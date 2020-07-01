@@ -1,4 +1,4 @@
-package com.example.a276project.UI;
+package ca.cmpt276.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
 
