@@ -12,6 +12,21 @@ public class RestaurantManager {
         //do nothing;
     }
 
-    public RestaurantManager getInstance() {return instance;};
+    public RestaurantManager getInstance() {return instance;}
+    /*Singleton*/
+
+
+    public List getRestList(){
+        return restList;
+    }
+
+    public Restaurant getRestaurant(int value){
+        for(int i = 0; i < restList.size(); i++) {
+            if (i == value) {
+                return restList.get(i);
+            }
+        }
+        return null;
+    }
 
 }

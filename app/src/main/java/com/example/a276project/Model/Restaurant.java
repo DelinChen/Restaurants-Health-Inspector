@@ -1,23 +1,28 @@
 package com.example.a276project.Model;
 
+import java.util.List;
+
 public class Restaurant {
     private String rest_name;
     private String rest_addr;
     private String GPS_coord;
     private String rest_tracking_num;
     private int num_reports;
+    private List<Inspection> rest_inspectionList;
 
 
 
     //decide to add image in the UI, not in the class
-    public Restaurant(String rest_name, String rest_addr, String GPS_coord, String rest_tracking_num, int num_reports) {
+    public Restaurant(String rest_name, String rest_addr, String GPS_coord, String rest_tracking_num, int num_reports, List<Inspection> rest_inspectionList) {
         this.rest_name = rest_name;
         this.rest_addr = rest_addr;
         this.GPS_coord = GPS_coord;
         this.rest_tracking_num = rest_tracking_num;
         this.num_reports = num_reports;
+        this.rest_inspectionList = rest_inspectionList;
     }
 
+    //Getter and Setter
     public String getRest_name() {
         return rest_name;
     }
@@ -56,5 +61,13 @@ public class Restaurant {
 
     public void setNum_reports(int num_reports) {
         this.num_reports = num_reports;
+    }
+
+    public List<Inspection> getRest_inspectionList() {
+        return rest_inspectionList;
+    }
+
+    public void setRest_inspectionList(List<Inspection> rest_inspectionList) {
+        this.rest_inspectionList = rest_inspectionList;
     }
 }
