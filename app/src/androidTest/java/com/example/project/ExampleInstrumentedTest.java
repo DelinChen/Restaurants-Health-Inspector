@@ -1,4 +1,4 @@
-package com.example.a276project;
+package com.example.project;
 
 import android.content.Context;
 

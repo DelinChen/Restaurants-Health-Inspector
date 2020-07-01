@@ -1,4 +1,4 @@
-package com.example.a276project.Model;
+package com.example.project.Model;
 
 public class Violation {
     private int viol_num;

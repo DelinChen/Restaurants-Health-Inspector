@@ -1,4 +1,4 @@
-package com.example.a276project.Model;
+package com.example.project.Model;
 
 import java.util.ArrayList;
 import java.util.List;
