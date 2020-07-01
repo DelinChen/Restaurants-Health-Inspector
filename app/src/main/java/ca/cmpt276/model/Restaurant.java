@@ -1,4 +1,4 @@
-package com.example.project.Model;
+package ca.cmpt276.model;
 
 import java.util.List;
 
