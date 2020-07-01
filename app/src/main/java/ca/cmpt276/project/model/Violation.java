@@ -1,4 +1,4 @@
-package ca.cmpt276.model;
+package ca.cmpt276.project.model;
 
 public class Violation {
     private int viol_num;
