@@ -9,6 +9,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name="ca.cmpt276.ui.InspectionActivity"></activity>
+        <activity android:name="ca.cmpt276.ui.RestaurantActivity" />
         <activity android:name="ca.cmpt276.ui.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
