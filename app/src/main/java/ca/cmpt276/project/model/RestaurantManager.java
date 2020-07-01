@@ -19,11 +19,9 @@ public class RestaurantManager implements Iterable<Restaurant> {
 
     public RestaurantManager getInstance() {
         if(instance == null) {
-            return new RestaurantManager();
+            instance = new RestaurantManager();
         }
-        else {
-            return instance;
-        }
+        return instance;
     }
 
 
