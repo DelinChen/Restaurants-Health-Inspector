@@ -1,4 +1,4 @@
-package ca.cmpt276.model;
+package ca.cmpt276.project.model;
 
 import java.util.ArrayList;
 import java.util.List;
