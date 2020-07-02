@@ -2,12 +2,15 @@ package ca.cmpt276.project.model;
 
 import androidx.annotation.NonNull;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class RestaurantManager {
     private static RestaurantManager instance = null;
@@ -45,8 +48,9 @@ public class RestaurantManager {
     public Set<String> trackingNumberSet() {
         return Collections.unmodifiableSet(restaurants.keySet());
     }
-    public Collection<Restaurant> restaurants() {
-        return Collections.unmodifiableCollection(restaurants.values());
+    public List<Restaurant> restaurants() {
+        return Collections.unmodifiableList(
+                new ArrayList<>(restaurants.values()) );
     }
     public Set<Map.Entry<String, Restaurant>> entrySet() {
         return Collections.unmodifiableSet(restaurants.entrySet());
