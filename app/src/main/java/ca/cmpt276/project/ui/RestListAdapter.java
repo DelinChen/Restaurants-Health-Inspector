@@ -12,12 +12,19 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.a276project.R;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
+import ca.cmpt276.project.model.Inspection;
+import ca.cmpt276.project.model.Restaurant;
 import ca.cmpt276.project.model.RestaurantManager;
+
+
 
 
 public class RestListAdapter extends RecyclerView.Adapter<RestListAdapter.RestListViewHolder> {
@@ -40,16 +47,45 @@ public class RestListAdapter extends RecyclerView.Adapter<RestListAdapter.RestLi
 
     @Override
     public void onBindViewHolder(@NonNull RestListViewHolder holder, int position) {
-        /*Restaurant currRest = manager.getRestaurant(position);
-        Inspection currInspect = currRest.getRest_inspectionList().get(currRest.getNum_reports() - 1);
+        Restaurant currRest = manager.restaurants().get(position);
+        Inspection currInspect = currRest.getInspections().get(currRest.getInspections().size() - 1);
         int numIssues = currInspect.getInspect_crit_issue() + currInspect.getInspect_nonCrit_issue();
+        int hazardLevel = currInspect.getHazaradRating();
         Date currDate = Calendar.getInstance().getTime();
+
+        Date currInspectDate = null;
+        try {
+            currInspectDate = new SimpleDateFormat("yyyyMMdd").parse(currInspect.getInspect_date());
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        long diffInMillies = Math.abs(currDate.getTime() - currInspectDate.getTime());
+        long diffInDays = TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS);
+
         SimpleDateFormat dateFormat = new SimpleDateFormat("MMMM dd, yyyy");
 
-        holder.name.setText(currRest.getRest_name());
+        holder.name.setText(currRest.name);
         holder.numIssues.setText("" + numIssues);
-        holder.date.setText();
-        holder.hazardIcon.setImageDrawable();*/
+
+        if(diffInDays < 31) {
+            holder.date.setText("" + diffInDays + " days ago");
+        }
+        else {
+            holder.date.setText(dateFormat.format(currInspectDate));
+        }
+
+        if(hazardLevel == 1) {
+            holder.hazardIcon.setImageResource(R.drawable.hazard_low);
+        }
+        else if(hazardLevel == 2) {
+            holder.hazardIcon.setImageResource(R.drawable.hazard_medium);
+        }
+        else {
+            holder.hazardIcon.setImageResource(R.drawable.hazard_high);
+        }
+
+        holder.restIcon.setImageResource(R.drawable.restaurant);
 
     }
 
