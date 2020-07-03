@@ -2,30 +2,32 @@ package ca.cmpt276.project.model;
 
 import androidx.annotation.NonNull;
 
+import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.stream.Collectors;
 
-public class RestaurantManager {
+public final class RestaurantManager {
     private static RestaurantManager instance = null;
     private final Map<String, Restaurant> restaurants;      // maps Tracking Number -> Restaurant
 
     ////////////////////////////////////////////////////////////
     // Singleton pattern
 
-    private RestaurantManager() {
+    RestaurantManager() {
+        if(instance != null) {
+            throw new UnsupportedOperationException(getClass().getName() + " is a singleton with an existing instance and cannot be reinstantiated");
+        }
+
         restaurants = new HashMap<>();
     }
 
-    public RestaurantManager getInstance() {
+    public static RestaurantManager getInstance() throws IOException {
         if(instance == null) {
-            instance = new RestaurantManager();
+            instance = RestaurantManagerFactory.populateFromCsv(RestaurantManagerFactory.PATH_TO_CSV_DATA);
         }
         return instance;
     }
@@ -60,15 +62,4 @@ public class RestaurantManager {
     protected Restaurant put(String trackingNumber, Restaurant restaurant) {
         return restaurants.put(trackingNumber, restaurant);
     }
-
-    /* Shouldn't ever need to add/remove entries dynamically: all objects are encoded in dataset
-
-    public Restaurant remove(String trackingNumber) {
-        return restaurants.remove(trackingNumber);
-    }
-
-    public void clear() {
-        restaurants.clear();
-    }
-    */
 }

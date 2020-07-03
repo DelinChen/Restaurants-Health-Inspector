@@ -3,6 +3,7 @@ package ca.cmpt276.project.model;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 public class Restaurant {
     public  final String trackingNumber;     // unique ID
@@ -16,10 +17,11 @@ public class Restaurant {
     private final List<Inspection> inspections;
 
 
-    //////////////////////////////////////////////////////////////////////
-    // Constructor
+    /////////////////////////////////////////////////////////////////////////////////////
+    // Constructors
 
     public Restaurant(String trackingNumber, String name, String address, String city, double latitude, double longitude, List<Inspection> inspections) {
+        validateConstructorArgs(trackingNumber, name, address, city, latitude, longitude, inspections);
         this.trackingNumber = trackingNumber;
         this.name           = name;
         this.address        = address;
@@ -35,16 +37,81 @@ public class Restaurant {
     }
 
 
-    //////////////////////////////////////////////////////////////////////
-    // Delegate methods
+    /**
+     * Used to populate the list of inspections; outside world shouldn't be able to add anything to list
+     * @param checkup the Inspection to add to this Restaurant object
+     */
+    protected void inspect(Inspection checkup) {
+        inspections.add(checkup);
+    }
+
+
+    /////////////////////////////////////////////////////////////////////////////////////
+    // Getter methods
+    //     No mutator methods are allowed because there is currently no need to change a restaurant's data dynamically
+    //     i.e. the class is essentially just a read-only interface to the csv data
 
     public List<Inspection> getInspections() {
         return Collections.unmodifiableList(inspections);
     }
 
 
-    // Used to populate the list of inspections; outside world shouldn't be able to add anything to list
-    protected void inspect(Inspection checkup) {
-        inspections.add(checkup);
+    /////////////////////////////////////////////////////////////////////////////////////
+    // Helper methods
+
+    private static void validateConstructorArgs(String trackingNumber, String name, String address, String city, double latitude, double longitude, List<Inspection> inspections) {
+        String[] argNames = {"trackingNumber", "name", "address", "city", "latitude", "longitude", "inspections"};
+        Object[] argValues = {trackingNumber, name, address, city, latitude, longitude, inspections};
+        requireArgsNonNull(argNames, argValues);
+
+        String[] stringArgNames = {"trackingNumber", "name", "address", "city"};
+        String[] stringArgValues = {trackingNumber, name, address, city};
+        requireStringArgsNonEmpty(stringArgNames, stringArgValues);
+
+        requireGpsCoordsInRange(latitude, longitude);
+    }
+
+    private static void requireArgsNonNull(String[] argNames, Object[] argValues) {
+        if(argNames.length != argValues.length) {
+            throw new IllegalArgumentException("argNames.length must be equal to argValues.length");
+        }
+
+        for(int i = 0; i < argNames.length; i++) {
+            Objects.requireNonNull(argValues[i], "Restaurant field " + argNames[i] + " cannot be null");
+        }
+    }
+
+    private static void requireStringArgsNonEmpty(String[] stringArgNames, String[] stringArgValues) {
+        if(stringArgNames.length != stringArgValues.length) {
+            throw new IllegalArgumentException("stringArgNames.length must be equal to stringArgValues.length");
+        }
+
+        for(int i = 0; i < stringArgValues.length; i++) {
+            if(stringArgValues[i].length() == 0) {
+                throw new IllegalArgumentException("Restaurant string field " + stringArgNames[i] + " cannot be the empty string");
+            }
+        }
+    }
+
+    private static void requireGpsCoordsInRange(double latitude, double longitude) {
+        final String latitudeClosedInterval = "[-90, 90]";
+        final String longitudeClosedInterval = "[-180, 180]";
+
+        if(latitude < -90) {
+            throw new IllegalArgumentException(gpsRangeErrorMsg("Latitude", "less than -90", latitudeClosedInterval));
+        }
+        if(latitude > 90) {
+            throw new IllegalArgumentException(gpsRangeErrorMsg("Latitude", "greater than 90", latitudeClosedInterval));
+        }
+
+        if(longitude < -180) {
+            throw new IllegalArgumentException(gpsRangeErrorMsg("Longitude", "less than -180", longitudeClosedInterval));
+        }
+        if(longitude > 180) {
+            throw new IllegalArgumentException(gpsRangeErrorMsg("Longitude", "greater than 180", longitudeClosedInterval));
+        }
+    }
+    private static String gpsRangeErrorMsg(String axis, String outOfRange, String closedInterval) {
+        return axis + " is undefined for numbers " + outOfRange + ", must be in the closed interval " + closedInterval;
     }
 }
