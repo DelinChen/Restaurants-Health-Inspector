@@ -19,7 +19,7 @@ public final class RestaurantManager {
 
     RestaurantManager() {
         if(instance != null) {
-            throw new UnsupportedOperationException(getClass().getName() + " is a singleton with an existing instance and cannot be reinstantiated");
+            throw new IllegalStateException(getClass().getName() + " is a singleton with an existing instance and cannot be reinstantiated");
         }
 
         restaurants = new HashMap<>();

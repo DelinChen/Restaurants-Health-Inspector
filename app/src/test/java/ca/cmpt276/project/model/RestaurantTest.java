@@ -11,6 +11,10 @@ import org.junit.runner.RunWith;
 import java.util.ArrayList;
 import java.util.List;
 
+import static ca.cmpt276.project.model.Restaurant.MAX_LATITUDE;
+import static ca.cmpt276.project.model.Restaurant.MAX_LONGITUDE;
+import static ca.cmpt276.project.model.Restaurant.MIN_LATITUDE;
+import static ca.cmpt276.project.model.Restaurant.MIN_LONGITUDE;
 import static org.junit.Assert.*;
 
 @RunWith(Enclosed.class)
@@ -23,7 +27,26 @@ public class RestaurantTest {
     private static final double longitude = -122.8668064;
     private static final List<Inspection> inspections = new ArrayList<>();
 
-    private static final double MAX_DELTA = 1e-8;
+    private static final double MAX_DELTA = 1e-12;
+
+    public static class RestaurantMethodTest {
+        public Restaurant instance = null;
+
+        @Before
+        public void initialize() {
+            instance = new Restaurant(trackingNumber, name, address, city, latitude, longitude, inspections);
+        }
+
+        @Test
+        public void getInspections () {
+
+        }
+
+        @Test
+        public void inspect () {
+
+        }
+    }
 
     public static class ValidRestaurantConstructorTest {
         private Restaurant instance = null;
@@ -61,62 +84,139 @@ public class RestaurantTest {
         public void validInspectionsTest() {
             assertEquals(inspections, instance.getInspections());
         }
+        @Test
+        public void latitudeOnLowerBoundTest() {
+            Restaurant instance = new Restaurant(trackingNumber, name, address, city, MIN_LATITUDE, longitude, inspections);
+        }
+        @Test
+        public void latitudeOnUpperBoundTest() {
+            Restaurant instance = new Restaurant(trackingNumber, name, address, city, MAX_LATITUDE, longitude, inspections);
+        }
+        @Test
+        public void longitudeOnLowerBoundTest() {
+            Restaurant instance = new Restaurant(trackingNumber, name, address, city, latitude, MIN_LONGITUDE, inspections);
+        }
+        @Test
+        public void longitudeOnUpperBoundTest() {
+            Restaurant instance = new Restaurant(trackingNumber, name, address, city, latitude, MAX_LONGITUDE, inspections);
+        }
     }
 
     public static class RestaurantConstructorNullArgsTest {
         @Rule
-        public ExpectedException thrownNullException = ExpectedException.none();
+        public ExpectedException thrown = ExpectedException.none();
         @Before
         public void expectNullPointerException() {
-            thrownNullException.expect(NullPointerException.class);
+            thrown.expect(NullPointerException.class);
         }
 
         @Test
         public void nullTrackingNumberTest() {
-            Restaurant diner = new Restaurant(null, name, address, city, latitude, longitude, inspections);
+            Restaurant instance = new Restaurant(null, name, address, city, latitude, longitude, inspections);
         }
         @Test
         public void nullNameTest() {
-            Restaurant diner = new Restaurant(trackingNumber, null, address, city, latitude, longitude, inspections);
+            Restaurant instance = new Restaurant(trackingNumber, null, address, city, latitude, longitude, inspections);
         }
         @Test
         public void nullAddressTest() {
-            Restaurant diner = new Restaurant(trackingNumber, name, null, city, latitude, longitude, inspections);
+            Restaurant instance = new Restaurant(trackingNumber, name, null, city, latitude, longitude, inspections);
         }
         @Test
         public void nullCityTest() {
-            Restaurant diner = new Restaurant(trackingNumber, name, address, null, latitude, longitude, inspections);
+            Restaurant instance = new Restaurant(trackingNumber, name, address, null, latitude, longitude, inspections);
         }
         @Test
         public void nullLatitudeTest() {
-            Restaurant diner = new Restaurant(trackingNumber, name, address, city, (Double)null, longitude, inspections);
+            Restaurant instance = new Restaurant(trackingNumber, name, address, city, (Double)null, longitude, inspections);
         }
         @Test
         public void nullLongitudeTest() {
-            Restaurant diner = new Restaurant(trackingNumber, name, address, city, latitude, (Double)null, inspections);
+            Restaurant instance = new Restaurant(trackingNumber, name, address, city, latitude, (Double)null, inspections);
         }
         @Test
         public void nullInspectionsTest() {
-            Restaurant diner = new Restaurant(trackingNumber, name, address, city, latitude, longitude, null);
+            Restaurant instance = new Restaurant(trackingNumber, name, address, city, latitude, longitude, null);
         }
 
         @Test
         public void allArgsNullTest() {
-            Restaurant diner = new Restaurant(null, null, null, null, (Double)null, (Double)null, null);
+            Restaurant instance = new Restaurant(null, null, null, null, (Double)null, (Double)null, null);
         }
     }
 
     public static class RestaurantConstructorEmptyStringArgsTest {
+        @Rule
+        public ExpectedException thrown = ExpectedException.none();
+        @Before
+        public void expectIllegalArgumentException() {
+            thrown.expect(IllegalArgumentException.class);
+        }
 
+        @Test
+        public void emptyTrackingNumberTest() {
+            Restaurant instance = new Restaurant("", name, address, city, latitude, longitude, inspections);
+        }
+        @Test
+        public void emptyNameTest() {
+            Restaurant instance = new Restaurant(trackingNumber, "", address, city, latitude, longitude, inspections);
+        }
+        @Test
+        public void emptyAddressTest() {
+            Restaurant instance = new Restaurant(trackingNumber, name, "", city, latitude, longitude, inspections);
+        }
+        @Test
+        public void emptyCityTest() {
+            Restaurant instance = new Restaurant(trackingNumber, name, address, "", latitude, longitude, inspections);
+        }
+
+        @Test
+        public void allArgsEmptyTest() {
+            Restaurant instance = new Restaurant("", "", "", "", latitude, longitude, inspections);
+        }
     }
 
-    @Test
-    public void getInspections() {
+    public static class RestaurantConstructorGpsArgsNaNTest {
+        @Rule
+        public ExpectedException thrown = ExpectedException.none();
+        @Before
+        public void expectIllegalArgumentException() {
+            thrown.expect(IllegalArgumentException.class);
+        }
 
+        @Test
+        public void latitudeNaNTest() {
+            Restaurant instance = new Restaurant(trackingNumber, name, address, city, Double.NaN, longitude, inspections);
+        }
+        @Test
+        public void longitudeNaNTest() {
+            Restaurant instance = new Restaurant(trackingNumber, name, address, city, latitude, Double.NaN, inspections);
+        }
     }
 
-    @Test
-    public void inspect() {
+    public static class RestaurantConstructorGpsArgsOutOfRangeTest {
+        @Rule
+        public ExpectedException thrown = ExpectedException.none();
+        @Before
+        public void expectIllegalArgumentException() {
+            thrown.expect(IllegalArgumentException.class);
+        }
 
+        @Test
+        public void latitudeUnderLowerBoundTest() {
+            Restaurant instance = new Restaurant(trackingNumber, name, address, city, MIN_LATITUDE - MAX_DELTA, longitude, inspections);
+        }
+        @Test
+        public void latitudeAboveUpperBoundTest() {
+            Restaurant instance = new Restaurant(trackingNumber, name, address, city, MAX_LATITUDE + MAX_DELTA, longitude, inspections);
+        }
+        @Test
+        public void longitudeUnderLowerBoundTest() {
+            Restaurant instance = new Restaurant(trackingNumber, name, address, city, latitude, MIN_LONGITUDE - MAX_DELTA, inspections);
+        }
+        @Test
+        public void longitudeAboveLowerBoundTest() {
+            Restaurant instance = new Restaurant(trackingNumber, name, address, city, latitude, MAX_LONGITUDE + MAX_DELTA, inspections);
+        }
     }
 }
