@@ -1,6 +1,5 @@
 package ca.cmpt276.project.model;
 
-import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -8,7 +7,7 @@ import org.junit.rules.ExpectedException;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-import static ca.cmpt276.project.model.RestaurantScanner.PATH_TO_RESTAURANT_CSV;
+import static ca.cmpt276.project.model.RestaurantScanner.PATH_TO_RESTAURANT_CSV_FROM_SRC;
 import static org.junit.Assert.*;
 
 public class CsvScannerTest {
@@ -22,13 +21,13 @@ public class CsvScannerTest {
 
     @Test
     public void hasNextLine() throws IOException {
-        CsvScanner scanner = new CsvScanner(PATH_TO_RESTAURANT_CSV){};
+        CsvScanner scanner = new CsvScanner(PATH_TO_RESTAURANT_CSV_FROM_SRC){};
         assertTrue(scanner.hasNextLine());
     }
 
     @Test
     public void opensValidFileForReadingTest() throws IOException {
-        CsvScanner scanner = new CsvScanner(PATH_TO_RESTAURANT_CSV){};
+        CsvScanner scanner = new CsvScanner(PATH_TO_RESTAURANT_CSV_FROM_SRC){};
     }
 
     @Test

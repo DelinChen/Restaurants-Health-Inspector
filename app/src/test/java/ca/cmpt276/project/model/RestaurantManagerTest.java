@@ -16,6 +16,12 @@ public class RestaurantManagerTest {
 
     @Test
     public void getInstance() {
+        RestaurantManager manager = RestaurantManager.getInstance();
+        for(Restaurant rest : manager.restaurants()) {
+            System.out.println(rest.name);
+        }
+
+        assertTrue(manager.size() != 0);
     }
 
     @Test
