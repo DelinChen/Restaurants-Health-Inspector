@@ -77,8 +77,9 @@ public final class RestaurantManager {
         return Collections.unmodifiableSet(restaurants.keySet());
     }
     public List<Restaurant> restaurants() {
-        return Collections.unmodifiableList(
-                new ArrayList<>(restaurants.values()) );
+        List<Restaurant> values = new ArrayList<>(restaurants.values());
+        Collections.sort(values);
+        return Collections.unmodifiableList(values);
     }
     public Set<Map.Entry<String, Restaurant>> entrySet() {
         return Collections.unmodifiableSet(restaurants.entrySet());

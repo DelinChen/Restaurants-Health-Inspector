@@ -5,7 +5,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
-public class Restaurant {
+public class Restaurant implements Comparable<Restaurant> {
     public final String trackingNumber;     // unique ID
     public final String name;
     public final String address;
@@ -60,6 +60,11 @@ public class Restaurant {
         return Collections.unmodifiableList(inspections);
     }
 
+
+    @Override
+    public int compareTo(Restaurant other) {
+        return name.compareTo(other.name);
+    }
 
     @Override
     public boolean equals(Object o) {
