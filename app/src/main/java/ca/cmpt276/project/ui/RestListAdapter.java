@@ -49,8 +49,8 @@ public class RestListAdapter extends RecyclerView.Adapter<RestListAdapter.RestLi
 
     @Override
     public void onBindViewHolder(@NonNull RestListViewHolder holder, int position) {
-        /*Restaurant currRest = manager.restaurants().get(position);
-        Inspection currInspect = currRest.getInspections().get(currRest.getInspections().size() - 1);
+        Restaurant currRest = manager.restaurants().get(position);
+        /*Inspection currInspect = currRest.getInspections().get(currRest.getInspections().size() - 1);
         int numIssues = currInspect.getInspect_crit_issue() + currInspect.getInspect_nonCrit_issue();
         int hazardLevel = currInspect.getHazaradRating();
         Date currDate = Calendar.getInstance().getTime();
@@ -65,10 +65,12 @@ public class RestListAdapter extends RecyclerView.Adapter<RestListAdapter.RestLi
         long diffInMillies = Math.abs(currDate.getTime() - currInspectDate.getTime());
         long diffInDays = TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS);
 
-        SimpleDateFormat dateFormat = new SimpleDateFormat("MMMM dd, yyyy");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("MMMM dd, yyyy");*/
 
         holder.name.setText(currRest.name);
-        holder.numIssues.setText("" + numIssues);
+        holder.address.setText(currRest.address);
+        holder.restIcon.setImageResource(R.drawable.restaurant);
+        /*holder.numIssues.setText("" + numIssues);
 
         if(diffInDays < 31) {
             holder.date.setText("" + diffInDays + " days ago");
@@ -88,18 +90,16 @@ public class RestListAdapter extends RecyclerView.Adapter<RestListAdapter.RestLi
         }
 
         holder.restIcon.setImageResource(R.drawable.restaurant);*/
-        holder.name.setText("Restaurant");
-        holder.date.setText("July 5, 2020");
-        holder.numIssues.setText("5");
+
     }
 
     @Override
     public int getItemCount() {
-        return 20;
+        return manager.restaurants().size();
     }
 
-    public class RestListViewHolder extends RecyclerView.ViewHolder /*implements  View.OnClickListener*/{
-        TextView name, date, numIssues;
+    public class RestListViewHolder extends RecyclerView.ViewHolder implements  View.OnClickListener{
+        TextView name, date, numIssues, address;
         ImageView restIcon, hazardIcon;
         public RestListViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -108,13 +108,14 @@ public class RestListAdapter extends RecyclerView.Adapter<RestListAdapter.RestLi
             numIssues = itemView.findViewById(R.id.num_issues);
             restIcon = itemView.findViewById(R.id.rest_icon);
             hazardIcon = itemView.findViewById(R.id.hazard_icon);
-            //itemView.setOnClickListener(this);
+            address = itemView.findViewById(R.id.rest_address);
+            itemView.setOnClickListener(this);
         }
 
-        /*@Override
+        @Override
         public void onClick(View view) {
             listener.onClick(view, getAdapterPosition());
-        }*/
+        }
     }
 
     public interface RestListClickListener {
