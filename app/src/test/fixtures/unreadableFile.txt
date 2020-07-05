@@ -1,0 +1,1 @@
+This file should not have read permissions to test RestaurantManagerFactory's validateCsvData(...) method
