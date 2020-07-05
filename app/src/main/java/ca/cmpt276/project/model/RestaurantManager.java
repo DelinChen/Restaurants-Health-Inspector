@@ -1,6 +1,9 @@
 package ca.cmpt276.project.model;
 
+import android.content.Context;
+
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -8,7 +11,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import static ca.cmpt276.project.model.RestaurantScanner.PATH_TO_RESTAURANT_CSV;
+import static ca.cmpt276.project.model.RestaurantScanner.PATH_TO_RESTAURANT_CSV_FROM_ASSETS;
+import static ca.cmpt276.project.model.RestaurantScanner.PATH_TO_RESTAURANT_CSV_FROM_SRC;
 
 
 public final class RestaurantManager {
@@ -27,10 +31,21 @@ public final class RestaurantManager {
         restaurants = new HashMap<>();
     }
 
+    public static RestaurantManager getInstance(Context anyContext) {
+        if(instance == null) {
+            try {
+                instance = fromCsv(anyContext, PATH_TO_RESTAURANT_CSV_FROM_ASSETS, true);
+            } catch(IOException e) {
+                e.printStackTrace();
+                System.exit(1);
+            }
+        }
+        return instance;
+    }
     public static RestaurantManager getInstance() {
         if(instance == null) {
             try {
-                instance = fromCsv(PATH_TO_RESTAURANT_CSV);
+                instance = fromCsv(PATH_TO_RESTAURANT_CSV_FROM_SRC);
             } catch(IOException e) {
                 e.printStackTrace();
                 System.exit(1);
@@ -81,19 +96,35 @@ public final class RestaurantManager {
     /**
      * Uses .csv data to populate the RestaurantManager
      * @param pathToCsvData a String path to the data
-     * @param headerRow
+     * @param hasHeaderRow
      * @return the populated manager
      */
-    private static RestaurantManager fromCsv(String pathToCsvData, boolean headerRow) throws IOException {
+    private static RestaurantManager fromCsv(String pathToCsvData, boolean hasHeaderRow) throws IOException {
         RestaurantManager manager = new RestaurantManager();
-        RestaurantScanner scanner = new RestaurantScanner(pathToCsvData, headerRow);
-        while(scanner.hasNextLine()) {
-            Restaurant result = scanner.nextRestaurant();
-            manager.put(result.trackingNumber, result);
-        }
+        RestaurantScanner scanner = new RestaurantScanner(pathToCsvData, hasHeaderRow);
+        scanUntilEnd(manager, scanner);
         return manager;
     }
     private static RestaurantManager fromCsv(String pathToCsvData) throws IOException {
         return fromCsv(pathToCsvData, true);
+    }
+
+    private static RestaurantManager fromCsv(Context anyContext, String pathToCsvData, boolean hasHeaderRow)
+            throws IOException {
+        InputStream dataStream = anyContext.getApplicationContext().getAssets()
+                                    .open(pathToCsvData);
+        RestaurantManager manager = new RestaurantManager();
+        RestaurantScanner scanner = new RestaurantScanner(dataStream, hasHeaderRow);
+        scanUntilEnd(manager, scanner);
+        return manager;
+    }
+
+
+    private static void scanUntilEnd(RestaurantManager manager, RestaurantScanner scanner) {
+        while(scanner.hasNextLine()) {
+            Restaurant result = scanner.nextRestaurant();
+            manager.put(result.trackingNumber, result);
+        }
+        scanner.close();
     }
 }

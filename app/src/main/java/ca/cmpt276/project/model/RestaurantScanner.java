@@ -3,6 +3,7 @@ package ca.cmpt276.project.model;
 import org.w3c.dom.ls.LSOutput;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -10,15 +11,23 @@ import java.util.Stack;
 import java.util.stream.Collectors;
 
 public class RestaurantScanner extends CsvScanner {
-    public static final String PATH_TO_RESTAURANT_CSV = "src/main/assets/ProjectData/restaurants_itr1.csv";
+    public static final String PATH_TO_RESTAURANT_CSV_FROM_SRC = "src/main/assets/ProjectData/restaurants_itr1.csv";
+    public static final String PATH_TO_RESTAURANT_CSV_FROM_ASSETS = "ProjectData/restaurants_itr1.csv";
     public static final int UNUSED_COLUMN = 4;
 
 
     ///////////////////////////////////////////////////////////////////////////////////
     // Constructors
 
-    public RestaurantScanner(String pathToCsvData, boolean headerRow) throws IOException {
-        super(pathToCsvData, headerRow);
+    public RestaurantScanner(InputStream input, boolean hasHeaderRow) {
+        super(input, hasHeaderRow);
+    }
+    public RestaurantScanner(InputStream input) {
+        super(input);
+    }
+
+    public RestaurantScanner(String pathToCsvData, boolean hasHeaderRow) throws IOException {
+        super(pathToCsvData, hasHeaderRow);
     }
 
     public RestaurantScanner(String pathToCsvData) throws IOException {

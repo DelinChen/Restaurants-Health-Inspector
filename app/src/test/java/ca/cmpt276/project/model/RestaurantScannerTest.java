@@ -4,7 +4,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +18,7 @@ public class RestaurantScannerTest {
 
     @Test
     public void readsOneRestaurant() throws IOException {
-        RestaurantScanner scanner = new RestaurantScanner(RestaurantScanner.PATH_TO_RESTAURANT_CSV);
+        RestaurantScanner scanner = new RestaurantScanner(RestaurantScanner.PATH_TO_RESTAURANT_CSV_FROM_SRC);
 
         Restaurant expected = new Restaurant("SDFO-8HKP7E", "Pattullo A&W", "12808 King George Blvd", "Surrey", 49.20610961, -122.8668064);
         Restaurant scanned = scanner.nextRestaurant();
@@ -29,7 +28,7 @@ public class RestaurantScannerTest {
 
     @Test
     public void readsEntireRestaurantsFile_itr1Test() throws IOException {
-        RestaurantScanner scanner = new RestaurantScanner(RestaurantScanner.PATH_TO_RESTAURANT_CSV);
+        RestaurantScanner scanner = new RestaurantScanner(RestaurantScanner.PATH_TO_RESTAURANT_CSV_FROM_SRC);
         List<Object> allScanned = new ArrayList<>();
         while(scanner.hasNextLine()) {
             allScanned.add(scanner.nextRestaurant());

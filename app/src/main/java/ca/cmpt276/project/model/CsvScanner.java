@@ -3,22 +3,28 @@ package ca.cmpt276.project.model;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.Scanner;
 
 public abstract class CsvScanner {
     private Scanner lineScanner;
 
-    public CsvScanner(String pathToCsvData, boolean headerRow) throws IOException {
+    public CsvScanner(InputStream input, boolean hasHeaderRow) {
+        lineScanner = new Scanner(input);
+        discardHeaderRow(hasHeaderRow);
+    }
+    public CsvScanner(InputStream input) {
+        this(input, true);
+    }
+
+    public CsvScanner(String pathToCsvData, boolean hasHeaderRow) throws IOException {
         File csvData = new File(pathToCsvData);
         validateDataFile(csvData);
 
         lineScanner = new Scanner(csvData);
-        if(hasNextLine() && headerRow) {
-            // discard the header row
-            lineScanner.nextLine();
-        }
+        discardHeaderRow(hasHeaderRow);
     }
-
     public CsvScanner(String pathToCsvData) throws IOException {
         this(pathToCsvData, true);
     }
@@ -35,6 +41,9 @@ public abstract class CsvScanner {
         return lineScanner.nextLine();
     }
 
+    public void close() {
+        lineScanner.close();
+    }
 
     ///////////////////////////////////////////////////////////////////////////////////
     // Helper methods
@@ -48,6 +57,12 @@ public abstract class CsvScanner {
         }
         if (!csvData.canRead()) {
             throw new IOException("Don't have permission to read file " + csvData.getPath());
+        }
+    }
+
+    private void discardHeaderRow(boolean hasHeaderRow) {
+        if(hasNextLine() && hasHeaderRow) {
+            nextLine();
         }
     }
 }
