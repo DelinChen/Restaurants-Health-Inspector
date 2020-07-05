@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v, int position) {
                 Intent intent = new Intent(MainActivity.this, RestaurantActivity.class);
-                intent.putExtra("restaurant", (Parcelable) manager.restaurants().get(position));
+                //intent.putExtra("tracking number", manager.restaurants().get(position).trackingNumber);
                 startActivity(intent);
             }
         };
