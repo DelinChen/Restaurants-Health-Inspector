@@ -61,6 +61,25 @@ public class Restaurant {
     }
 
 
+    @Override
+    public boolean equals(Object o) {
+        if(!(o instanceof Restaurant)) {
+            return false;
+        }
+        Restaurant other = (Restaurant)o;
+        return allFieldsEqualTo(other);
+    }
+    private boolean allFieldsEqualTo(Restaurant other) {
+        return trackingNumber.equals(other.trackingNumber)
+                && name.equals(other.name)
+                && address.equals(other.address)
+                && city.equals(other.city)
+                && (Double.compare(latitude, other.latitude) == 0)
+                && (Double.compare(longitude, other.longitude) == 0)
+                && inspections.equals(other.inspections);
+    }
+
+
     /////////////////////////////////////////////////////////////////////////////////////
     // Helper methods
 
