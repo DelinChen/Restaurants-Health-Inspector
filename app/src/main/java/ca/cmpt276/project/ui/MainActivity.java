@@ -25,17 +25,17 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        manager.getInstance();
+        //manager = RestaurantManager.getInstance();
         restList = findViewById(R.id.rest_list);
         RestListAdapter adapter = new RestListAdapter(this, manager, listener);
-        listener = new RestListAdapter.RestListClickListener() {
+        /*listener = new RestListAdapter.RestListClickListener() {
             @Override
             public void onClick(View v, int position) {
                 Intent intent = new Intent(MainActivity.this, RestaurantActivity.class);
                 intent.putExtra("restaurant", (Parcelable) manager.restaurants().get(position));
                 startActivity(intent);
             }
-        };
+        };*/
         restList.setAdapter(adapter);
         restList.setLayoutManager(new LinearLayoutManager(this));
     }

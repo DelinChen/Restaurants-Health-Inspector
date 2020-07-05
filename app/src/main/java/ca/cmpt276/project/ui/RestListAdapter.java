@@ -31,10 +31,12 @@ public class RestListAdapter extends RecyclerView.Adapter<RestListAdapter.RestLi
 
     private Context context;
     private RestaurantManager manager;
+    private RestListClickListener listener;
 
-    public RestListAdapter(Context context, RestaurantManager manager) {
+    public RestListAdapter(Context context, RestaurantManager manager, RestListClickListener listener) {
         this.context = context;
         this.manager = manager;
+        this.listener = listener;
     }
 
     @NonNull
@@ -47,7 +49,7 @@ public class RestListAdapter extends RecyclerView.Adapter<RestListAdapter.RestLi
 
     @Override
     public void onBindViewHolder(@NonNull RestListViewHolder holder, int position) {
-        Restaurant currRest = manager.restaurants().get(position);
+        /*Restaurant currRest = manager.restaurants().get(position);
         Inspection currInspect = currRest.getInspections().get(currRest.getInspections().size() - 1);
         int numIssues = currInspect.getInspect_crit_issue() + currInspect.getInspect_nonCrit_issue();
         int hazardLevel = currInspect.getHazaradRating();
@@ -85,16 +87,18 @@ public class RestListAdapter extends RecyclerView.Adapter<RestListAdapter.RestLi
             holder.hazardIcon.setImageResource(R.drawable.hazard_high);
         }
 
-        holder.restIcon.setImageResource(R.drawable.restaurant);
-
+        holder.restIcon.setImageResource(R.drawable.restaurant);*/
+        holder.name.setText("Restaurant");
+        holder.date.setText("July 5, 2020");
+        holder.numIssues.setText("5");
     }
 
     @Override
     public int getItemCount() {
-        return 0;
+        return 20;
     }
 
-    public class RestListViewHolder extends RecyclerView.ViewHolder{
+    public class RestListViewHolder extends RecyclerView.ViewHolder /*implements  View.OnClickListener*/{
         TextView name, date, numIssues;
         ImageView restIcon, hazardIcon;
         public RestListViewHolder(@NonNull View itemView) {
@@ -104,7 +108,16 @@ public class RestListAdapter extends RecyclerView.Adapter<RestListAdapter.RestLi
             numIssues = itemView.findViewById(R.id.num_issues);
             restIcon = itemView.findViewById(R.id.rest_icon);
             hazardIcon = itemView.findViewById(R.id.hazard_icon);
-
+            //itemView.setOnClickListener(this);
         }
+
+        /*@Override
+        public void onClick(View view) {
+            listener.onClick(view, getAdapterPosition());
+        }*/
+    }
+
+    public interface RestListClickListener {
+        void onClick(View v, int position);
     }
 }

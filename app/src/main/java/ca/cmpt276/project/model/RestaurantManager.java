@@ -1,37 +1,46 @@
 package ca.cmpt276.project.model;
 
-import androidx.annotation.NonNull;
-
+import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.stream.Collectors;
 
-public class RestaurantManager {
+import static ca.cmpt276.project.model.RestaurantScanner.PATH_TO_RESTAURANT_CSV;
+
+
+public final class RestaurantManager {
     private static RestaurantManager instance = null;
     private final Map<String, Restaurant> restaurants;      // maps Tracking Number -> Restaurant
 
-    ////////////////////////////////////////////////////////////
+
+    ////////////////////////////////////////////////////////////////////////////
     // Singleton pattern
 
     private RestaurantManager() {
+        if(instance != null) {
+            throw new IllegalStateException(getClass().getName() + " is a singleton with an existing instance and cannot be reinstantiated");
+        }
+        instance = this;
         restaurants = new HashMap<>();
     }
 
-    public RestaurantManager getInstance() {
+    public static RestaurantManager getInstance() {
         if(instance == null) {
-            instance = new RestaurantManager();
+            try {
+                instance = fromCsv(PATH_TO_RESTAURANT_CSV);
+            } catch(IOException e) {
+                e.printStackTrace();
+                System.exit(1);
+            }
         }
         return instance;
     }
 
 
-    ////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////
     // Delegate methods
 
     public boolean containsTrackingNumber(String trackingNumber) {
@@ -43,6 +52,10 @@ public class RestaurantManager {
 
     public Restaurant get(String trackingNumber) {
         return restaurants.get(trackingNumber);
+    }
+
+    public int size() {
+        return restaurants.size();
     }
 
     public Set<String> trackingNumberSet() {
@@ -61,14 +74,26 @@ public class RestaurantManager {
         return restaurants.put(trackingNumber, restaurant);
     }
 
-    /* Shouldn't ever need to add/remove entries dynamically: all objects are encoded in dataset
 
-    public Restaurant remove(String trackingNumber) {
-        return restaurants.remove(trackingNumber);
-    }
+    ////////////////////////////////////////////////////////////////////////
+    // Factory method
 
-    public void clear() {
-        restaurants.clear();
+    /**
+     * Uses .csv data to populate the RestaurantManager
+     * @param pathToCsvData a String path to the data
+     * @param headerRow
+     * @return the populated manager
+     */
+    private static RestaurantManager fromCsv(String pathToCsvData, boolean headerRow) throws IOException {
+        RestaurantManager manager = new RestaurantManager();
+        RestaurantScanner scanner = new RestaurantScanner(pathToCsvData, headerRow);
+        while(scanner.hasNextLine()) {
+            Restaurant result = scanner.nextRestaurant();
+            manager.put(result.trackingNumber, result);
+        }
+        return manager;
     }
-    */
+    private static RestaurantManager fromCsv(String pathToCsvData) throws IOException {
+        return fromCsv(pathToCsvData, true);
+    }
 }
