@@ -53,7 +53,7 @@ public class RestaurantManagerTest {
     @Test
     public void onReinstantiation_throwsExceptionTest() throws InstantiationException, IllegalAccessException, NoSuchMethodException, InvocationTargetException {
         // Found isA(...) at https://stackoverflow.com/a/20759785
-        thrown.expectCause(isA(InstantiationException.class));
+        thrown.expectCause(isA(IllegalStateException.class));
 
         RestaurantManager manager = RestaurantManager.getInstance();
 
