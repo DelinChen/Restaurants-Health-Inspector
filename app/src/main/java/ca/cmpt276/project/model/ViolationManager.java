@@ -17,4 +17,8 @@ public class ViolationManager {
         return violations.size();
     }
 
+    public Violation getViolation(int position){
+        return violations.get(position);
+    }
+
 }
