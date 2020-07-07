@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -17,18 +16,18 @@ import static ca.cmpt276.project.model.RestaurantScanner.PATH_TO_RESTAURANT_CSV_
 
 public final class RestaurantManager {
     private static RestaurantManager instance = null;
-    private final Map<String, Restaurant> restaurants;      // maps Tracking Number -> Restaurant
+    private final Map<String, Restaurant> restaurantMap;      // maps Tracking Number -> Restaurant
 
 
     ////////////////////////////////////////////////////////////////////////////
     // Singleton pattern
 
-    private RestaurantManager(Map<String, Restaurant> restaurants) {
+    private RestaurantManager(Map<String, Restaurant> restaurantMap) {
         if(instance != null) {
             throw new IllegalStateException(getClass().getName() + " is a singleton with an existing instance and cannot be reinstantiated");
         }
         instance = this;
-        this.restaurants = Collections.unmodifiableMap(restaurants);
+        this.restaurantMap = Collections.unmodifiableMap(restaurantMap);
     }
 
     public static RestaurantManager getInstance(Context anyContext) {
@@ -59,30 +58,30 @@ public final class RestaurantManager {
     // Delegate methods
 
     public boolean containsTrackingNumber(String trackingNumber) {
-        return restaurants.containsKey(trackingNumber);
+        return restaurantMap.containsKey(trackingNumber);
     }
     public boolean containsRestaurant(Restaurant restaurant) {
-        return restaurants.containsValue(restaurant);
+        return restaurantMap.containsValue(restaurant);
     }
 
     public Restaurant get(String trackingNumber) {
-        return restaurants.get(trackingNumber);
+        return restaurantMap.get(trackingNumber);
     }
 
     public int size() {
-        return restaurants.size();
+        return restaurantMap.size();
     }
 
     public Set<String> trackingNumberSet() {
-        return Collections.unmodifiableSet(restaurants.keySet());
+        return Collections.unmodifiableSet(restaurantMap.keySet());
     }
     public List<Restaurant> restaurants() {
-        List<Restaurant> values = new ArrayList<>(restaurants.values());
+        List<Restaurant> values = new ArrayList<>(restaurantMap.values());
         Collections.sort(values);
         return Collections.unmodifiableList(values);
     }
     public Set<Map.Entry<String, Restaurant>> entrySet() {
-        return Collections.unmodifiableSet(restaurants.entrySet());
+        return Collections.unmodifiableSet(restaurantMap.entrySet());
     }
 
 

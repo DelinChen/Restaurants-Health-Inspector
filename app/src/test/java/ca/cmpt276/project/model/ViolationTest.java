@@ -59,16 +59,20 @@ public class ViolationTest {
         @Test
         public void nullCodeNumberTest() {
             //int cannot be null
-            violation = new Violation(0, isCritical, category, description);
+            violation = new Violation((Integer)null, isCritical, category, description);
         }
         @Test
         public void nullNameTest() {
             //boolean is default to be false if not assigned any value
-            violation = new Violation(codeNumber, false, category, description);
+            violation = new Violation(codeNumber, (Boolean)null, category, description);
         }
         @Test
         public void nullCategoryTest() {
             violation = new Violation(codeNumber, isCritical, null, description);
+        }
+        @Test
+        public void categoryIsNullCategoryTest() {
+            violation = new Violation(codeNumber, isCritical, ViolationCategory.NULL_CATEGORY, description);
         }
         @Test
         public void nullDescriptionTest() {
@@ -87,23 +91,8 @@ public class ViolationTest {
             thrown.expect(IllegalArgumentException.class);
         }
 
-        @Test
-        public void emptyCodeNumberTest() {
-            //int cannot be null
-            violation = new Violation(0, isCritical, category, description);
-        }
-        @Test
-        public void emptyNameTest() {
-            //boolean is default to be false if not assigned any value
-            violation = new Violation(codeNumber, false, category, description);
-        }
-        @Test
-        public void emptyCategoryTest() {
-            violation = new Violation(codeNumber, isCritical, null, description);
-        }
-        @Test
         public void emptyDescriptionTest() {
-            violation = new Violation(codeNumber, isCritical, category, null);
+            violation = new Violation(codeNumber, isCritical, category, "");
         }
     }
 
