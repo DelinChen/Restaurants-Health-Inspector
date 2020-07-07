@@ -11,18 +11,20 @@ public class Inspection {
     public final InspectionType type;
     public final int numCritViolations;
     public final int numNonCritViolations;
-    public final HazardRating rating;
+    public final HazardRating hazardRating;
     public final List<Violation> violations;
 
-    public Inspection(String trackingNumber, LocalDate date, InspectionType type, int numCritViolations, int numNonCritViolations, HazardRating rating, List<Violation> violations) {
+
+    public Inspection(String trackingNumber, LocalDate date, InspectionType type, int numCritViolations, int numNonCritViolations, HazardRating hazardRating, List<Violation> violations) {
         this.trackingNumber = trackingNumber;
         this.date = date;
         this.type = type;
         this.numCritViolations = numCritViolations;
         this.numNonCritViolations = numNonCritViolations;
-        this.rating = rating;
+        this.hazardRating = hazardRating;
         this.violations = violations;
     }
+
 
     @Override
     public boolean equals(@Nullable Object o) {
@@ -38,7 +40,7 @@ public class Inspection {
                 && type.equals(other.type)
                 && numCritViolations == other.numCritViolations
                 && numNonCritViolations == other.numNonCritViolations
-                && rating.equals(other.rating)
+                && hazardRating.equals(other.hazardRating)
                 && violations.equals(violations);
     }
 }

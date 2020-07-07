@@ -4,11 +4,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ViolationManager {
-    private List<Violation> violationList = new ArrayList<>();
+    private List<Violation> violations;
 
     public ViolationManager() {
-        this.violationList = violationList;
+        violations = new ArrayList<>();
     }
 
+    ////////////////////////////////////////////////////////////////////////////
+    // Delegate methods
+
+    public int size() {
+        return violations.size();
+    }
+
+    public Violation getViolation(int position){
+        return violations.get(position);
+    }
 
 }
