@@ -1,5 +1,7 @@
 package ca.cmpt276.project.model;
 
+import androidx.annotation.NonNull;
+
 public enum HazardRating {
     LOW("Low"),
     MODERATE("Moderate"),
@@ -12,6 +14,7 @@ public enum HazardRating {
         this.stringVal = stringVal;
     }
 
+    @NonNull
     @Override
     public String toString() {
         return stringVal;
