@@ -14,7 +14,7 @@ public class Restaurant implements Comparable<Restaurant> {
     public final double latitude;
     public final double longitude;
 
-    private final List<Inspection> inspections;
+    public final List<Inspection> inspections;
 
     public static final double MIN_LATITUDE = -90;
     public static final double MAX_LATITUDE = 90;
@@ -33,31 +33,11 @@ public class Restaurant implements Comparable<Restaurant> {
         this.city           = city;
         this.latitude       = latitude;
         this.longitude      = longitude;
-        // dependency injection
-        this.inspections    = inspections;
+        this.inspections    = Collections.unmodifiableList(inspections);
     }
 
     public Restaurant(String trackingNumber, String name, String address, String city, double latitude, double longitude) {
-        this(trackingNumber, name, address, city, latitude, longitude, new ArrayList<Inspection>());
-    }
-
-
-    /**
-     * Used to populate the list of inspections; outside world shouldn't be able to add anything to list
-     * @param checkup the Inspection to add to this Restaurant object
-     */
-    protected void inspect(Inspection checkup) {
-        inspections.add(checkup);
-    }
-
-
-    /////////////////////////////////////////////////////////////////////////////////////
-    // Getter methods
-    //     No mutator methods are allowed because there is currently no need to change a restaurant's data dynamically
-    //     i.e. the class is essentially just a read-only interface to the csv data
-
-    public List<Inspection> getInspections() {
-        return Collections.unmodifiableList(inspections);
+        this(trackingNumber, name, address, city, latitude, longitude, new ArrayList<>(0));
     }
 
 
