@@ -7,7 +7,15 @@ public enum InspectionType {
     FOLLOWUP("Follow-Up"),
     NULL_TYPE("");
 
+
+    ///////////////////////////////////////////////////////////
+    // Fields
+
     public final String stringVal;
+
+
+    ///////////////////////////////////////////////////////////
+    // Constructor
 
     InspectionType(String stringVal) {
         this.stringVal = stringVal;
@@ -18,6 +26,10 @@ public enum InspectionType {
     public String toString() {
         return this.stringVal;
     }
+
+
+    ///////////////////////////////////////////////////////////
+    // Factory method
 
     public static InspectionType parse(String input) {
         for(InspectionType type : InspectionType.values()) {

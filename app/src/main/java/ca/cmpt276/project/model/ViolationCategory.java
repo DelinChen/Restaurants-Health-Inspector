@@ -8,7 +8,14 @@ public enum ViolationCategory {
     EQUIPMENT("EQUIPMENT"),
     NULL_CATEGORY("");
 
+
+    ///////////////////////////////////////////////////////////
+    // Fields
+
     public final String stringVal;
+
+    ///////////////////////////////////////////////////////////
+    // Constructor
 
     ViolationCategory(String stringVal){
         this.stringVal = stringVal;
@@ -19,6 +26,10 @@ public enum ViolationCategory {
     public String toString() {
         return this.stringVal;
     }
+
+
+    ///////////////////////////////////////////////////////////
+    // Factory method
 
     public static ViolationCategory parse(String input){
         for( ViolationCategory category : ViolationCategory.values()){

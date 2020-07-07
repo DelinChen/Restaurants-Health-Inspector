@@ -8,7 +8,15 @@ public enum HazardRating {
     HIGH("High"),
     NULL_RATING("");
 
+
+    ///////////////////////////////////////////////////////////
+    // Fields
+
     private final String stringVal;
+
+
+    ///////////////////////////////////////////////////////////
+    // Constructor
 
     HazardRating(String stringVal) {
         this.stringVal = stringVal;
@@ -19,6 +27,10 @@ public enum HazardRating {
     public String toString() {
         return stringVal;
     }
+
+
+    ///////////////////////////////////////////////////////////
+    // Factory method
 
     public static HazardRating parse(String input) {
         for(HazardRating rating : HazardRating.values()) {
