@@ -47,7 +47,7 @@ public class InspectionScanner extends CsvScanner {
         String line = super.nextLine();
         line = line.replace("\"", "");
         line = line.replace("Not Repeat", "");
-        String[] buffer = line.split(",", VIOLATIONS_LUMP);
+        String[] buffer = line.split(",", VIOLATIONS_LUMP+1);
 
         String trackingNumber           = buffer[TRACKING_NUMBER];
         LocalDate date                  = LocalDate.parse(buffer[DATE], BASIC_ISO_DATE);

@@ -72,9 +72,9 @@ public class Restaurant implements Comparable<Restaurant> {
             return false;
         }
         Restaurant other = (Restaurant)o;
-        return allFieldsEqualTo(other);
+        return allFieldsEqualWith(other);
     }
-    private boolean allFieldsEqualTo(Restaurant other) {
+    private boolean allFieldsEqualWith(Restaurant other) {
         return trackingNumber.equals(other.trackingNumber)
                 && name.equals(other.name)
                 && address.equals(other.address)

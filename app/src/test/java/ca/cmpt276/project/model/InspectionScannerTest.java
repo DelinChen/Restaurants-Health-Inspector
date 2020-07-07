@@ -34,7 +34,7 @@ public class InspectionScannerTest {
     public void scanEntireFileTest() throws IOException, ParseException {
         InspectionScanner scanner = new InspectionScanner(PATH_TO_INSPECTION_CSV);
         while(scanner.hasNextLine()) {
-            System.out.println(scanner.nextInspection());
+            scanner.nextInspection();
         }
     }
 }

@@ -1,5 +1,7 @@
 package ca.cmpt276.project.model;
 
+import androidx.annotation.Nullable;
+
 import java.time.LocalDate;
 import java.util.List;
 
@@ -20,5 +22,23 @@ public class Inspection {
         this.numNonCritViolations = numNonCritViolations;
         this.rating = rating;
         this.violations = violations;
+    }
+
+    @Override
+    public boolean equals(@Nullable Object o) {
+        if(!(o instanceof Inspection)) {
+            return false;
+        }
+        Inspection other = (Inspection)o;
+        return allFieldsEqualWith(other);
+    }
+    private boolean allFieldsEqualWith(Inspection other) {
+        return trackingNumber.equals(other.trackingNumber)
+                && date.equals(other.date)
+                && type.equals(other.type)
+                && numCritViolations == other.numCritViolations
+                && numNonCritViolations == other.numNonCritViolations
+                && rating.equals(other.rating)
+                && violations.equals(violations);
     }
 }
