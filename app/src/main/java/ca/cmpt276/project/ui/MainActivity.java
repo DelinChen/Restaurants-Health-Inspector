@@ -7,6 +7,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
+import android.widget.Toast;
 
 import ca.cmpt276.project.R;
 
@@ -26,6 +28,7 @@ public class MainActivity extends AppCompatActivity implements RestListAdapter.R
         RestListAdapter adapter = new RestListAdapter(this, manager, this);
         restList.setAdapter(adapter);
         restList.setLayoutManager(new LinearLayoutManager(this));
+
     }
 
     @Override
@@ -33,6 +36,5 @@ public class MainActivity extends AppCompatActivity implements RestListAdapter.R
         Intent intent = new Intent(this, RestaurantActivity.class);
         intent.putExtra("tracking number", manager.restaurants().get(position).trackingNumber);
         startActivity(intent);
-        //Toast.makeText(this, "testing", Toast.LENGTH_LONG).show();
     }
 }
