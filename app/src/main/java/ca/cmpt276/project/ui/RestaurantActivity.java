@@ -13,7 +13,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.example.a276project.R;
+import ca.cmpt276.project.R;
 
 import java.util.List;
 
