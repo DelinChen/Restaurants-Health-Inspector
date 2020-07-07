@@ -1,17 +1,14 @@
 package ca.cmpt276.project.model;
 
-import org.w3c.dom.ls.LSOutput;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static ca.cmpt276.project.model.InspectionScanner.InspectionCsvColumns.*;
 import static java.time.format.DateTimeFormatter.BASIC_ISO_DATE;
@@ -55,12 +52,10 @@ public class InspectionScanner extends CsvScanner {
         int numCritViolations           = Integer.parseInt(buffer[NUM_CRITICAL]);
         int numNonCritViolations        = Integer.parseInt(buffer[NUM_NONCRITICAL]);
         HazardRating rating             = HazardRating.parse(buffer[HAZARD_RATING]);
-
-        // ViolationScanner lumpScanner    = new ViolationScanner(buffer[VIOLATIONS_LUMP]);
-        // List<Violation> violations      = lumpScanner.nextListOfViolations();
+        List<Violation> violations      = ViolationsScanner.makeListFromLump(buffer[VIOLATIONS_LUMP]);
 
         Inspection nextResult = new Inspection(
-                trackingNumber, date, type, numCritViolations, numNonCritViolations, rating, new ArrayList<>());
+                trackingNumber, date, type, numCritViolations, numNonCritViolations, rating, violations);
         return nextResult;
     }
 
@@ -71,6 +66,10 @@ public class InspectionScanner extends CsvScanner {
     // For clarity when parsing the csv data
 
     static final class InspectionCsvColumns {
+        private InspectionCsvColumns() throws InstantiationException {
+            // should never be instantiated
+            throw new InstantiationException(getClass().getName() + "is not instantiable");
+        }
         static final int TRACKING_NUMBER = 0;
         static final int DATE = 1;
         static final int TYPE = 2;
@@ -78,5 +77,28 @@ public class InspectionScanner extends CsvScanner {
         static final int NUM_NONCRITICAL = 4;
         static final int HAZARD_RATING = 5;
         static final int VIOLATIONS_LUMP = 6;
+    }
+
+
+
+    ///////////////////////////////////////////////////////////////////////////////////
+    // Nested ViolationScanner class used to parse ViolationLump
+
+    private static class ViolationsScanner {
+        private ViolationsScanner() throws InstantiationException {
+            // should never be instantiated
+            throw new InstantiationException(getClass().getName() + "is not instantiable");
+        }
+
+        public static List<Violation> makeListFromLump(String lump) {
+            String[] violationsBuffer = lump.split(",|");
+            return Arrays.stream(violationsBuffer)
+                    .map(ViolationsScanner::nextViolation)
+                    .collect(Collectors.toList());
+        }
+
+        private static Violation nextViolation(String csvField) {
+            return null;
+        }
     }
 }
