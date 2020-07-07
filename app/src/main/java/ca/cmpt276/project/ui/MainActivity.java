@@ -4,20 +4,21 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.view.View;
+import android.widget.Toast;
 
 import com.example.a276project.R;
 
 import ca.cmpt276.project.model.RestaurantManager;
 import ca.cmpt276.project.ui.RestListAdapter;
-import ca.cmpt276.ui.RestaurantActivity;
+import ca.cmpt276.project.ui.RestaurantActivity;
 
 
-public class MainActivity extends AppCompatActivity {
-    private RestListAdapter.RestListClickListener listener;
+public class MainActivity extends AppCompatActivity implements RestListAdapter.RestListClickListener {
     RestaurantManager manager;
     RecyclerView restList;
     @Override
@@ -27,16 +28,16 @@ public class MainActivity extends AppCompatActivity {
 
         manager = RestaurantManager.getInstance(getApplicationContext());
         restList = findViewById(R.id.rest_list);
-        RestListAdapter adapter = new RestListAdapter(this, manager, listener);
-        listener = new RestListAdapter.RestListClickListener() {
-            @Override
-            public void onClick(View v, int position) {
-                Intent intent = new Intent(MainActivity.this, RestaurantActivity.class);
-                //intent.putExtra("tracking number", manager.restaurants().get(position).trackingNumber);
-                startActivity(intent);
-            }
-        };
+        RestListAdapter adapter = new RestListAdapter(this, manager, this);
         restList.setAdapter(adapter);
         restList.setLayoutManager(new LinearLayoutManager(this));
+    }
+
+    @Override
+    public void onClick(View v, int position) {
+        Intent intent = new Intent(this, RestaurantActivity.class);
+        intent.putExtra("tracking number", manager.restaurants().get(position).trackingNumber);
+        startActivity(intent);
+        //Toast.makeText(this, "testing", Toast.LENGTH_LONG).show();
     }
 }

@@ -44,7 +44,7 @@ public class RestListAdapter extends RecyclerView.Adapter<RestListAdapter.RestLi
     public RestListViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(context);
         View view = inflater.inflate(R.layout.restaurant_row, parent, false);
-        return new RestListViewHolder(view);
+        return new RestListViewHolder(view, listener);
     }
 
     @Override
@@ -101,7 +101,8 @@ public class RestListAdapter extends RecyclerView.Adapter<RestListAdapter.RestLi
     public class RestListViewHolder extends RecyclerView.ViewHolder implements  View.OnClickListener{
         TextView name, date, numIssues, address;
         ImageView restIcon, hazardIcon;
-        public RestListViewHolder(@NonNull View itemView) {
+        RestListClickListener itemListener;
+        public RestListViewHolder(@NonNull View itemView, RestListClickListener itemListener) {
             super(itemView);
             name = itemView.findViewById(R.id.rest_name);
             date = itemView.findViewById(R.id.inspect_date);
@@ -109,12 +110,13 @@ public class RestListAdapter extends RecyclerView.Adapter<RestListAdapter.RestLi
             restIcon = itemView.findViewById(R.id.rest_icon);
             hazardIcon = itemView.findViewById(R.id.hazard_icon);
             address = itemView.findViewById(R.id.rest_address);
+            this.itemListener = itemListener;
             itemView.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View view) {
-            listener.onClick(view, getAdapterPosition());
+            itemListener.onClick(view, getAdapterPosition());
         }
     }
 

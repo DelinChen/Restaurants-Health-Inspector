@@ -23,8 +23,9 @@ import ca.cmpt276.project.model.RestaurantManager;
 
 // Display details of single restaurant
 public class RestaurantActivity extends AppCompatActivity {
-
+    RestaurantManager manager;
     Restaurant restaurant;
+    String trackingNumber;
     private List<Inspection> inspections;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,7 +34,9 @@ public class RestaurantActivity extends AppCompatActivity {
 
         // get the intent and set the restaurant information
         Intent intent = getIntent();
-        restaurant = intent.getParcelableExtra("restaurant");
+        trackingNumber = intent.getStringExtra("tracking number");
+        manager = RestaurantManager.getInstance();
+        restaurant = manager.get(trackingNumber);
         TextView name = findViewById(R.id.txtName);
         TextView address = findViewById(R.id.txtAddress);
         TextView coords = findViewById(R.id.txtCoords);
@@ -42,10 +45,10 @@ public class RestaurantActivity extends AppCompatActivity {
         coords.setText("(" + restaurant.latitude + ", " + restaurant.longitude + ")");
 
         // get the inspections
-        inspections = restaurant.getInspections();
+        //inspections = restaurant.getInspections();
 
         // set the inspections listview
-        populateListView();
+        //populateListView();
     }
 
     private void populateListView() {
