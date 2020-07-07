@@ -9,30 +9,33 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static ca.cmpt276.project.model.InspectionScanner.PATH_TO_INSPECTION_CSV_FROM_ASSETS;
 import static ca.cmpt276.project.model.InspectionScanner.PATH_TO_INSPECTION_CSV_FROM_SRC;
 
 public final class InspectionManager {
     private static InspectionManager instance = null;
-    private final Map<String, List<Inspection>> inspections;      // maps Tracking Number -> Inspection
+    private final Map<String, List<Inspection>> inspectionsMap;      // maps Tracking Number -> Inspection
 
 
     ////////////////////////////////////////////////////////////////////////////
     // Singleton pattern
 
-    private InspectionManager(Map<String, List<Inspection>> inspections) {
+    private InspectionManager(Map<String, List<Inspection>> inspectionsMap) {
         if(instance != null) {
             throw new IllegalStateException(getClass().getName() + " is a singleton with an existing instance and cannot be reinstantiated");
         }
         instance = this;
 
         // Make both the Map and the List values in the Map immutable
-        inspections.forEach((trackingNumber, inspectionsList) -> {
-            inspections.put(trackingNumber, Collections.unmodifiableList(inspectionsList));
+        inspectionsMap.forEach((trackingNumber, inspectionsList) -> {
+            Collections.sort(inspectionsList, Collections.reverseOrder());
+            inspectionsMap.put(trackingNumber, Collections.unmodifiableList(inspectionsList));
         });
-        this.inspections = Collections.unmodifiableMap(inspections);
+        this.inspectionsMap = Collections.unmodifiableMap(inspectionsMap);
     }
+
 
     public static InspectionManager getInstance(Context anyContext) {
         if(instance == null) {
@@ -62,25 +65,27 @@ public final class InspectionManager {
     // Delegate methods
 
     public boolean containsTrackingNumber(String trackingNumber) {
-        return inspections.containsKey(trackingNumber);
+        return inspectionsMap.containsKey(trackingNumber);
     }
     public boolean containsInspection(Inspection inspection) {
-        return inspections.containsValue(inspection);
+        return inspectionsMap.containsValue(inspection);
     }
 
     public List<Inspection> get(String trackingNumber) {
-        return Optional
-                .ofNullable(inspections.get(trackingNumber))
-                .orElseGet(() -> new ArrayList<>(0));
+        return inspectionsMap.get(trackingNumber);
     }
     public List<Inspection> getOrDefault(String trackingNumber, List<Inspection> defaultValue) {
-        return inspections.getOrDefault(trackingNumber, defaultValue);
+        return inspectionsMap.getOrDefault(trackingNumber, defaultValue);
     }
 
     public int size() {
-        return inspections.size();
+        return inspectionsMap.size();
     }
 
+    public List<List<Inspection>> inspections() {
+        List<List<Inspection>> values = new ArrayList<>(inspectionsMap.values());
+        return Collections.unmodifiableList(values);
+    }
 
 
     ////////////////////////////////////////////////////////////////////////

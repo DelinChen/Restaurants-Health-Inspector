@@ -1,12 +1,14 @@
 package ca.cmpt276.project.model;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
-public class Inspection {
+public class Inspection implements Comparable<Inspection> {
     public final String trackingNumber;
     public final LocalDate date;
     public final InspectionType type;
@@ -46,5 +48,32 @@ public class Inspection {
                 && numNonCritViolations == other.numNonCritViolations
                 && hazardRating.equals(other.hazardRating)
                 && violations.equals(other.violations);
+    }
+
+    @Override
+    public int compareTo(Inspection other) {
+        if(date.isBefore(other.date)) {
+            return -1;
+        }
+        else if(date.isEqual(other.date)) {
+            return 0;
+        }
+        else {
+            return 1;
+        }
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(trackingNumber, date, type, numCritViolations, numNonCritViolations, hazardRating, violations);
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        // Used mainly for debugging purposes
+        return "Inspection<" + trackingNumber + ", " + date + ", " + type
+                + ", " + numCritViolations + ", " + numNonCritViolations
+                + ", " + hazardRating + ", ... " + violations.size() + " violations>";
     }
 }
