@@ -4,18 +4,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.view.View;
-import android.widget.Toast;
 
-import com.example.a276project.R;
+import ca.cmpt276.project.R;
 
 import ca.cmpt276.project.model.RestaurantManager;
-import ca.cmpt276.project.ui.RestListAdapter;
-import ca.cmpt276.project.ui.RestaurantActivity;
 
 
 public class MainActivity extends AppCompatActivity implements RestListAdapter.RestListClickListener {
