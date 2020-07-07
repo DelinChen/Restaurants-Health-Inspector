@@ -37,7 +37,7 @@ public class Restaurant implements Comparable<Restaurant> {
     }
 
     public Restaurant(String trackingNumber, String name, String address, String city, double latitude, double longitude) {
-        this(trackingNumber, name, address, city, latitude, longitude, new ArrayList<>(0));
+        this(trackingNumber, name, address, city, latitude, longitude, Collections.emptyList());
     }
 
 
