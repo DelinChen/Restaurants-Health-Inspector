@@ -4,6 +4,53 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="ca.cmpt276.ui.InspectionActivity">
+    tools:context="ca.cmpt276.project.ui.InspectionActivity">
+
+    <ImageView
+        android:id="@+id/imgHazard"
+        android:layout_width="116dp"
+        android:layout_height="117dp"
+        android:layout_marginStart="28dp"
+        android:layout_marginTop="48dp"
+        android:src="@drawable/restaurant"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/hazard_high" />
+
+    <LinearLayout
+        android:layout_width="233dp"
+        android:layout_height="121dp"
+        android:layout_marginStart="24dp"
+        android:orientation="vertical"
+        app:layout_constraintStart_toEndOf="@+id/imgHazard"
+        app:layout_constraintTop_toTopOf="@+id/imgHazard">
+
+        <TextView
+            android:id="@+id/txtName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Inspection type"
+            android:textColor="#000000"
+            android:textSize="24sp" />
+
+        <TextView
+            android:id="@+id/txtDate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Date" />
+
+        <TextView
+            android:id="@+id/txtCritical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="critical:" />
+
+        <TextView
+            android:id="@+id/txtCoords"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="non critical:" />
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

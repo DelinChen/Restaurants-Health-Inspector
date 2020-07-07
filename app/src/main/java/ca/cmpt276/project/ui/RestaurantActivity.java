@@ -45,10 +45,10 @@ public class RestaurantActivity extends AppCompatActivity {
         coords.setText("(" + restaurant.latitude + ", " + restaurant.longitude + ")");
 
         // get the inspections
-        //inspections = restaurant.getInspections();
+        inspections = restaurant.getInspections();
 
         // set the inspections listview
-        //populateListView();
+        populateListView();
     }
 
     private void populateListView() {
