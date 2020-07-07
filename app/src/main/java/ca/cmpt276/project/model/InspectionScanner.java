@@ -6,16 +6,16 @@ import java.io.InputStream;
 import java.text.ParseException;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Map;
 
 import static ca.cmpt276.project.model.InspectionScanner.InspectionCsvColumns.*;
 import static java.time.format.DateTimeFormatter.BASIC_ISO_DATE;
 
 public class InspectionScanner extends CsvScanner {
-    public static final String PATH_TO_INSPECTION_CSV = "src/main/assets/ProjectData/inspectionreports_itr1.csv";
-
+    public static final String PATH_TO_INSPECTION_CSV_FROM_SRC = "src/main/assets/ProjectData/inspectionreports_itr1.csv";
+    public static final String PATH_TO_INSPECTION_CSV_FROM_ASSETS = "ProjectData/inspectionreports_itr1.csv";
 
     ///////////////////////////////////////////////////////////////////////////////////
     // Constructors
@@ -40,7 +40,7 @@ public class InspectionScanner extends CsvScanner {
     ///////////////////////////////////////////////////////////////////////////////////
     // Methods
 
-    public Inspection nextInspection() throws ParseException {
+    public Inspection nextInspection() {
         String line = super.nextLine();
         line = line.replace("\"", "");
         line = line.replace(",Not Repeat", "");
@@ -57,6 +57,25 @@ public class InspectionScanner extends CsvScanner {
         Inspection nextResult = new Inspection(
                 trackingNumber, date, type, numCritViolations, numNonCritViolations, rating, violations);
         return nextResult;
+    }
+
+    public Map<String, List<Inspection>> scanAllInspections() {
+        Map<String, List<Inspection>> inspectionsMap = new HashMap<>();
+        while(hasNextLine()) {
+            Inspection nextResult = nextInspection();
+            if(inspectionsMap.containsKey(nextResult.trackingNumber)) {
+                List<Inspection> inspectionsList = inspectionsMap.get(nextResult.trackingNumber);
+                assert(inspectionsList != null);
+                inspectionsList.add(nextResult);
+            }
+            else {
+                List<Inspection> inspectionsList = new ArrayList<>();
+                inspectionsList.add(nextResult);
+                inspectionsMap.put(nextResult.trackingNumber, inspectionsList);
+            }
+        }
+        close();
+        return inspectionsMap;
     }
 
 

@@ -8,13 +8,13 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
-import static ca.cmpt276.project.model.InspectionScanner.PATH_TO_INSPECTION_CSV;
+import static ca.cmpt276.project.model.InspectionScanner.PATH_TO_INSPECTION_CSV_FROM_SRC;
 import static org.junit.Assert.*;
 
 public class InspectionScannerTest {
     @Test
     public void scanOneInspectionTest() throws IOException, ParseException {
-        InspectionScanner scanner = new InspectionScanner(PATH_TO_INSPECTION_CSV);
+        InspectionScanner scanner = new InspectionScanner(PATH_TO_INSPECTION_CSV_FROM_SRC);
 
         // Expected fields
         String trackingNumber = "SDFO-8HKP7E";
@@ -32,7 +32,7 @@ public class InspectionScannerTest {
 
     @Test
     public void scanEntireFileTest() throws IOException, ParseException {
-        InspectionScanner scanner = new InspectionScanner(PATH_TO_INSPECTION_CSV);
+        InspectionScanner scanner = new InspectionScanner(PATH_TO_INSPECTION_CSV_FROM_SRC);
         while(scanner.hasNextLine()) {
             scanner.nextInspection();
         }

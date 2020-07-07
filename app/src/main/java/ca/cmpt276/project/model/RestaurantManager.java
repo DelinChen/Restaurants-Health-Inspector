@@ -23,12 +23,12 @@ public final class RestaurantManager {
     ////////////////////////////////////////////////////////////////////////////
     // Singleton pattern
 
-    private RestaurantManager() {
+    private RestaurantManager(Map<String, Restaurant> restaurants) {
         if(instance != null) {
             throw new IllegalStateException(getClass().getName() + " is a singleton with an existing instance and cannot be reinstantiated");
         }
         instance = this;
-        restaurants = new HashMap<>();
+        this.restaurants = Collections.unmodifiableMap(restaurants);
     }
 
     public static RestaurantManager getInstance(Context anyContext) {
@@ -85,11 +85,6 @@ public final class RestaurantManager {
         return Collections.unmodifiableSet(restaurants.entrySet());
     }
 
-    // Used when populating the RestuarantManager from CSV file
-    protected Restaurant put(String trackingNumber, Restaurant restaurant) {
-        return restaurants.put(trackingNumber, restaurant);
-    }
-
 
     ////////////////////////////////////////////////////////////////////////
     // Factory methods
@@ -101,9 +96,10 @@ public final class RestaurantManager {
      * @return the populated manager
      */
     private static RestaurantManager fromCsv(String pathToCsvData, boolean hasHeaderRow) throws IOException {
-        RestaurantManager manager = new RestaurantManager();
         RestaurantScanner scanner = new RestaurantScanner(pathToCsvData, hasHeaderRow);
-        scanUntilEnd(manager, scanner);
+        Map<String, Restaurant> restaurants = scanner.scanAllRestaurants();
+
+        RestaurantManager manager = new RestaurantManager(restaurants);
         return manager;
     }
     private static RestaurantManager fromCsv(String pathToCsvData) throws IOException {
@@ -112,20 +108,13 @@ public final class RestaurantManager {
 
     private static RestaurantManager fromCsv(Context anyContext, String pathToCsvData, boolean hasHeaderRow)
             throws IOException {
-        InputStream dataStream = anyContext.getApplicationContext().getAssets()
-                                    .open(pathToCsvData);
-        RestaurantManager manager = new RestaurantManager();
-        RestaurantScanner scanner = new RestaurantScanner(dataStream, hasHeaderRow);
-        scanUntilEnd(manager, scanner);
+        InputStream dataStream = anyContext.getApplicationContext().getAssets().open(pathToCsvData);
+        RestaurantScanner restaurantScanner = new RestaurantScanner(anyContext, dataStream, hasHeaderRow);
+        Map<String, Restaurant> restaurants = restaurantScanner.scanAllRestaurants();
+
+        RestaurantManager manager = new RestaurantManager(restaurants);
         return manager;
     }
 
 
-    private static void scanUntilEnd(RestaurantManager manager, RestaurantScanner scanner) {
-        while(scanner.hasNextLine()) {
-            Restaurant result = scanner.nextRestaurant();
-            manager.put(result.trackingNumber, result);
-        }
-        scanner.close();
-    }
 }
