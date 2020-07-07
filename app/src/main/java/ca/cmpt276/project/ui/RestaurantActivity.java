@@ -56,15 +56,15 @@ public class RestaurantActivity extends AppCompatActivity {
         ArrayAdapter <Inspection> adapter = new MyListAdapter();
         ListView list = findViewById(R.id.listInspections);
         list.setAdapter(adapter);
-        /*list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Intent intent = new Intent(this, InspectionActivity.class);
+                Intent intent = new Intent(RestaurantActivity.this, InspectionActivity.class);
                 intent.putExtra("tracking number", restaurant.trackingNumber);
                 intent.putExtra("position", i);
                 startActivity(intent);
             }
-        });*/
+        });
 
     }
     private class MyListAdapter extends ArrayAdapter<Inspection>{
