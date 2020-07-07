@@ -38,6 +38,7 @@ public class RestaurantActivity extends AppCompatActivity {
         trackingNumber = intent.getStringExtra("tracking number");
         manager = RestaurantManager.getInstance();
         restaurant = manager.get(trackingNumber);
+
         TextView name = findViewById(R.id.txtName);
         TextView address = findViewById(R.id.txtAddress);
         TextView coords = findViewById(R.id.txtCoords);
@@ -65,8 +66,8 @@ public class RestaurantActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
     }
+
     private class MyListAdapter extends ArrayAdapter<Inspection>{
         public MyListAdapter(){
             super(RestaurantActivity.this, R.layout.listview_inspections,inspections);
