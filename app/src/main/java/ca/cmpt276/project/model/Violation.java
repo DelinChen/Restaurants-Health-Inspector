@@ -1,6 +1,8 @@
 package ca.cmpt276.project.model;
 
 
+import androidx.annotation.Nullable;
+
 public class Violation {
     public final int codeNumber;
     public final boolean isCritical;
@@ -18,4 +20,13 @@ public class Violation {
         this.description = description;
     }
 
+
+    @Override
+    public boolean equals(@Nullable Object o) {
+        if(!(o instanceof Violation)) {
+            return false;
+        }
+        Violation other = (Violation) o;
+        return this.codeNumber == other.codeNumber;
+    }
 }

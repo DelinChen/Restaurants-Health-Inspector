@@ -25,18 +25,22 @@ public class ViolationTest {
             violation = new Violation(codeNumber, isCritical, category, description);
         }
 
+        @Test
         public void validCodeNumberTest(){
             assertEquals(codeNumber, violation.codeNumber);
         }
 
+        @Test
         public void validIsCriticalTest(){
             assertEquals(isCritical, violation.isCritical);
         }
 
+        @Test
         public void validCategoryTest(){
             assertEquals(category, violation.category);
         }
 
+        @Test
         public void validDescriptionTest(){
             assertEquals(description, violation.description);
         }
