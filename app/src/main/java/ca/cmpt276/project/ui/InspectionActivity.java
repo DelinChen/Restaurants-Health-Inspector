@@ -40,10 +40,10 @@ public class InspectionActivity extends AppCompatActivity {
         Intent intent = getIntent();
         trackingNumber = intent.getStringExtra("tracking number");
         position = intent.getIntExtra("position", 0);
-        inspection = manager.get(trackingNumber).getInspections().get(position);
+        inspection = manager.get(trackingNumber).inspections.get(position);
 
         // get violations
-        violations = inspection.getViolationList();
+        violations = inspection.violations;
 
         populateInspection();
         populateViolations();
@@ -82,22 +82,22 @@ public class InspectionActivity extends AppCompatActivity {
 
             // set the image
             ImageView imageView = itemView.findViewById(R.id.imgCategory);
-            if (currentViolation.getHazardType().equals("food")){
+            if (currentViolation.category.equals("FOOD")){
                 imageView.setImageResource(R.drawable.violation_food);
             }
-            else if (currentViolation.getHazardType().equals("pest")){
+            else if (currentViolation.category.equals("PEST")){
                 imageView.setImageResource(R.drawable.violation_pest);
             }
 
-            else if (currentViolation.getHazardType().equals("equipment")){
+            else if (currentViolation.category.equals("EQUIPMENT")){
                 imageView.setImageResource(R.drawable.violation_equipment);
             }
 
-            String description = currentViolation.getDescription();
+            String description = currentViolation.description;
             TextView txtDescription = findViewById(R.id.txtDescription);
             txtDescription.setText(description);
 
-            Boolean critical = currentViolation.isCritical();
+            Boolean critical = currentViolation.isCritical;
             ImageView imgCategory = findViewById(R.id.imageView3);
             TextView txtCritical = findViewById(R.id.txtCriticalExtent);
             if(critical == true){
@@ -118,22 +118,25 @@ public class InspectionActivity extends AppCompatActivity {
 
     private void populateInspection() {
         // find single inspection data
-        int hazardLevel = inspection.getHazaradRating();
-        String inspectionType = inspection.getInspect_type();
-        String date = inspection.getInspect_date();
-        int critical = inspection.getInspect_crit_issue();
-        int nonCritical = inspection.getInspect_nonCrit_issue();
+        String hazardLevel = inspection.hazardRating.toString();
+        String inspectionType = inspection.type.toString();
+        String date = inspection.date.toString();
+        int critical = inspection.numCritViolations;
+        int nonCritical = inspection.numNonCritViolations;
 
         //
         ImageView image = findViewById(R.id.imgHazard);
-        if (hazardLevel == 0){
+        if (hazardLevel.equals("Low")){
             image.setImageResource(R.drawable.hazard_low);
         }
-        else if (hazardLevel == 1){
+        else if (hazardLevel.equals("Moderate")){
             image.setImageResource(R.drawable.hazard_medium);
         }
-        else {
+        else if (hazardLevel.equals("High")){
             image.setImageResource(R.drawable.hazard_high);
+        }
+        else {
+            //image.setImageResource(R.drawable.hazard_high);
         }
 
         TextView txtType = findViewById(R.id.txtName);

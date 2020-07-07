@@ -47,7 +47,7 @@ public class RestaurantActivity extends AppCompatActivity {
         coords.setText("(" + restaurant.latitude + ", " + restaurant.longitude + ")");
 
         // get the inspections
-        inspections = restaurant.getInspections();
+        inspections = restaurant.inspections;
 
         // set the inspections listview
         populateListView();
@@ -86,23 +86,26 @@ public class RestaurantActivity extends AppCompatActivity {
 
             // set the image
             ImageView imageView = itemView.findViewById(R.id.imgHazard);
-            if (currentInspection.getHazaradRating() == 0){
+            if (currentInspection.hazardRating.toString().equals("Low")){
                 imageView.setImageResource(R.drawable.hazard_low);
             }
-            else if (currentInspection.getHazaradRating() == 1){
+            else if (currentInspection.hazardRating.toString().equals("Moderate")){
                 imageView.setImageResource(R.drawable.hazard_medium);
             }
-            else {
+            else if (currentInspection.hazardRating.toString().equals("High")){
                 imageView.setImageResource(R.drawable.hazard_high);
             }
+            else{
+
+            }
             TextView txtCritical = itemView.findViewById(R.id.txtCritical);
-            txtCritical.setText("Critical: " + currentInspection.getInspect_crit_issue());
+            txtCritical.setText("Critical: " + currentInspection.numCritViolations);
 
             TextView txtNonCritical = itemView.findViewById(R.id.txtNonCritical);
-            txtNonCritical.setText("Critical: " + currentInspection.getInspect_nonCrit_issue());
+            txtNonCritical.setText("Critical: " + currentInspection.numNonCritViolations);
 
             TextView txtDate = itemView.findViewById(R.id.txtDate);
-            txtDate.setText("Critical: " + currentInspection.getInspect_date());
+            txtDate.setText("Critical: " + currentInspection.date.toString());
             return itemView;
 
         }
