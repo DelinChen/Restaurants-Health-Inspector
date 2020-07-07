@@ -3,6 +3,8 @@ package ca.cmpt276.project.model;
 
 import androidx.annotation.Nullable;
 
+import java.util.Objects;
+
 public class Violation {
     public final int codeNumber;
     public final boolean isCritical;
@@ -28,5 +30,10 @@ public class Violation {
         }
         Violation other = (Violation) o;
         return this.codeNumber == other.codeNumber;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(codeNumber, isCritical, category, description);
     }
 }
