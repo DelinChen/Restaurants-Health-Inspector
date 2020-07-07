@@ -1,69 +1,79 @@
 package ca.cmpt276.project.model;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
+import java.time.LocalDate;
+import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
-public class Inspection {
-    private String inspect_date;
-    private String inspect_type;
-    private int inspect_crit_issue;
-    private int inspect_nonCrit_issue;
-    private int hazaradRating; //0 = low, 1 = moderate, 2= high
-    private List<Violation> violationList;
+public class Inspection implements Comparable<Inspection> {
+    public final String trackingNumber;
+    public final LocalDate date;
+    public final InspectionType type;
+    public final int numCritViolations;
+    public final int numNonCritViolations;
+    public final HazardRating hazardRating;
+    public final List<Violation> violations;
 
-    public Inspection(String inspect_date, String inspect_type, int inspect_crit_issue, int inspect_nonCrit_issue, int hazaradRating, List<Violation> violationList) {
-        this.inspect_date = inspect_date;
-        this.inspect_type = inspect_type;
-        this.inspect_crit_issue = inspect_crit_issue;
-        this.inspect_nonCrit_issue = inspect_nonCrit_issue;
-        this.hazaradRating = hazaradRating;
-        this.violationList = violationList;
+
+    /////////////////////////////////////////////////////////////////////////////////////
+    // Constructor
+
+    public Inspection(String trackingNumber, LocalDate date, InspectionType type, int numCritViolations, int numNonCritViolations, HazardRating hazardRating, List<Violation> violations) {
+        this.trackingNumber         = trackingNumber;
+        this.date                   = date;
+        this.type                   = type;
+        this.numCritViolations      = numCritViolations;
+        this.numNonCritViolations   = numNonCritViolations;
+        this.hazardRating           = hazardRating;
+        this.violations             = Collections.unmodifiableList(violations);
     }
 
-    public String getInspect_date() {
-        return inspect_date;
+
+    @Override
+    public boolean equals(@Nullable Object o) {
+        if(!(o instanceof Inspection)) {
+            return false;
+        }
+        Inspection other = (Inspection)o;
+        return allFieldsEqualWith(other);
+    }
+    private boolean allFieldsEqualWith(Inspection other) {
+        return trackingNumber.equals(other.trackingNumber)
+                && date.equals(other.date)
+                && type.equals(other.type)
+                && numCritViolations == other.numCritViolations
+                && numNonCritViolations == other.numNonCritViolations
+                && hazardRating.equals(other.hazardRating)
+                && violations.equals(other.violations);
     }
 
-    public void setInspect_date(String inspect_date) {
-        this.inspect_date = inspect_date;
+    @Override
+    public int compareTo(Inspection other) {
+        if(date.isBefore(other.date)) {
+            return -1;
+        }
+        else if(date.isEqual(other.date)) {
+            return 0;
+        }
+        else {
+            return 1;
+        }
     }
 
-    public String getInspect_type() {
-        return inspect_type;
+    @Override
+    public int hashCode() {
+        return Objects.hash(trackingNumber, date, type, numCritViolations, numNonCritViolations, hazardRating, violations);
     }
 
-    public void setInspect_type(String inspect_type) {
-        this.inspect_type = inspect_type;
-    }
-
-    public int getInspect_crit_issue() {
-        return inspect_crit_issue;
-    }
-
-    public void setInspect_crit_issue(int inspect_crit_issue) {
-        this.inspect_crit_issue = inspect_crit_issue;
-    }
-
-    public int getInspect_nonCrit_issue() {
-        return inspect_nonCrit_issue;
-    }
-
-    public void setInspect_nonCrit_issue(int inspect_nonCrit_issue) {
-        this.inspect_nonCrit_issue = inspect_nonCrit_issue;
-    }
-
-    public int getHazaradRating() {
-        return hazaradRating;
-    }
-
-    public void setHazaradRating(int hazaradRating) {
-        this.hazaradRating = hazaradRating;
-    }
-
-    public List<Violation> getViolationList() {
-        return violationList;
-    }
-
-    public void setViolationList(List<Violation> violationList) {
-        this.violationList = violationList;
+    @NonNull
+    @Override
+    public String toString() {
+        // Used mainly for debugging purposes
+        return "Inspection<" + trackingNumber + ", " + date + ", " + type
+                + ", " + numCritViolations + ", " + numNonCritViolations
+                + ", " + hazardRating + ", ... " + violations.size() + " violations>";
     }
 }

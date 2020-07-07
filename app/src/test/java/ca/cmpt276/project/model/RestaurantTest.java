@@ -29,24 +29,6 @@ public class RestaurantTest {
 
     private static final double MAX_DELTA = 1e-12;
 
-    public static class RestaurantMethodTest {
-        public Restaurant instance = null;
-
-        @Before
-        public void initialize() {
-            instance = new Restaurant(trackingNumber, name, address, city, latitude, longitude, inspections);
-        }
-
-        @Test
-        public void getInspections () {
-
-        }
-
-        @Test
-        public void inspect () {
-
-        }
-    }
 
     public static class ValidRestaurantConstructorTest {
         private Restaurant instance = null;
@@ -82,7 +64,7 @@ public class RestaurantTest {
         }
         @Test
         public void validInspectionsTest() {
-            assertEquals(inspections, instance.getInspections());
+            assertEquals(inspections, instance.inspections);
         }
         @Test
         public void latitudeOnLowerBoundTest() {

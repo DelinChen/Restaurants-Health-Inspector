@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -17,18 +16,18 @@ import static ca.cmpt276.project.model.RestaurantScanner.PATH_TO_RESTAURANT_CSV_
 
 public final class RestaurantManager {
     private static RestaurantManager instance = null;
-    private final Map<String, Restaurant> restaurants;      // maps Tracking Number -> Restaurant
+    private final Map<String, Restaurant> restaurantMap;      // maps Tracking Number -> Restaurant
 
 
     ////////////////////////////////////////////////////////////////////////////
     // Singleton pattern
 
-    private RestaurantManager() {
+    private RestaurantManager(Map<String, Restaurant> restaurantMap) {
         if(instance != null) {
             throw new IllegalStateException(getClass().getName() + " is a singleton with an existing instance and cannot be reinstantiated");
         }
         instance = this;
-        restaurants = new HashMap<>();
+        this.restaurantMap = Collections.unmodifiableMap(restaurantMap);
     }
 
     public static RestaurantManager getInstance(Context anyContext) {
@@ -59,40 +58,35 @@ public final class RestaurantManager {
     // Delegate methods
 
     public boolean containsTrackingNumber(String trackingNumber) {
-        return restaurants.containsKey(trackingNumber);
+        return restaurantMap.containsKey(trackingNumber);
     }
     public boolean containsRestaurant(Restaurant restaurant) {
-        return restaurants.containsValue(restaurant);
+        return restaurantMap.containsValue(restaurant);
     }
 
     public Restaurant get(String trackingNumber) {
-        return restaurants.get(trackingNumber);
+        return restaurantMap.get(trackingNumber);
     }
 
     public int size() {
-        return restaurants.size();
+        return restaurantMap.size();
     }
 
     public Set<String> trackingNumberSet() {
-        return Collections.unmodifiableSet(restaurants.keySet());
+        return Collections.unmodifiableSet(restaurantMap.keySet());
     }
     public List<Restaurant> restaurants() {
-        List<Restaurant> values = new ArrayList<>(restaurants.values());
+        List<Restaurant> values = new ArrayList<>(restaurantMap.values());
         Collections.sort(values);
         return Collections.unmodifiableList(values);
     }
     public Set<Map.Entry<String, Restaurant>> entrySet() {
-        return Collections.unmodifiableSet(restaurants.entrySet());
-    }
-
-    // Used when populating the RestuarantManager from CSV file
-    protected Restaurant put(String trackingNumber, Restaurant restaurant) {
-        return restaurants.put(trackingNumber, restaurant);
+        return Collections.unmodifiableSet(restaurantMap.entrySet());
     }
 
 
     ////////////////////////////////////////////////////////////////////////
-    // Factory method
+    // Factory methods
 
     /**
      * Uses .csv data to populate the RestaurantManager
@@ -101,9 +95,10 @@ public final class RestaurantManager {
      * @return the populated manager
      */
     private static RestaurantManager fromCsv(String pathToCsvData, boolean hasHeaderRow) throws IOException {
-        RestaurantManager manager = new RestaurantManager();
         RestaurantScanner scanner = new RestaurantScanner(pathToCsvData, hasHeaderRow);
-        scanUntilEnd(manager, scanner);
+        Map<String, Restaurant> restaurants = scanner.scanAllRestaurants();
+
+        RestaurantManager manager = new RestaurantManager(restaurants);
         return manager;
     }
     private static RestaurantManager fromCsv(String pathToCsvData) throws IOException {
@@ -112,20 +107,13 @@ public final class RestaurantManager {
 
     private static RestaurantManager fromCsv(Context anyContext, String pathToCsvData, boolean hasHeaderRow)
             throws IOException {
-        InputStream dataStream = anyContext.getApplicationContext().getAssets()
-                                    .open(pathToCsvData);
-        RestaurantManager manager = new RestaurantManager();
-        RestaurantScanner scanner = new RestaurantScanner(dataStream, hasHeaderRow);
-        scanUntilEnd(manager, scanner);
+        InputStream dataStream = anyContext.getApplicationContext().getAssets().open(pathToCsvData);
+        RestaurantScanner restaurantScanner = new RestaurantScanner(anyContext, dataStream, hasHeaderRow);
+        Map<String, Restaurant> restaurants = restaurantScanner.scanAllRestaurants();
+
+        RestaurantManager manager = new RestaurantManager(restaurants);
         return manager;
     }
 
 
-    private static void scanUntilEnd(RestaurantManager manager, RestaurantScanner scanner) {
-        while(scanner.hasNextLine()) {
-            Restaurant result = scanner.nextRestaurant();
-            manager.put(result.trackingNumber, result);
-        }
-        scanner.close();
-    }
 }
