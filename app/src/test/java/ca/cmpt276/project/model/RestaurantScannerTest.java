@@ -6,12 +6,14 @@ import org.junit.rules.ExpectedException;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import static org.junit.Assert.*;
 
 public class RestaurantScannerTest {
     public static final int NUM_RESTAURANTS_IN_CSV = 8;
+    public static final InspectionManager inspectionManager = InspectionManager.getInstance();
 
     @Rule
     public ExpectedException thrown = ExpectedException.none();
@@ -19,8 +21,10 @@ public class RestaurantScannerTest {
     @Test
     public void readsOneRestaurant() throws IOException {
         RestaurantScanner scanner = new RestaurantScanner(RestaurantScanner.PATH_TO_RESTAURANT_CSV_FROM_SRC);
+        InspectionManager inspectionManager = InspectionManager.getInstance();
+        List<Inspection> inspectionsList = inspectionManager.getOrDefault("SDFO-8HKP7E", Collections.emptyList());
 
-        Restaurant expected = new Restaurant("SDFO-8HKP7E", "Pattullo A&W", "12808 King George Blvd", "Surrey", 49.20610961, -122.8668064);
+        Restaurant expected = new Restaurant("SDFO-8HKP7E", "Pattullo A&W", "12808 King George Blvd", "Surrey", 49.20610961, -122.8668064, inspectionsList);
         Restaurant scanned = scanner.nextRestaurant();
 
         assertEquals(expected, scanned);
