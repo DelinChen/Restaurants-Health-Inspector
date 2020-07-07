@@ -5,8 +5,8 @@ android {
     buildToolsVersion "30.0.0"
 
     defaultConfig {
-        applicationId "com.example.a276project"
-        minSdkVersion 24
+        applicationId "ca.cmpt276.project"
+        minSdkVersion 29
         targetSdkVersion 30
         versionCode 1
         versionName "1.0"

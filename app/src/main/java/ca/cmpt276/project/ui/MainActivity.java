@@ -13,7 +13,7 @@ import com.example.a276project.R;
 
 import ca.cmpt276.project.model.RestaurantManager;
 import ca.cmpt276.project.ui.RestListAdapter;
-import ca.cmpt276.ui.RestaurantActivity;
+import ca.cmpt276.project.ui.RestaurantActivity;
 
 
 public class MainActivity extends AppCompatActivity {
