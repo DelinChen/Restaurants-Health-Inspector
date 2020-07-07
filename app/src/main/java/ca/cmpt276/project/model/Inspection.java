@@ -41,6 +41,6 @@ public class Inspection {
                 && numCritViolations == other.numCritViolations
                 && numNonCritViolations == other.numNonCritViolations
                 && hazardRating.equals(other.hazardRating)
-                && violations.equals(violations);
+                && violations.equals(other);
     }
 }
