@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -55,6 +56,15 @@ public class RestaurantActivity extends AppCompatActivity {
         ArrayAdapter <Inspection> adapter = new MyListAdapter();
         ListView list = findViewById(R.id.listInspections);
         list.setAdapter(adapter);
+        /*list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Intent intent = new Intent(this, InspectionActivity.class);
+                intent.putExtra("tracking number", restaurant.trackingNumber);
+                intent.putExtra("position", i);
+                startActivity(intent);
+            }
+        });*/
 
     }
     private class MyListAdapter extends ArrayAdapter<Inspection>{
