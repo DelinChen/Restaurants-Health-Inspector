@@ -43,7 +43,7 @@ public class InspectionScanner extends CsvScanner {
     public Inspection nextInspection() throws ParseException {
         String line = super.nextLine();
         line = line.replace("\"", "");
-        line = line.replace("Not Repeat", "");
+        line = line.replace(",Not Repeat", "");
         String[] buffer = line.split(",", VIOLATIONS_LUMP+1);
 
         String trackingNumber           = buffer[TRACKING_NUMBER];
@@ -52,15 +52,13 @@ public class InspectionScanner extends CsvScanner {
         int numCritViolations           = Integer.parseInt(buffer[NUM_CRITICAL]);
         int numNonCritViolations        = Integer.parseInt(buffer[NUM_NONCRITICAL]);
         HazardRating rating             = HazardRating.parse(buffer[HAZARD_RATING]);
-        List<Violation> violations      = ViolationsScanner.makeListFromLump(buffer[VIOLATIONS_LUMP]);
+        List<Violation> violations      = ViolationScanner.parseListFromLump(buffer[VIOLATIONS_LUMP]);
 
         Inspection nextResult = new Inspection(
                 trackingNumber, date, type, numCritViolations, numNonCritViolations, rating, violations);
         return nextResult;
     }
 
-    ///////////////////////////////////////////////////////////////////////////////////
-    // Helper methods
 
     ///////////////////////////////////////////////////////////////////////////////////
     // For clarity when parsing the csv data
@@ -77,28 +75,5 @@ public class InspectionScanner extends CsvScanner {
         static final int NUM_NONCRITICAL = 4;
         static final int HAZARD_RATING = 5;
         static final int VIOLATIONS_LUMP = 6;
-    }
-
-
-
-    ///////////////////////////////////////////////////////////////////////////////////
-    // Nested ViolationScanner class used to parse ViolationLump
-
-    private static class ViolationsScanner {
-        private ViolationsScanner() throws InstantiationException {
-            // should never be instantiated
-            throw new InstantiationException(getClass().getName() + "is not instantiable");
-        }
-
-        public static List<Violation> makeListFromLump(String lump) {
-            String[] violationsBuffer = lump.split(",|");
-            return Arrays.stream(violationsBuffer)
-                    .map(ViolationsScanner::nextViolation)
-                    .collect(Collectors.toList());
-        }
-
-        private static Violation nextViolation(String csvField) {
-            return null;
-        }
     }
 }

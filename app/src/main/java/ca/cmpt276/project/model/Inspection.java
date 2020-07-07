@@ -3,6 +3,7 @@ package ca.cmpt276.project.model;
 import androidx.annotation.Nullable;
 
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.List;
 
 public class Inspection {
@@ -15,14 +16,17 @@ public class Inspection {
     public final List<Violation> violations;
 
 
+    /////////////////////////////////////////////////////////////////////////////////////
+    // Constructor
+
     public Inspection(String trackingNumber, LocalDate date, InspectionType type, int numCritViolations, int numNonCritViolations, HazardRating hazardRating, List<Violation> violations) {
-        this.trackingNumber = trackingNumber;
-        this.date = date;
-        this.type = type;
-        this.numCritViolations = numCritViolations;
-        this.numNonCritViolations = numNonCritViolations;
-        this.hazardRating = hazardRating;
-        this.violations = violations;
+        this.trackingNumber         = trackingNumber;
+        this.date                   = date;
+        this.type                   = type;
+        this.numCritViolations      = numCritViolations;
+        this.numNonCritViolations   = numNonCritViolations;
+        this.hazardRating           = hazardRating;
+        this.violations             = Collections.unmodifiableList(violations);
     }
 
 

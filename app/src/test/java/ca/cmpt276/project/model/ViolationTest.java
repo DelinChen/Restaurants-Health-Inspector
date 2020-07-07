@@ -8,40 +8,33 @@ import org.junit.experimental.runners.Enclosed;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import static ca.cmpt276.project.model.Restaurant.MAX_LATITUDE;
-import static ca.cmpt276.project.model.Restaurant.MAX_LONGITUDE;
-import static ca.cmpt276.project.model.Restaurant.MIN_LATITUDE;
-import static ca.cmpt276.project.model.Restaurant.MIN_LONGITUDE;
 import static org.junit.Assert.*;
 
 @RunWith(Enclosed.class)
 public class ViolationTest {
-    private final static int vioNum = 201;
+    private final static int codeNumber = 201;
     private final static boolean isCritical = true;
-    private final static String hazardType = "Food contaminated or unfit for human consumption [s. 13]";
-    private final static String description = "Not Repeat";
+    private final static ViolationCategory category = ViolationCategory.FOOD;
+    private final static String description = "Food contaminated or unfit for human consumption [s. 13]";
 
 
     public static class ViolationMethodTest {
         private Violation violation;
         @Before
         public void initialize() {
-            violation = new Violation(vioNum, isCritical, hazardType, description);
+            violation = new Violation(codeNumber, isCritical, category, description);
         }
 
-        public void validVioNumTest(){
-            assertEquals(vioNum, violation.vioNum);
+        public void validCodeNumberTest(){
+            assertEquals(codeNumber, violation.codeNumber);
         }
 
         public void validIsCriticalTest(){
             assertEquals(isCritical, violation.isCritical);
         }
 
-        public void validHazardTypeTest(){
-            assertEquals(hazardType, violation.hazardType);
+        public void validCategoryTest(){
+            assertEquals(category, violation.category);
         }
 
         public void validDescriptionTest(){
@@ -60,27 +53,27 @@ public class ViolationTest {
         }
 
         @Test
-        public void nullVioNumTest() {
+        public void nullCodeNumberTest() {
             //int cannot be null
-            violation = new Violation(0, isCritical, hazardType, description);
+            violation = new Violation(0, isCritical, category, description);
         }
         @Test
         public void nullNameTest() {
             //boolean is default to be false if not assigned any value
-            violation = new Violation(vioNum, false, hazardType, description);
+            violation = new Violation(codeNumber, false, category, description);
         }
         @Test
-        public void nullHazardTest() {
-            violation = new Violation(vioNum, isCritical, null, description);
+        public void nullCategoryTest() {
+            violation = new Violation(codeNumber, isCritical, null, description);
         }
         @Test
         public void nullDescriptionTest() {
-            violation = new Violation(vioNum, isCritical, hazardType, null);
+            violation = new Violation(codeNumber, isCritical, category, null);
         }
 
     }
 
-    public static class RestaurantConstructorEmptyStringArgsTest {
+    public static class ViolationConstructorEmptyStringArgsTest {
         private Violation violation;
 
         @Rule
@@ -91,22 +84,22 @@ public class ViolationTest {
         }
 
         @Test
-        public void emptyVioNumTest() {
+        public void emptyCodeNumberTest() {
             //int cannot be null
-            violation = new Violation(0, isCritical, hazardType, description);
+            violation = new Violation(0, isCritical, category, description);
         }
         @Test
         public void emptyNameTest() {
             //boolean is default to be false if not assigned any value
-            violation = new Violation(vioNum, false, hazardType, description);
+            violation = new Violation(codeNumber, false, category, description);
         }
         @Test
-        public void emptyHazardTest() {
-            violation = new Violation(vioNum, isCritical, null, description);
+        public void emptyCategoryTest() {
+            violation = new Violation(codeNumber, isCritical, null, description);
         }
         @Test
         public void emptyDescriptionTest() {
-            violation = new Violation(vioNum, isCritical, hazardType, null);
+            violation = new Violation(codeNumber, isCritical, category, null);
         }
     }
 

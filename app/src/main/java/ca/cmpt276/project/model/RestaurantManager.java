@@ -92,7 +92,7 @@ public final class RestaurantManager {
 
 
     ////////////////////////////////////////////////////////////////////////
-    // Factory method
+    // Factory methods
 
     /**
      * Uses .csv data to populate the RestaurantManager

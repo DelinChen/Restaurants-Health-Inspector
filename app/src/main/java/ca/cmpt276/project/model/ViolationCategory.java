@@ -6,7 +6,7 @@ public enum ViolationCategory {
     FOOD("FOOD"),
     PEST("PEST"),
     EQUIPMENT("EQUIPMENT"),
-    NULL_TYPE("");
+    NULL_CATEGORY("");
 
     public final String stringVal;
 
@@ -26,7 +26,7 @@ public enum ViolationCategory {
                 return category;
             }
         }
-        return NULL_TYPE;
+        return NULL_CATEGORY;
     }
 
 }
