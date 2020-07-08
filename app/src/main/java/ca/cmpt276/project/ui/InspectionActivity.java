@@ -21,6 +21,7 @@ import ca.cmpt276.project.R;
 import ca.cmpt276.project.model.Inspection;
 import ca.cmpt276.project.model.RestaurantManager;
 import ca.cmpt276.project.model.Violation;
+import ca.cmpt276.project.model.ViolationCategory;
 
 public class InspectionActivity extends AppCompatActivity {
     RestaurantManager manager;
@@ -48,8 +49,8 @@ public class InspectionActivity extends AppCompatActivity {
         // get violations
         violations = inspection.violations;
 
-        //populateInspection();
-        //populateViolations();
+        populateInspection();
+        populateViolations();
 
     }
     @Override
@@ -95,24 +96,25 @@ public class InspectionActivity extends AppCompatActivity {
 
             // set the image
             ImageView imageView = itemView.findViewById(R.id.imgCategory);
-            if (currentViolation.category.toString().equals("FOOD")){
+
+            if (currentViolation.category == ViolationCategory.FOOD){
                 imageView.setImageResource(R.drawable.violation_food);
             }
-            else if (currentViolation.category.toString().equals("PEST")){
+            else if (currentViolation.category == ViolationCategory.PEST){
                 imageView.setImageResource(R.drawable.violation_pest);
             }
 
-            else if (currentViolation.category.toString().equals("EQUIPMENT")){
+            else if (currentViolation.category == ViolationCategory.EQUIPMENT){
                 imageView.setImageResource(R.drawable.violation_equipment);
             }
 
             String description = currentViolation.description;
-            TextView txtDescription = findViewById(R.id.txtDescription);
-            txtDescription.setText(description+"");
+            TextView txtDescription = itemView.findViewById(R.id.txtDescription);
+            txtDescription.setText(description);
 
             boolean critical = currentViolation.isCritical;
-            ImageView imgCategory = findViewById(R.id.imageView3);
-            TextView txtCritical = findViewById(R.id.txtCriticalExtent);
+            ImageView imgCategory = itemView.findViewById(R.id.imageView3);
+            TextView txtCritical = itemView.findViewById(R.id.txtCriticalExtent);
             if(critical){
                 imgCategory.setImageResource(R.drawable.icon_critical);
                 txtCritical.setText("Critical");
