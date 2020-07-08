@@ -102,10 +102,10 @@ public class RestaurantActivity extends AppCompatActivity {
             txtCritical.setText("Critical: " + currentInspection.numCritViolations);
 
             TextView txtNonCritical = itemView.findViewById(R.id.txtNonCritical);
-            txtNonCritical.setText("Critical: " + currentInspection.numNonCritViolations);
+            txtNonCritical.setText("Non critical: " + currentInspection.numNonCritViolations);
 
             TextView txtDate = itemView.findViewById(R.id.txtDate);
-            txtDate.setText("Critical: " + currentInspection.date.toString());
+            txtDate.setText("Date: " + currentInspection.date.toString());
             return itemView;
 
         }

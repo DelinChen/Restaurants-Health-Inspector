@@ -8,11 +8,14 @@
 
     <ImageView
         android:id="@+id/imgHazard"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
+        android:layout_width="62dp"
+        android:layout_height="63dp"
+        android:layout_marginStart="24dp"
         android:src="@drawable/hazard_high"
+        app:layout_constraintBottom_toTopOf="@+id/guideline"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="@+id/guideline"
+        app:layout_constraintVertical_bias="0.444" />
 
     <TextView
         android:id="@+id/txtCritical"
@@ -56,7 +59,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_begin="194dp" />
+        app:layout_constraintGuide_begin="210dp" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
