@@ -15,6 +15,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.snackbar.Snackbar;
 
@@ -75,11 +76,9 @@ public class InspectionActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 // show exact description
-                final Snackbar snackbar = Snackbar
-                        .make(findViewById(android.R.id.content).getRootView(),
-                                violations.get(i).description,
-                                Snackbar.LENGTH_INDEFINITE);
-                snackbar.show();
+                Toast.makeText(getApplicationContext(),
+                        violations.get(i).description,
+                        Toast.LENGTH_LONG).show();
             }
         });
 
@@ -101,7 +100,7 @@ public class InspectionActivity extends AppCompatActivity {
             // find the inspection to work with
             Violation currentViolation = violations.get(position);
 
-            // set the image
+            // set the violation category image
             ImageView imageView = itemView.findViewById(R.id.imgCategory);
             if (currentViolation.category.toString().equals("Food")){
                 imageView.setImageResource(R.drawable.violation_food);
@@ -112,6 +111,18 @@ public class InspectionActivity extends AppCompatActivity {
 
             else if (currentViolation.category.toString().equals("Equipment")){
                 imageView.setImageResource(R.drawable.violation_equipment);
+            }
+
+            else if (currentViolation.category.toString().equals("Hygiene")){
+                imageView.setImageResource(R.drawable.violation_hygiene);
+            }
+
+            else if (currentViolation.category.toString().equals("Training")){
+                imageView.setImageResource(R.drawable.violation_training);
+            }
+
+            else if (currentViolation.category.toString().equals("Logistics")){
+                imageView.setImageResource(R.drawable.violation_logistics);
             }
 
             String description = currentViolation.description;
