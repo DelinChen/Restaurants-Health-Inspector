@@ -19,6 +19,9 @@ import android.widget.Toast;
 
 import com.google.android.material.snackbar.Snackbar;
 
+import java.text.SimpleDateFormat;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.List;
 
 import ca.cmpt276.project.R;
@@ -153,7 +156,8 @@ public class InspectionActivity extends AppCompatActivity {
         // find single inspection data
         String hazardLevel = inspection.hazardRating.toString();
         String inspectionType = inspection.type.toString();
-        String date = inspection.date.toString();
+        SimpleDateFormat formatDate = new SimpleDateFormat("MMMM dd, yyyy");
+        Date date = Date.from(inspection.date.atStartOfDay(ZoneId.systemDefault()).toInstant());
         int critical = inspection.numCritViolations;
         int nonCritical = inspection.numNonCritViolations;
 
@@ -178,7 +182,7 @@ public class InspectionActivity extends AppCompatActivity {
         TextView txtNonCritical = findViewById(R.id.txtNonCritical);
 
         txtType.setText(inspectionType);
-        txtDate.setText(date);
+        txtDate.setText(formatDate.format(date));
         txtCritical.setText("Critical: " + critical);
         txtNonCritical.setText("Non-critical: " + nonCritical);
     }

@@ -72,14 +72,18 @@ public class RestListAdapter extends RecyclerView.Adapter<RestListAdapter.RestLi
             long hours = minutes / 60;
             days = Math.abs(hours / 24);
 
-            SimpleDateFormat dateFormat = new SimpleDateFormat("MMMM dd, yyyy");
+            SimpleDateFormat withinOneYearFormat = new SimpleDateFormat("MMMM dd");
+            SimpleDateFormat oneYearBeforeFormat = new SimpleDateFormat("MMMM yyyy");
             holder.numIssues.setText("" + numIssues);
 
             if(days < 31) {
                 holder.date.setText("" + days + " days ago");
             }
+            else if (days<365){
+                holder.date.setText(withinOneYearFormat.format(inspectDate));
+            }
             else {
-                holder.date.setText(dateFormat.format(inspectDate));
+                holder.date.setText(oneYearBeforeFormat.format(inspectDate));
             }
 
             if(hazardLevel == HazardRating.LOW) {
