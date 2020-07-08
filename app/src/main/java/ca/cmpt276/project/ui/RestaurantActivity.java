@@ -57,7 +57,13 @@ public class RestaurantActivity extends AppCompatActivity {
         inspections = restaurant.inspections;
 
         // set the inspections listview
-        populateListView();
+        if(inspections.isEmpty()){
+            TextView empty = findViewById(R.id.txtEmpty);
+            empty.setVisibility(View.VISIBLE);
+        }
+        else {
+            populateListView();
+        }
     }
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {

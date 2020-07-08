@@ -56,7 +56,14 @@ public class InspectionActivity extends AppCompatActivity {
         violations = inspection.violations;
 
         populateInspection();
-        populateViolations();
+
+        if(violations.isEmpty()){
+            TextView empty = findViewById(R.id.txtEmpty);
+            empty.setVisibility(View.VISIBLE);
+        }
+        else {
+            populateViolations();
+        }
 
     }
     @Override
