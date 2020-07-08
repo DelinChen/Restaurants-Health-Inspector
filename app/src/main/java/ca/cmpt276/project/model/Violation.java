@@ -66,7 +66,7 @@ public class Violation {
 
     private static void requireCategoryNotNullCategory(ViolationCategory category) {
         if(category.equals(ViolationCategory.NULL_CATEGORY)) {
-            throw new IllegalArgumentException("ViolationCategory category is the invalid NULL_CATEGORY");
+            throw new IllegalArgumentException("ViolationCategory category cannot be NULL_CATEGORY");
         }
     }
 }
