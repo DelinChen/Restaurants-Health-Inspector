@@ -16,6 +16,7 @@ public class Violation {
     // Constructors
 
     public Violation(int codeNumber, boolean isCritical, ViolationCategory category, String description) {
+        validateConstructorArgs(codeNumber, isCritical, category, description);
         this.codeNumber = codeNumber;
         this.isCritical = isCritical;
         this.category = category;
@@ -35,5 +36,31 @@ public class Violation {
     @Override
     public int hashCode() {
         return Objects.hash(codeNumber, isCritical, category, description);
+    }
+
+
+    private static void validateConstructorArgs(int codeNumber, boolean isCritical, ViolationCategory category, String description) {
+        String[] argNames = {"codeNumber", "isCritical", "category", "description"};
+        Object[] argValues = {codeNumber, isCritical, category, description};
+        ConstructorArguments.requireArgsNonNull(argNames, argValues, Violation.class);
+
+        String[] stringArgNames = {"description"};
+        String[] stringArgValues = {description};
+        ConstructorArguments.requireStringArgsNonEmpty(stringArgNames, stringArgValues, Violation.class);
+
+        requireCodeNumberNonNegative(codeNumber);
+        requireCategoryNotNullCategory(category);
+    }
+
+    private static void requireCodeNumberNonNegative(int codeNumber) {
+        if(codeNumber < 0) {
+            throw new IllegalArgumentException("codeNumber must be non-negative");
+        }
+    }
+
+    private static void requireCategoryNotNullCategory(ViolationCategory category) {
+        if(category.equals(ViolationCategory.NULL_CATEGORY)) {
+            throw new IllegalArgumentException("ViolationCategory category is the invalid NULL_CATEGORY");
+        }
     }
 }

@@ -18,11 +18,12 @@ public class ViolationScanner {
     public static Violation nextViolation(String csvField) {
         String[] buffer = csvField.split(",");
 
-        int codeNumber = Integer.parseInt(buffer[CODE_NUMBER]);
-        boolean isCritical = buffer[IS_CRITICAL].equals("Critical");
-        String description = buffer[DESCRIPTION];
+        int codeNumber              = Integer.parseInt(buffer[CODE_NUMBER]);
+        boolean isCritical          = buffer[IS_CRITICAL].equals("Critical");
+        ViolationCategory category  = ViolationCategory.fromCodeNumber(codeNumber);
+        String description          = buffer[DESCRIPTION];
 
-        Violation nextResult = new Violation(codeNumber, isCritical, ViolationCategory.NULL_CATEGORY, description);
+        Violation nextResult = new Violation(codeNumber, isCritical, category, description);
         return nextResult;
     }
 
