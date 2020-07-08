@@ -12,14 +12,14 @@ import static org.junit.Assert.*;
 
 @RunWith(Enclosed.class)
 public class ViolationTest {
-    private final static int codeNumber = 201;
-    private final static boolean isCritical = true;
-    private final static ViolationCategory category = ViolationCategory.FOOD;
-    private final static String description = "Food contaminated or unfit for human consumption [s. 13]";
+    private static final int codeNumber = 201;
+    private static final boolean isCritical = true;
+    private static final ViolationCategory category = ViolationCategory.FOOD;
+    private static final String description = "Food contaminated or unfit for human consumption [s. 13]";
 
+    private static Violation violation;
 
     public static class ViolationMethodTest {
-        private Violation violation;
         @Before
         public void initialize() {
             violation = new Violation(codeNumber, isCritical, category, description);
@@ -47,8 +47,6 @@ public class ViolationTest {
     }
 
     public static class ViolationConstructorNullArgsTest {
-        private Violation violation;
-
         @Rule
         public ExpectedException thrown = ExpectedException.none();
         @Before
@@ -71,19 +69,13 @@ public class ViolationTest {
             violation = new Violation(codeNumber, isCritical, null, description);
         }
         @Test
-        public void categoryIsNullCategoryTest() {
-            violation = new Violation(codeNumber, isCritical, ViolationCategory.NULL_CATEGORY, description);
-        }
-        @Test
         public void nullDescriptionTest() {
             violation = new Violation(codeNumber, isCritical, category, null);
         }
 
     }
 
-    public static class ViolationConstructorEmptyStringArgsTest {
-        private Violation violation;
-
+    public static class InvalidViolationConstructor_ThrowsIllegalArgumentExceptionTest {
         @Rule
         public ExpectedException thrown = ExpectedException.none();
         @Before
@@ -91,10 +83,20 @@ public class ViolationTest {
             thrown.expect(IllegalArgumentException.class);
         }
 
+        @Test
         public void emptyDescriptionTest() {
             violation = new Violation(codeNumber, isCritical, category, "");
         }
-    }
 
+        @Test
+        public void categoryIsNullCategoryTest() {
+            violation = new Violation(codeNumber, isCritical, ViolationCategory.NULL_CATEGORY, description);
+        }
+
+        @Test
+        public void negativeCodeNumberTest() {
+            Violation violation = new Violation(-1, isCritical, category, description);
+        }
+    }
 
 }
