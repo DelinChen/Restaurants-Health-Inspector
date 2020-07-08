@@ -18,7 +18,6 @@ import ca.cmpt276.project.R;
 
 import java.util.List;
 
-import ca.cmpt276.project.model.HazardRating;
 import ca.cmpt276.project.model.Inspection;
 import ca.cmpt276.project.model.Restaurant;
 import ca.cmpt276.project.model.RestaurantManager;
@@ -87,23 +86,26 @@ public class RestaurantActivity extends AppCompatActivity {
 
             // set the image
             ImageView imageView = itemView.findViewById(R.id.imgHazard);
-            if (currentInspection.hazardRating == HazardRating.LOW){
+            if (currentInspection.hazardRating.toString().equals("Low")){
                 imageView.setImageResource(R.drawable.hazard_low);
             }
-            else if (currentInspection.hazardRating == HazardRating.MODERATE){
+            else if (currentInspection.hazardRating.toString().equals("Moderate")){
                 imageView.setImageResource(R.drawable.hazard_medium);
             }
-            else {
+            else if (currentInspection.hazardRating.toString().equals("High")){
                 imageView.setImageResource(R.drawable.hazard_high);
+            }
+            else{
+
             }
             TextView txtCritical = itemView.findViewById(R.id.txtCritical);
             txtCritical.setText("Critical: " + currentInspection.numCritViolations);
 
             TextView txtNonCritical = itemView.findViewById(R.id.txtNonCritical);
-            txtNonCritical.setText("Non-Critical: " + currentInspection.numNonCritViolations);
+            txtNonCritical.setText("Non critical: " + currentInspection.numNonCritViolations);
 
             TextView txtDate = itemView.findViewById(R.id.txtDate);
-            txtDate.setText("Date: " + currentInspection.date);
+            txtDate.setText("Date: " + currentInspection.date.toString());
             return itemView;
 
         }

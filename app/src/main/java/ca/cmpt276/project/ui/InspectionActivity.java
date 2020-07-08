@@ -14,24 +14,19 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
 
 import ca.cmpt276.project.R;
-import ca.cmpt276.project.model.HazardRating;
 import ca.cmpt276.project.model.Inspection;
-import ca.cmpt276.project.model.InspectionType;
 import ca.cmpt276.project.model.RestaurantManager;
 import ca.cmpt276.project.model.Violation;
-import ca.cmpt276.project.model.ViolationCategory;
 
 public class InspectionActivity extends AppCompatActivity {
     RestaurantManager manager;
     String trackingNumber;
     Inspection inspection;
     int position;
-    List<Violation> violations;
+    private List<Violation> violations;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,8 +45,8 @@ public class InspectionActivity extends AppCompatActivity {
         // get violations
         violations = inspection.violations;
 
-        //populateInspection();
-        //populateViolations();
+        populateInspection();
+        populateViolations();
 
     }
 
@@ -87,32 +82,32 @@ public class InspectionActivity extends AppCompatActivity {
 
             // set the image
             ImageView imageView = itemView.findViewById(R.id.imgCategory);
-            if (currentViolation.category == ViolationCategory.FOOD){
+            if (currentViolation.category.toString().equals("FOOD")){
                 imageView.setImageResource(R.drawable.violation_food);
             }
-            else if (currentViolation.category == ViolationCategory.PEST){
+            else if (currentViolation.category.toString().equals("PEST")){
                 imageView.setImageResource(R.drawable.violation_pest);
             }
 
-            else if (currentViolation.category == ViolationCategory.EQUIPMENT){
+            else if (currentViolation.category.toString().equals("EQUIPMENT")){
                 imageView.setImageResource(R.drawable.violation_equipment);
             }
 
             String description = currentViolation.description;
             TextView txtDescription = findViewById(R.id.txtDescription);
-            txtDescription.setText(description);
+            txtDescription.setText(description+"");
 
-            Boolean critical = currentViolation.isCritical;
+            boolean critical = currentViolation.isCritical;
             ImageView imgCategory = findViewById(R.id.imageView3);
             TextView txtCritical = findViewById(R.id.txtCriticalExtent);
-            if(critical == true){
+            if(critical){
                 imgCategory.setImageResource(R.drawable.icon_critical);
                 txtCritical.setText("Critical");
                 txtCritical.setTextColor(Color.RED);
             }
             else{
                 imgCategory.setImageResource(R.drawable.icon_noncritical);
-                txtCritical.setText("Non-ritical");
+                txtCritical.setText("Non-critical");
                 txtCritical.setTextColor(Color.rgb(255,165,0));
             }
 
@@ -123,22 +118,25 @@ public class InspectionActivity extends AppCompatActivity {
 
     private void populateInspection() {
         // find single inspection data
-        HazardRating hazardLevel = inspection.hazardRating;
-        InspectionType inspectionType = inspection.type;
-        LocalDate date = inspection.date;
+        String hazardLevel = inspection.hazardRating.toString();
+        String inspectionType = inspection.type.toString();
+        String date = inspection.date.toString();
         int critical = inspection.numCritViolations;
         int nonCritical = inspection.numNonCritViolations;
 
         //
         ImageView image = findViewById(R.id.imgHazard);
-        if (hazardLevel == HazardRating.LOW){
+        if (hazardLevel.equals("Low")){
             image.setImageResource(R.drawable.hazard_low);
         }
-        else if (hazardLevel == HazardRating.MODERATE){
+        else if (hazardLevel.equals("Moderate")){
             image.setImageResource(R.drawable.hazard_medium);
         }
-        else {
+        else if (hazardLevel.equals("High")){
             image.setImageResource(R.drawable.hazard_high);
+        }
+        else {
+            //image.setImageResource(R.drawable.hazard_high);
         }
 
         TextView txtType = findViewById(R.id.txtName);
@@ -146,8 +144,8 @@ public class InspectionActivity extends AppCompatActivity {
         TextView txtCritical = findViewById(R.id.txtCritical);
         TextView txtNonCritical = findViewById(R.id.txtNonCritical);
 
-        txtType.setText(inspectionType.toString());
-        txtDate.setText(date.toString());
+        txtType.setText(inspectionType);
+        txtDate.setText(date);
         txtCritical.setText("Critical: " + critical);
         txtNonCritical.setText("Non-critical: " + nonCritical);
     }
