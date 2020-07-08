@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Calendar;
 import java.util.Date;
@@ -69,7 +70,7 @@ public class RestListAdapter extends RecyclerView.Adapter<RestListAdapter.RestLi
             long seconds = diff / 1000;
             long minutes = seconds / 60;
             long hours = minutes / 60;
-            days = hours / 24;
+            days = Math.abs(hours / 24);
 
             SimpleDateFormat dateFormat = new SimpleDateFormat("MMMM dd, yyyy");
             holder.numIssues.setText("" + numIssues);

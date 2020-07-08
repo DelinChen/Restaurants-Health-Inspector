@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -32,6 +33,8 @@ public class RestaurantActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_restaurant);
+        getSupportActionBar().setTitle("Restaurant Health Inspector");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         // get the intent and set the restaurant information
         Intent intent = getIntent();
@@ -52,6 +55,17 @@ public class RestaurantActivity extends AppCompatActivity {
         // set the inspections listview
         populateListView();
     }
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch(item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
 
     private void populateListView() {
         ArrayAdapter <Inspection> adapter = new MyListAdapter();

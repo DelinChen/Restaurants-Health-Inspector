@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -32,6 +33,8 @@ public class InspectionActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_inspection);
+        getSupportActionBar().setTitle("Restaurant Health Inspector");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         // set manager
         manager = RestaurantManager.getInstance();
@@ -45,9 +48,19 @@ public class InspectionActivity extends AppCompatActivity {
         // get violations
         violations = inspection.violations;
 
-        populateInspection();
-        populateViolations();
+        //populateInspection();
+        //populateViolations();
 
+    }
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch(item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     private void populateViolations() {

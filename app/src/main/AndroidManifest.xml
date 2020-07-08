@@ -20,7 +20,7 @@
             </intent-filter>
         </activity>
         <activity android:name="ca.cmpt276.project.ui.RestaurantActivity"></activity>
-        <activity android:name=".ui.InspectionActivity"></activity>
+        <activity android:name="ca.cmpt276.project.ui.InspectionActivity"></activity>
     </application>
 
 </manifest>

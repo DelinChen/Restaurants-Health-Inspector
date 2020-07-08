@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
+import android.widget.Toolbar;
 
 import ca.cmpt276.project.R;
 
@@ -22,6 +23,8 @@ public class MainActivity extends AppCompatActivity implements RestListAdapter.R
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        getSupportActionBar().setTitle("Restaurant Health Inspector");
+
 
         manager = RestaurantManager.getInstance(getApplicationContext());
         restList = findViewById(R.id.rest_list);
