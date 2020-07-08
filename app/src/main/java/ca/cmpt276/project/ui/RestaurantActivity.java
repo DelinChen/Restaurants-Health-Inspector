@@ -18,6 +18,7 @@ import ca.cmpt276.project.R;
 
 import java.util.List;
 
+import ca.cmpt276.project.model.HazardRating;
 import ca.cmpt276.project.model.Inspection;
 import ca.cmpt276.project.model.Restaurant;
 import ca.cmpt276.project.model.RestaurantManager;
@@ -47,7 +48,7 @@ public class RestaurantActivity extends AppCompatActivity {
         coords.setText("(" + restaurant.latitude + ", " + restaurant.longitude + ")");
 
         // get the inspections
-        inspections = restaurant.getInspections();
+        inspections = restaurant.inspections;
 
         // set the inspections listview
         populateListView();
@@ -86,23 +87,23 @@ public class RestaurantActivity extends AppCompatActivity {
 
             // set the image
             ImageView imageView = itemView.findViewById(R.id.imgHazard);
-            if (currentInspection.getHazaradRating() == 0){
+            if (currentInspection.hazardRating == HazardRating.LOW){
                 imageView.setImageResource(R.drawable.hazard_low);
             }
-            else if (currentInspection.getHazaradRating() == 1){
+            else if (currentInspection.hazardRating == HazardRating.MODERATE){
                 imageView.setImageResource(R.drawable.hazard_medium);
             }
             else {
                 imageView.setImageResource(R.drawable.hazard_high);
             }
             TextView txtCritical = itemView.findViewById(R.id.txtCritical);
-            txtCritical.setText("Critical: " + currentInspection.getInspect_crit_issue());
+            txtCritical.setText("Critical: " + currentInspection.numCritViolations);
 
             TextView txtNonCritical = itemView.findViewById(R.id.txtNonCritical);
-            txtNonCritical.setText("Critical: " + currentInspection.getInspect_nonCrit_issue());
+            txtNonCritical.setText("Non-Critical: " + currentInspection.numNonCritViolations);
 
             TextView txtDate = itemView.findViewById(R.id.txtDate);
-            txtDate.setText("Critical: " + currentInspection.getInspect_date());
+            txtDate.setText("Date: " + currentInspection.date);
             return itemView;
 
         }

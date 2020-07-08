@@ -10,8 +10,16 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.text.SimpleDateFormat;
+import java.time.ZoneId;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.concurrent.TimeUnit;
+
 import ca.cmpt276.project.R;
 
+import ca.cmpt276.project.model.HazardRating;
+import ca.cmpt276.project.model.Inspection;
 import ca.cmpt276.project.model.Restaurant;
 import ca.cmpt276.project.model.RestaurantManager;
 
@@ -41,46 +49,54 @@ public class RestListAdapter extends RecyclerView.Adapter<RestListAdapter.RestLi
     @Override
     public void onBindViewHolder(@NonNull RestListViewHolder holder, int position) {
         Restaurant currRest = manager.restaurants().get(position);
-        /*Inspection currInspect = currRest.getInspections().get(currRest.getInspections().size() - 1);
-        int numIssues = currInspect.getInspect_crit_issue() + currInspect.getInspect_nonCrit_issue();
-        int hazardLevel = currInspect.getHazaradRating();
-        Date currDate = Calendar.getInstance().getTime();
-
-        Date currInspectDate = null;
-        try {
-            currInspectDate = new SimpleDateFormat("yyyyMMdd").parse(currInspect.getInspect_date());
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-
-        long diffInMillies = Math.abs(currDate.getTime() - currInspectDate.getTime());
-        long diffInDays = TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS);
-
-        SimpleDateFormat dateFormat = new SimpleDateFormat("MMMM dd, yyyy");*/
-
         holder.name.setText(currRest.name);
         holder.address.setText(currRest.address);
         holder.restIcon.setImageResource(R.drawable.restaurant);
-        /*holder.numIssues.setText("" + numIssues);
 
-        if(diffInDays < 31) {
-            holder.date.setText("" + diffInDays + " days ago");
+        Inspection currInspect;
+        int numIssues;
+        HazardRating hazardLevel;
+        Date currDate;
+        Date inspectDate;
+        long days;
+        if(!currRest.inspections.isEmpty()) {
+            currInspect = currRest.inspections.get(0);
+            numIssues = currInspect.numCritViolations + currInspect.numNonCritViolations;
+            hazardLevel = currInspect.hazardRating;
+            currDate = Calendar.getInstance().getTime();
+            inspectDate = Date.from(currInspect.date.atStartOfDay(ZoneId.systemDefault()).toInstant());
+            long diff = currDate.getTime() - inspectDate.getTime();
+            long seconds = diff / 1000;
+            long minutes = seconds / 60;
+            long hours = minutes / 60;
+            days = hours / 24;
+
+            SimpleDateFormat dateFormat = new SimpleDateFormat("MMMM dd, yyyy");
+            holder.numIssues.setText("" + numIssues);
+
+            if(days < 31) {
+                holder.date.setText("" + days + " days ago");
+            }
+            else {
+                holder.date.setText(dateFormat.format(inspectDate));
+            }
+
+            if(hazardLevel == HazardRating.LOW) {
+                holder.hazardIcon.setImageResource(R.drawable.hazard_low);
+            }
+            else if(hazardLevel == HazardRating.MODERATE) {
+                holder.hazardIcon.setImageResource(R.drawable.hazard_medium);
+            }
+            else {
+                holder.hazardIcon.setImageResource(R.drawable.hazard_high);
+            }
         }
         else {
-            holder.date.setText(dateFormat.format(currInspectDate));
+            numIssues = 0;
+            holder.date.setText("No inspections");
+            holder.numIssues.setText("" + numIssues);
+            holder.hazardIcon.setImageResource(0);
         }
-
-        if(hazardLevel == 1) {
-            holder.hazardIcon.setImageResource(R.drawable.hazard_low);
-        }
-        else if(hazardLevel == 2) {
-            holder.hazardIcon.setImageResource(R.drawable.hazard_medium);
-        }
-        else {
-            holder.hazardIcon.setImageResource(R.drawable.hazard_high);
-        }
-
-        holder.restIcon.setImageResource(R.drawable.restaurant);*/
 
     }
 
