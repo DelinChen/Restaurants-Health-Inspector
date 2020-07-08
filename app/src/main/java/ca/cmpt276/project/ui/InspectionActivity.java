@@ -10,10 +10,12 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.List;
 
@@ -68,14 +70,14 @@ public class InspectionActivity extends AppCompatActivity {
         ArrayAdapter <Violation> adapter = new MyListAdapter();
         ListView list = findViewById(R.id.listViolations);
         list.setAdapter(adapter);
-        /*
+
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 // show exact description
+                Toast.makeText(getApplicationContext(),violations.get(i).description, Toast.LENGTH_SHORT).show();
             }
         });
-         */
     }
 
     private class MyListAdapter extends ArrayAdapter<Violation>{
