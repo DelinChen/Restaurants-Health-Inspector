@@ -16,7 +16,7 @@ public class Violation {
     // Constructors
 
     public Violation(int codeNumber, boolean isCritical, ViolationCategory category, String description) {
-        // validateConstructorArgs(codeNumber, isCritical, category, description);
+        validateConstructorArgs(codeNumber, isCritical, category, description);
         this.codeNumber = codeNumber;
         this.isCritical = isCritical;
         this.category = category;
