@@ -19,7 +19,7 @@ public class ViolationTest {
 
     private static Violation violation;
 
-    public static class ViolationMethodTest {
+    public static class ValidConstructorArgsTest {
         @Before
         public void initialize() {
             violation = new Violation(codeNumber, isCritical, category, description);
@@ -43,6 +43,50 @@ public class ViolationTest {
         @Test
         public void validDescriptionTest(){
             assertEquals(description, violation.description);
+        }
+
+    }
+
+    public static class EqualsTest {
+        @Before
+        public void initialize() {
+            violation = new Violation(codeNumber, isCritical, category, description);
+        }
+
+        @Test
+        public void equalsReturnsTrueTest() {
+            Violation equivalent = new Violation(codeNumber, isCritical, category, description);
+            assertEquals(equivalent, violation);
+        }
+
+        @Test
+        public void codeNumberNotEqualTest() {
+            Violation different = new Violation(202, isCritical, category, description);
+            assertNotEquals(different, violation);
+        }
+
+        @Test
+        public void isCriticalNotEqualTest() {
+            Violation different = new Violation(codeNumber, false, category, description);
+            assertNotEquals(different, violation);
+        }
+
+        @Test
+        public void categoryNotEqualTest() {
+            Violation different = new Violation(codeNumber, isCritical, ViolationCategory.EQUIPMENT, description);
+            assertNotEquals(different, violation);
+        }
+
+        @Test
+        public void descriptionNotEqualTest() {
+            Violation different = new Violation(codeNumber, isCritical, category, "Beep beep I'm a jeep");
+            assertNotEquals(different, violation);
+        }
+
+        @Test
+        public void allFieldsNotEqualTest() {
+            Violation different = new Violation(202, false, ViolationCategory.EQUIPMENT, "Beep beep I'm a jeep");
+            assertNotEquals(different, violation);
         }
     }
 
