@@ -1,6 +1,7 @@
 package ca.cmpt276.project.model;
 
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import java.util.Objects;
@@ -23,6 +24,12 @@ public class Violation {
         this.description = description;
     }
 
+
+    @NonNull
+    @Override
+    public String toString() {
+        return "Violation<" + codeNumber + ", " + isCritical + ", " + category + ", " + description + ">";
+    }
 
     @Override
     public boolean equals(@Nullable Object o) {
