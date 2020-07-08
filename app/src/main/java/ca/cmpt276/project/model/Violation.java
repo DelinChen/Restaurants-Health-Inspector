@@ -30,7 +30,13 @@ public class Violation {
             return false;
         }
         Violation other = (Violation) o;
-        return this.codeNumber == other.codeNumber;
+        return allFieldsEqualWith(other);
+    }
+    private boolean allFieldsEqualWith(Violation other) {
+        return codeNumber == other.codeNumber
+                && isCritical == other.isCritical
+                && category.equals(other.category)
+                && description.equals(other.description);
     }
 
     @Override
