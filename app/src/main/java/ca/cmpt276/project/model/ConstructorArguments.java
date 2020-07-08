@@ -31,7 +31,7 @@ public final class ConstructorArguments {
         }
     }
 
-    public static <T> void requrieNonNegativeIntArgs(String[] intArgNames, int[] intArgValues, Class<T> classRef) {
+    public static <T> void requireNonNegativeIntArgs(String[] intArgNames, int[] intArgValues, Class<T> classRef) {
         if(intArgNames.length != intArgValues.length) {
             throw new IllegalArgumentException("stringArgNames.length must be equal to stringArgValues.length");
         }
