@@ -82,32 +82,32 @@ public class InspectionActivity extends AppCompatActivity {
 
             // set the image
             ImageView imageView = itemView.findViewById(R.id.imgCategory);
-            if (currentViolation.category.equals("FOOD")){
+            if (currentViolation.category.toString().equals("FOOD")){
                 imageView.setImageResource(R.drawable.violation_food);
             }
-            else if (currentViolation.category.equals("PEST")){
+            else if (currentViolation.category.toString().equals("PEST")){
                 imageView.setImageResource(R.drawable.violation_pest);
             }
 
-            else if (currentViolation.category.equals("EQUIPMENT")){
+            else if (currentViolation.category.toString().equals("EQUIPMENT")){
                 imageView.setImageResource(R.drawable.violation_equipment);
             }
 
             String description = currentViolation.description;
             TextView txtDescription = findViewById(R.id.txtDescription);
-            txtDescription.setText(description);
+            txtDescription.setText(description+"");
 
-            Boolean critical = currentViolation.isCritical;
+            boolean critical = currentViolation.isCritical;
             ImageView imgCategory = findViewById(R.id.imageView3);
             TextView txtCritical = findViewById(R.id.txtCriticalExtent);
-            if(critical == true){
+            if(critical){
                 imgCategory.setImageResource(R.drawable.icon_critical);
                 txtCritical.setText("Critical");
                 txtCritical.setTextColor(Color.RED);
             }
             else{
                 imgCategory.setImageResource(R.drawable.icon_noncritical);
-                txtCritical.setText("Non-ritical");
+                txtCritical.setText("Non-critical");
                 txtCritical.setTextColor(Color.rgb(255,165,0));
             }
 
