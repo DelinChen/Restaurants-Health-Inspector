@@ -71,36 +71,14 @@ public class Restaurant implements Comparable<Restaurant> {
     private static void validateConstructorArgs(String trackingNumber, String name, String address, String city, double latitude, double longitude, List<Inspection> inspections) {
         String[] argNames = {"trackingNumber", "name", "address", "city", "latitude", "longitude", "inspections"};
         Object[] argValues = {trackingNumber, name, address, city, latitude, longitude, inspections};
-        requireArgsNonNull(argNames, argValues);
+        ConstructorArguments.requireArgsNonNull(argNames, argValues, Restaurant.class);
 
         String[] stringArgNames = {"trackingNumber", "name", "address", "city"};
         String[] stringArgValues = {trackingNumber, name, address, city};
-        requireStringArgsNonEmpty(stringArgNames, stringArgValues);
+        ConstructorArguments.requireStringArgsNonEmpty(stringArgNames, stringArgValues, Restaurant.class);
 
         requireGpsCoordsNotNaN(latitude, longitude);
         requireGpsCoordsInRange(latitude, longitude);
-    }
-
-    private static void requireArgsNonNull(String[] argNames, Object[] argValues) {
-        if(argNames.length != argValues.length) {
-            throw new IllegalArgumentException("argNames.length must be equal to argValues.length");
-        }
-
-        for(int i = 0; i < argNames.length; i++) {
-            Objects.requireNonNull(argValues[i], "Restaurant field " + argNames[i] + " cannot be null");
-        }
-    }
-
-    private static void requireStringArgsNonEmpty(String[] stringArgNames, String[] stringArgValues) {
-        if(stringArgNames.length != stringArgValues.length) {
-            throw new IllegalArgumentException("stringArgNames.length must be equal to stringArgValues.length");
-        }
-
-        for(int i = 0; i < stringArgValues.length; i++) {
-            if(stringArgValues[i].length() == 0) {
-                throw new IllegalArgumentException("Restaurant string field " + stringArgNames[i] + " cannot be the empty string");
-            }
-        }
     }
 
     private static void requireGpsCoordsNotNaN(double latitude, double longitude) {
