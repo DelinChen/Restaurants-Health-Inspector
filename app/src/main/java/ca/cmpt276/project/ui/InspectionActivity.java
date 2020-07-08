@@ -10,10 +10,13 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.List;
 
@@ -67,14 +70,19 @@ public class InspectionActivity extends AppCompatActivity {
         ArrayAdapter <Violation> adapter = new MyListAdapter();
         ListView list = findViewById(R.id.listViolations);
         list.setAdapter(adapter);
-        /*
+
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 // show exact description
+                final Snackbar snackbar = Snackbar
+                        .make(findViewById(android.R.id.content).getRootView(),
+                                violations.get(i).description,
+                                Snackbar.LENGTH_INDEFINITE);
+                snackbar.show();
             }
         });
-         */
+
     }
 
     private class MyListAdapter extends ArrayAdapter<Violation>{
@@ -95,20 +103,20 @@ public class InspectionActivity extends AppCompatActivity {
 
             // set the image
             ImageView imageView = itemView.findViewById(R.id.imgCategory);
-            if (currentViolation.category.toString().equals("FOOD")){
+            if (currentViolation.category.toString().equals("Food")){
                 imageView.setImageResource(R.drawable.violation_food);
             }
-            else if (currentViolation.category.toString().equals("PEST")){
+            else if (currentViolation.category.toString().equals("Pest")){
                 imageView.setImageResource(R.drawable.violation_pest);
             }
 
-            else if (currentViolation.category.toString().equals("EQUIPMENT")){
+            else if (currentViolation.category.toString().equals("Equipment")){
                 imageView.setImageResource(R.drawable.violation_equipment);
             }
 
             String description = currentViolation.description;
             TextView txtDescription = itemView.findViewById(R.id.txtDescription);
-            txtDescription.setText(description+" ");
+            txtDescription.setText(description);
 
 
             boolean critical = currentViolation.isCritical;
