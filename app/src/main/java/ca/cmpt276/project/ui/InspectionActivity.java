@@ -105,27 +105,34 @@ public class InspectionActivity extends AppCompatActivity {
 
             // set the violation category image
             ImageView imageView = itemView.findViewById(R.id.imgCategory);
+            TextView txt = itemView.findViewById(R.id.txtCategory);
             if (currentViolation.category.toString().equals("Food")){
                 imageView.setImageResource(R.drawable.violation_food);
+                txt.setText("Food");
             }
             else if (currentViolation.category.toString().equals("Pest")){
                 imageView.setImageResource(R.drawable.violation_pest);
+                txt.setText("Pest");
             }
 
             else if (currentViolation.category.toString().equals("Equipment")){
                 imageView.setImageResource(R.drawable.violation_equipment);
+                txt.setText("Equipment");
             }
 
             else if (currentViolation.category.toString().equals("Hygiene")){
                 imageView.setImageResource(R.drawable.violation_hygiene);
+                txt.setText("Hygiene");
             }
 
             else if (currentViolation.category.toString().equals("Training")){
                 imageView.setImageResource(R.drawable.violation_training);
+                txt.setText("Training");
             }
 
             else if (currentViolation.category.toString().equals("Logistics")){
                 imageView.setImageResource(R.drawable.violation_logistics);
+                txt.setText("Logistics");
             }
 
             String description = currentViolation.description;
