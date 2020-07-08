@@ -31,7 +31,7 @@ public enum InspectionType {
     ///////////////////////////////////////////////////////////
     // Factory method
 
-    public static InspectionType parse(String input) {
+    public static InspectionType fromString(String input) {
         for(InspectionType type : InspectionType.values()) {
             if(type.stringVal.equals(input)) {
                 return type;

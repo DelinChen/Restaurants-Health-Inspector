@@ -3,7 +3,6 @@ package ca.cmpt276.project.model;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.text.ParseException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -48,10 +47,10 @@ public class InspectionScanner extends CsvScanner {
 
         String trackingNumber           = buffer[TRACKING_NUMBER];
         LocalDate date                  = LocalDate.parse(buffer[DATE], BASIC_ISO_DATE);
-        InspectionType type             = InspectionType.parse(buffer[TYPE]);
+        InspectionType type             = InspectionType.fromString(buffer[TYPE]);
         int numCritViolations           = Integer.parseInt(buffer[NUM_CRITICAL]);
         int numNonCritViolations        = Integer.parseInt(buffer[NUM_NONCRITICAL]);
-        HazardRating rating             = HazardRating.parse(buffer[HAZARD_RATING]);
+        HazardRating rating             = HazardRating.fromString(buffer[HAZARD_RATING]);
         List<Violation> violations      = ViolationScanner.parseListFromLump(buffer[VIOLATIONS_LUMP]);
 
         Inspection nextResult = new Inspection(
