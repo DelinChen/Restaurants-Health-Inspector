@@ -19,10 +19,10 @@ public class InspectionScannerTest {
         // Expected fields
         String trackingNumber = "SDFO-8HKP7E";
         LocalDate date = LocalDate.parse("20191002", DateTimeFormatter.BASIC_ISO_DATE);
-        InspectionType type = InspectionType.parse("Routine");
+        InspectionType type = InspectionType.fromString("Routine");
         int numCritViolations = 0;
         int numNonCritViolations = 0;
-        HazardRating rating = HazardRating.parse("Low");
+        HazardRating rating = HazardRating.fromString("Low");
 
         Inspection expected
                 = new Inspection(trackingNumber, date, type, numCritViolations, numNonCritViolations, rating, new ArrayList<>());

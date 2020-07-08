@@ -32,7 +32,7 @@ public enum HazardRating {
     ///////////////////////////////////////////////////////////
     // Factory method
 
-    public static HazardRating parse(String input) {
+    public static HazardRating fromString(String input) {
         for(HazardRating rating : HazardRating.values()) {
             if(rating.stringVal.equals(input)) {
                 return rating;
