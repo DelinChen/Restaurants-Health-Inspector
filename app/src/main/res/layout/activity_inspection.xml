@@ -18,6 +18,7 @@
         app:srcCompat="@drawable/hazard_high" />
 
     <LinearLayout
+        android:id="@+id/linearLayout2"
         android:layout_width="233dp"
         android:layout_height="121dp"
         android:layout_marginStart="24dp"
@@ -55,10 +56,11 @@
 
     <ListView
         android:id="@+id/listViolations"
-        android:layout_width="409dp"
-        android:layout_height="560dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout2" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

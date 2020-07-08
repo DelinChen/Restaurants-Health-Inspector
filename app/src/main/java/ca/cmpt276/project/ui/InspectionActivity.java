@@ -48,8 +48,8 @@ public class InspectionActivity extends AppCompatActivity {
         // get violations
         violations = inspection.violations;
 
-        //populateInspection();
-        //populateViolations();
+        populateInspection();
+        populateViolations();
 
     }
     @Override
@@ -107,12 +107,13 @@ public class InspectionActivity extends AppCompatActivity {
             }
 
             String description = currentViolation.description;
-            TextView txtDescription = findViewById(R.id.txtDescription);
-            txtDescription.setText(description+"");
+            TextView txtDescription = itemView.findViewById(R.id.txtDescription);
+            txtDescription.setText(description+" ");
+
 
             boolean critical = currentViolation.isCritical;
-            ImageView imgCategory = findViewById(R.id.imageView3);
-            TextView txtCritical = findViewById(R.id.txtCriticalExtent);
+            ImageView imgCategory = itemView.findViewById(R.id.imageView3);
+            TextView txtCritical = itemView.findViewById(R.id.txtCriticalExtent);
             if(critical){
                 imgCategory.setImageResource(R.drawable.icon_critical);
                 txtCritical.setText("Critical");
