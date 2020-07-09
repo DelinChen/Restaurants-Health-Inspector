@@ -1,6 +1,7 @@
 package ca.cmpt276.project.model;
 
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import java.util.Objects;
@@ -24,13 +25,25 @@ public class Violation {
     }
 
 
+    @NonNull
+    @Override
+    public String toString() {
+        return "Violation<" + codeNumber + ", " + isCritical + ", " + category + ", " + description + ">";
+    }
+
     @Override
     public boolean equals(@Nullable Object o) {
         if(!(o instanceof Violation)) {
             return false;
         }
         Violation other = (Violation) o;
-        return this.codeNumber == other.codeNumber;
+        return allFieldsEqualWith(other);
+    }
+    private boolean allFieldsEqualWith(Violation other) {
+        return codeNumber == other.codeNumber
+                && isCritical == other.isCritical
+                && category.equals(other.category)
+                && description.equals(other.description);
     }
 
     @Override
@@ -60,7 +73,7 @@ public class Violation {
 
     private static void requireCategoryNotNullCategory(ViolationCategory category) {
         if(category.equals(ViolationCategory.NULL_CATEGORY)) {
-            throw new IllegalArgumentException("ViolationCategory category is the invalid NULL_CATEGORY");
+            throw new IllegalArgumentException("ViolationCategory category cannot be NULL_CATEGORY");
         }
     }
 }
