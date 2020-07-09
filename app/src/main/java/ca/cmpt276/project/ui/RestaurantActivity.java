@@ -17,6 +17,10 @@ import android.widget.TextView;
 
 import ca.cmpt276.project.R;
 
+import java.text.SimpleDateFormat;
+import java.time.ZoneId;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import ca.cmpt276.project.model.Inspection;
@@ -53,7 +57,13 @@ public class RestaurantActivity extends AppCompatActivity {
         inspections = restaurant.inspections;
 
         // set the inspections listview
-        populateListView();
+        if(inspections.isEmpty()){
+            TextView empty = findViewById(R.id.txtEmpty);
+            empty.setVisibility(View.VISIBLE);
+        }
+        else {
+            populateListView();
+        }
     }
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
@@ -118,8 +128,28 @@ public class RestaurantActivity extends AppCompatActivity {
             TextView txtNonCritical = itemView.findViewById(R.id.txtNonCritical);
             txtNonCritical.setText("Non critical: " + currentInspection.numNonCritViolations);
 
+            Date currDate = Calendar.getInstance().getTime();
+            Date inspectDate = Date.from(currentInspection.date.atStartOfDay(ZoneId.systemDefault()).toInstant());
+            long diff = currDate.getTime() - inspectDate.getTime();
+            long seconds = diff / 1000;
+            long minutes = seconds / 60;
+            long hours = minutes / 60;
+            long days = Math.abs(hours / 24);
+
+            SimpleDateFormat withinOneYearFormat = new SimpleDateFormat("MMMM dd");
+            SimpleDateFormat oneYearBeforeFormat = new SimpleDateFormat("MMMM yyyy");
+
             TextView txtDate = itemView.findViewById(R.id.txtDate);
-            txtDate.setText("Date: " + currentInspection.date.toString());
+            if(days < 31) {
+                txtDate.setText("" + days + " days ago");
+            }
+            else if (days<365){
+                txtDate.setText(withinOneYearFormat.format(inspectDate));
+            }
+            else {
+                txtDate.setText(oneYearBeforeFormat.format(inspectDate));
+            }
+
             return itemView;
 
         }

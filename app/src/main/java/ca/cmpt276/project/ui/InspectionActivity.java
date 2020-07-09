@@ -17,13 +17,17 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.snackbar.Snackbar;
+
+import java.text.SimpleDateFormat;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.List;
 
 import ca.cmpt276.project.R;
 import ca.cmpt276.project.model.Inspection;
 import ca.cmpt276.project.model.RestaurantManager;
 import ca.cmpt276.project.model.Violation;
-import ca.cmpt276.project.model.ViolationCategory;
 
 public class InspectionActivity extends AppCompatActivity {
     RestaurantManager manager;
@@ -52,7 +56,14 @@ public class InspectionActivity extends AppCompatActivity {
         violations = inspection.violations;
 
         populateInspection();
-        populateViolations();
+
+        if(violations.isEmpty()){
+            TextView empty = findViewById(R.id.txtEmpty);
+            empty.setVisibility(View.VISIBLE);
+        }
+        else {
+            populateViolations();
+        }
 
     }
     @Override
@@ -75,9 +86,12 @@ public class InspectionActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 // show exact description
-                Toast.makeText(getApplicationContext(),violations.get(i).description, Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(),
+                        violations.get(i).description,
+                        Toast.LENGTH_LONG).show();
             }
         });
+
     }
 
     private class MyListAdapter extends ArrayAdapter<Violation>{
@@ -96,23 +110,42 @@ public class InspectionActivity extends AppCompatActivity {
             // find the inspection to work with
             Violation currentViolation = violations.get(position);
 
-            // set the image
+            // set the violation category image
             ImageView imageView = itemView.findViewById(R.id.imgCategory);
-
-            if (currentViolation.category == ViolationCategory.FOOD){
+            TextView txt = itemView.findViewById(R.id.txtCategory);
+            if (currentViolation.category.toString().equals("Food")){
                 imageView.setImageResource(R.drawable.violation_food);
+                txt.setText("Food");
             }
-            else if (currentViolation.category == ViolationCategory.PEST){
+            else if (currentViolation.category.toString().equals("Pest")){
                 imageView.setImageResource(R.drawable.violation_pest);
+                txt.setText("Pest");
             }
 
-            else if (currentViolation.category == ViolationCategory.EQUIPMENT){
+            else if (currentViolation.category.toString().equals("Equipment")){
                 imageView.setImageResource(R.drawable.violation_equipment);
+                txt.setText("Equipment");
+            }
+
+            else if (currentViolation.category.toString().equals("Hygiene")){
+                imageView.setImageResource(R.drawable.violation_hygiene);
+                txt.setText("Hygiene");
+            }
+
+            else if (currentViolation.category.toString().equals("Training")){
+                imageView.setImageResource(R.drawable.violation_training);
+                txt.setText("Training");
+            }
+
+            else if (currentViolation.category.toString().equals("Logistics")){
+                imageView.setImageResource(R.drawable.violation_logistics);
+                txt.setText("Logistics");
             }
 
             String description = currentViolation.description;
             TextView txtDescription = itemView.findViewById(R.id.txtDescription);
             txtDescription.setText(description);
+
 
             boolean critical = currentViolation.isCritical;
             ImageView imgCategory = itemView.findViewById(R.id.imageView3);
@@ -137,7 +170,8 @@ public class InspectionActivity extends AppCompatActivity {
         // find single inspection data
         String hazardLevel = inspection.hazardRating.toString();
         String inspectionType = inspection.type.toString();
-        String date = inspection.date.toString();
+        SimpleDateFormat formatDate = new SimpleDateFormat("MMMM dd, yyyy");
+        Date date = Date.from(inspection.date.atStartOfDay(ZoneId.systemDefault()).toInstant());
         int critical = inspection.numCritViolations;
         int nonCritical = inspection.numNonCritViolations;
 
@@ -162,7 +196,7 @@ public class InspectionActivity extends AppCompatActivity {
         TextView txtNonCritical = findViewById(R.id.txtNonCritical);
 
         txtType.setText(inspectionType);
-        txtDate.setText(date);
+        txtDate.setText(formatDate.format(date));
         txtCritical.setText("Critical: " + critical);
         txtNonCritical.setText("Non-critical: " + nonCritical);
     }

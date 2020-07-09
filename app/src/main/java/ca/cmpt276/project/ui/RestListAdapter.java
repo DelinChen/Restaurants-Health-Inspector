@@ -1,6 +1,7 @@
 package ca.cmpt276.project.ui;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -72,24 +73,37 @@ public class RestListAdapter extends RecyclerView.Adapter<RestListAdapter.RestLi
             long hours = minutes / 60;
             days = Math.abs(hours / 24);
 
-            SimpleDateFormat dateFormat = new SimpleDateFormat("MMMM dd, yyyy");
+            SimpleDateFormat withinOneYearFormat = new SimpleDateFormat("MMMM dd");
+            SimpleDateFormat oneYearBeforeFormat = new SimpleDateFormat("MMMM yyyy");
             holder.numIssues.setText("" + numIssues);
 
             if(days < 31) {
                 holder.date.setText("" + days + " days ago");
             }
+            else if (days<365){
+                holder.date.setText(withinOneYearFormat.format(inspectDate));
+            }
             else {
-                holder.date.setText(dateFormat.format(inspectDate));
+                holder.date.setText(oneYearBeforeFormat.format(inspectDate));
             }
 
             if(hazardLevel == HazardRating.LOW) {
                 holder.hazardIcon.setImageResource(R.drawable.hazard_low);
+                holder.level.setText("Low");
+                holder.level.setTextColor(Color.rgb(204,204,0));
             }
             else if(hazardLevel == HazardRating.MODERATE) {
                 holder.hazardIcon.setImageResource(R.drawable.hazard_medium);
+                holder.level.setText("Moderate");
+                holder.level.setTextColor(Color.rgb(255,165,0));
             }
-            else {
+            else if (hazardLevel == HazardRating.HIGH){
                 holder.hazardIcon.setImageResource(R.drawable.hazard_high);
+                holder.level.setText("High");
+                holder.level.setTextColor(Color.RED);
+            }
+            else{
+                holder.level.setText(" ");
             }
         }
         else {
@@ -107,7 +121,7 @@ public class RestListAdapter extends RecyclerView.Adapter<RestListAdapter.RestLi
     }
 
     public class RestListViewHolder extends RecyclerView.ViewHolder implements  View.OnClickListener{
-        TextView name, date, numIssues, address;
+        TextView name, date, numIssues, address, level;
         ImageView restIcon, hazardIcon;
         RestListClickListener itemListener;
         public RestListViewHolder(@NonNull View itemView, RestListClickListener itemListener) {
@@ -118,6 +132,7 @@ public class RestListAdapter extends RecyclerView.Adapter<RestListAdapter.RestLi
             restIcon = itemView.findViewById(R.id.rest_icon);
             hazardIcon = itemView.findViewById(R.id.hazard_icon);
             address = itemView.findViewById(R.id.rest_address);
+            level = itemView.findViewById(R.id.txtLevel);
             this.itemListener = itemListener;
             itemView.setOnClickListener(this);
         }

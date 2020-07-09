@@ -22,6 +22,7 @@ public class Inspection implements Comparable<Inspection> {
     // Constructor
 
     public Inspection(String trackingNumber, LocalDate date, InspectionType type, int numCritViolations, int numNonCritViolations, HazardRating hazardRating, List<Violation> violations) {
+        validateConstructorArgs(trackingNumber, date, type, numCritViolations, numNonCritViolations, hazardRating, violations);
         this.trackingNumber         = trackingNumber;
         this.date                   = date;
         this.type                   = type;
@@ -75,5 +76,37 @@ public class Inspection implements Comparable<Inspection> {
         return "Inspection<" + trackingNumber + ", " + date + ", " + type
                 + ", " + numCritViolations + ", " + numNonCritViolations
                 + ", " + hazardRating + ", ... " + violations.size() + " violations>";
+    }
+
+
+    ////////////////////////////////////////////////////////
+    // Validate constructor args
+
+    private static void validateConstructorArgs(String trackingNumber, LocalDate date, InspectionType type, int numCritViolations, int numNonCritViolations, HazardRating hazardRating, List<Violation> violations) {
+        String[] argNames = {"trackingNumber", "date", "type", "numCritViolations", "numNonCritViolations", "hazardRating", "violations"};
+        Object[] argValues = {trackingNumber, date, type, numCritViolations, numNonCritViolations, hazardRating, violations};
+        ConstructorArguments.requireArgsNonNull(argNames, argValues, Inspection.class);
+
+        String[] stringArgNames = {"trackingNumber"};
+        String[] stringArgValues = {trackingNumber};
+        ConstructorArguments.requireStringArgsNonEmpty(stringArgNames, stringArgValues, Inspection.class);
+
+        String[] intArgNames = {"numNonCritViolations", "numNonCritViolations"};
+        int[] intArgValues = {numCritViolations, numNonCritViolations};
+        ConstructorArguments.requireNonNegativeIntArgs(intArgNames, intArgValues, Inspection.class);
+
+        requireInspectionTypeNotNullType(type);
+        requireHazardRatingNotNullRating(hazardRating);
+    }
+
+    private static void requireInspectionTypeNotNullType(InspectionType type) {
+        if(type.equals(InspectionType.NULL_TYPE)) {
+            throw new IllegalArgumentException("Inspection class can not be instantiated with the field InspectionType type == NULL_TYPE");
+        }
+    }
+    private static void requireHazardRatingNotNullRating(HazardRating hazardRating) {
+        if(hazardRating.equals(HazardRating.NULL_RATING)) {
+            throw new IllegalArgumentException("Inspection class can not be instantiated with the field HazardRating hazardRating == NULL_RATING");
+        }
     }
 }
