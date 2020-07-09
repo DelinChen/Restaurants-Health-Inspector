@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="ca.cmpt276.project.ui.InspectionActivity">
+
+    <ImageView
+        android:id="@+id/imgHazard"
+        android:layout_width="62dp"
+        android:layout_height="63dp"
+        android:layout_marginStart="24dp"
+        android:src="@drawable/hazard_high"
+        app:layout_constraintBottom_toTopOf="@+id/guideline"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/guideline"
+        app:layout_constraintVertical_bias="0.444" />
+
+    <TextView
+        android:id="@+id/txtCritical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginBottom="8dp"
+        android:text="Critical: "
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/guideline"
+        app:layout_constraintStart_toEndOf="@+id/imgHazard" />
+
+    <TextView
+        android:id="@+id/txtNonCritical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginBottom="8dp"
+        android:text="Non-critical:"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/guideline"
+        app:layout_constraintStart_toStartOf="@+id/guideline2" />
+
+    <TextView
+        android:id="@+id/txtDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:text="Date:"
+        app:layout_constraintStart_toEndOf="@+id/imgHazard"
+        app:layout_constraintTop_toTopOf="@+id/guideline" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="42dp" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="210dp" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

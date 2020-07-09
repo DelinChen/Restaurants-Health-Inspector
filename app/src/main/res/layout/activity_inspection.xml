@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="ca.cmpt276.project.ui.InspectionActivity">
+
+    <ImageView
+        android:id="@+id/imgHazard"
+        android:layout_width="116dp"
+        android:layout_height="117dp"
+        android:layout_marginStart="28dp"
+        android:layout_marginTop="24dp"
+        android:src="@drawable/restaurant"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/hazard_high" />
+
+    <TextView
+        android:id="@+id/txtEmpty"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="No Violations"
+        android:visibility="gone"
+        android:textSize="30sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/listViolations" />
+
+    <LinearLayout
+        android:id="@+id/linearLayout2"
+        android:layout_width="233dp"
+        android:layout_height="121dp"
+        android:layout_marginStart="24dp"
+        android:orientation="vertical"
+        app:layout_constraintStart_toEndOf="@+id/imgHazard"
+        app:layout_constraintTop_toTopOf="@+id/imgHazard">
+
+        <TextView
+            android:id="@+id/txtName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Inspection type"
+            android:textColor="#000000"
+            android:textSize="24sp" />
+
+        <TextView
+            android:id="@+id/txtDate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Date" />
+
+        <TextView
+            android:id="@+id/txtCritical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="critical:" />
+
+        <TextView
+            android:id="@+id/txtNonCritical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Non critical:" />
+    </LinearLayout>
+
+    <ListView
+        android:id="@+id/listViolations"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout2" >
+
+    </ListView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
