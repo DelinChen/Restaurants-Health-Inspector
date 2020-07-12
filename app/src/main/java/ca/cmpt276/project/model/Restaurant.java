@@ -5,15 +5,29 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
-public class Restaurant implements Comparable<Restaurant> {
-    public final String trackingNumber;     // unique ID
-    public final String name;
-    public final String address;
-    public final String city;
-    // GPS coordinates
-    public final double latitude;
-    public final double longitude;
+import androidx.annotation.NonNull;
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.Ignore;
+import androidx.room.PrimaryKey;
 
+@Entity ( tableName = "restaurantTable" )
+public class Restaurant implements Comparable<Restaurant> {
+    @PrimaryKey
+    @NonNull
+    public final String trackingNumber;     // unique ID
+    @ColumnInfo( name = "name")
+    public final String name;
+    @ColumnInfo( name = "address")
+    public final String address;
+    @ColumnInfo( name = "city")
+    public final String city;
+//     GPS coordinates
+    @ColumnInfo( name = "latitude")
+    public final double latitude;
+    @ColumnInfo( name = "longitude")
+    public final double longitude;
+    @Ignore
     public final List<Inspection> inspections;
 
     public static final double MIN_LATITUDE = -90;

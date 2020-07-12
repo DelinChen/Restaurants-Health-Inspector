@@ -2,19 +2,32 @@ package ca.cmpt276.project.model;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.Ignore;
+import androidx.room.PrimaryKey;
 
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
+@Entity( tableName = "inspectionTable")
 public class Inspection implements Comparable<Inspection> {
+    @PrimaryKey
+    @NonNull
     public final String trackingNumber;
+    @ColumnInfo ( name = "Inspection date")
     public final LocalDate date;
+    @Ignore  //don know how to deal with
     public final InspectionType type;
+    @ColumnInfo ( name = "Critical Violations")
     public final int numCritViolations;
+    @ColumnInfo ( name =  "non Critical violations")
     public final int numNonCritViolations;
+    @Ignore
     public final HazardRating hazardRating;
+    @Ignore
     public final List<Violation> violations;
 
 

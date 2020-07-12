@@ -3,13 +3,23 @@ package ca.cmpt276.project.model;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
 
 import java.util.Objects;
 
+
+//Because we have an ViolationCategory as class attribute, still haven't figure out how to deal with it yet..
+//@Entity( tableName = "violationTable")
 public class Violation {
+//    @PrimaryKey
     public final int codeNumber;
+//    @ColumnInfo( name = "isCritical")
     public final boolean isCritical;
+//     @Ignore
     public final ViolationCategory category;
+//    @ColumnInfo( name = "description")
     public final String description;
 
 
