@@ -18,7 +18,7 @@ public enum HazardRating {
     ///////////////////////////////////////////////////////////
     // Constructor
 
-    HazardRating(String stringVal) {
+    public HazardRating(String stringVal) {
         this.stringVal = stringVal;
     }
 

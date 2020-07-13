@@ -12,12 +12,11 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
-@Entity( tableName = "inspectionTable")
+@Entity( primaryKeys = {"trackingNumber", "date"}, tableName = "inspections")
 public class Inspection implements Comparable<Inspection> {
-    @PrimaryKey
     @NonNull
     public final String trackingNumber;
-    @ColumnInfo ( name = "Inspection date")
+    @ColumnInfo ( name = "InspectionDate")
     public final LocalDate date;
     @Ignore  //don know how to deal with
     public final InspectionType type;
@@ -29,6 +28,8 @@ public class Inspection implements Comparable<Inspection> {
     public final HazardRating hazardRating;
     @Ignore
     public final List<Violation> violations;
+
+
 
 
     /////////////////////////////////////////////////////////////////////////////////////

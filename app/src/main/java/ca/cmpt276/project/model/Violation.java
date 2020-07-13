@@ -5,21 +5,22 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 import java.util.Objects;
 
 
 //Because we have an ViolationCategory as class attribute, still haven't figure out how to deal with it yet..
-//@Entity( tableName = "violationTable")
+@Entity( tableName = "violations")
 public class Violation {
-//    @PrimaryKey
+    @PrimaryKey
     public final int codeNumber;
-//    @ColumnInfo( name = "isCritical")
+    @ColumnInfo( name = "isCritical")
     public final boolean isCritical;
-//     @Ignore
+    @Ignore
     public final ViolationCategory category;
-//    @ColumnInfo( name = "description")
+    @ColumnInfo( name = "description")
     public final String description;
 
 

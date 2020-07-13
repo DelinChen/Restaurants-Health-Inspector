@@ -11,7 +11,7 @@ import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
-@Entity ( tableName = "restaurantTable" )
+@Entity ( tableName = "restaurants" )
 public class Restaurant implements Comparable<Restaurant> {
     @PrimaryKey
     @NonNull

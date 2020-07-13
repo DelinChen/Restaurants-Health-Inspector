@@ -14,7 +14,6 @@ import java.io.IOException;
 
 import ca.cmpt276.project.R;
 
-import ca.cmpt276.project.model.RestaurantJSONParser;
 import ca.cmpt276.project.model.RestaurantManager;
 
 
@@ -69,11 +68,11 @@ public class MainActivity extends AppCompatActivity implements RestListAdapter.R
                 dialog.setMessage("I am updating");
                 dialog.show();
     */
-            protected void doInBackground(Void...params) throws IOException {
-            JSONObject jsonObject = RestaurantJSONParser.getDataFromWeb();
-
-
-
-     }
+//            protected void doInBackground(Void...params) throws IOException {
+//            JSONObject jsonObject = RestaurantJSONParser.getDataFromWeb();
+//
+//
+//
+//     }
 
 }

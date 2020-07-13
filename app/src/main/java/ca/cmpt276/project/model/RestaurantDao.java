@@ -23,13 +23,13 @@ public interface RestaurantDao{
     @Delete
     void delete(Restaurant restaurant);
 
-    @Query("DELETE FROM restaurantTable")
+    @Query("DELETE FROM restaurants")
     void deleteAllRestaurants();
 
-    @Query("SELECT * FROM restaurantTable WHERE trackingNumber = :trackingNumber")
+    @Query("SELECT * FROM restaurants WHERE trackingNumber = :trackingNumber")
     LiveData<Restaurant> getRestaurantById(int trackingNumber);
 
-    @Query("SELECT * FROM restaurantTable")
+    @Query("SELECT * FROM restaurants")
     LiveData<List<Restaurant>> getAllRestaurant();
 }
 
