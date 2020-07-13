@@ -29,6 +29,16 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
+        // get user location and center on current location
+
+        // display pegs showing the location of each restaurant with hazard icons
+
+        // show the hazard level of the most recent inspection report on pegs
+
+        // tap peg to pop up name, address and hazard level
+
+        // tap again to goto restaurant's full info page
     }
 
     /**
@@ -50,6 +60,8 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
         mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
     }
 
+
+    // create menu
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
