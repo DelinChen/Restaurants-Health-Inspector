@@ -40,7 +40,6 @@ public class InspectionActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_inspection);
-        getSupportActionBar().setTitle("Restaurant Health Inspector");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         // set manager

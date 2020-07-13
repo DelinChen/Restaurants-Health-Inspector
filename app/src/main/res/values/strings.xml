@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">276Project</string>
+    <string name="app_name">Restaurant Health Inspector</string>
     <string name="number_of_issues_text">Number of Issues: </string>
     <string name="latest_inspection_text">Latest Inspection: </string>
     <string name="title_activity_test">TestActivity</string>
