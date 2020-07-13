@@ -6,6 +6,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 
 import ca.cmpt276.project.R;
@@ -36,5 +39,27 @@ public class MainActivity extends AppCompatActivity implements RestListAdapter.R
         Intent intent = new Intent(this, RestaurantActivity.class);
         intent.putExtra("tracking number", manager.restaurants().get(position).trackingNumber);
         startActivity(intent);
+    }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_list, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            // switch to map view
+            case R.id.map:
+                Intent intent = new Intent(this, MapActivity.class);
+                startActivity(intent);
+                finish();
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }
