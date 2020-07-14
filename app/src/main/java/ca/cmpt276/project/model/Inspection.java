@@ -16,15 +16,13 @@ import java.util.Objects;
 @Entity( primaryKeys = {"trackingNumber", "date"}, tableName = "inspections")
 public class Inspection implements Comparable<Inspection> {
     @NonNull
-    @ColumnInfo(name = "tracking_number")
-    @ForeignKey(entity = Restaurant.class, parentColumns = "tracking_number", childColumns = "tracking_number")
+    @ForeignKey(
+            entity = Restaurant.class, parentColumns = "tracking_number", childColumns = "tracking_number",
+            onDelete = ForeignKey.CASCADE, onUpdate = ForeignKey.CASCADE)
     public final String trackingNumber;
     
-    @NonNull
-    public final LocalDate date;
-    
-    @NonNull
-    public final InspectionType type;
+    @NonNull public final LocalDate date;
+    @NonNull public final InspectionType type;
     
     @ColumnInfo(name = "num_crit_violations")
     public final int numCritViolations;
@@ -34,7 +32,8 @@ public class Inspection implements Comparable<Inspection> {
     
     @ColumnInfo(name = "hazard_rating")
     public final HazardRating hazardRating;
-    
+
+    @Ignore
     public final List<Violation> violations;
 
 

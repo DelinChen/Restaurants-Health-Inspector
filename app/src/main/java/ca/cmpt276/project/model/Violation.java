@@ -16,12 +16,12 @@ import java.util.Objects;
 public class Violation {
     @PrimaryKey
     public final int codeNumber;
-    @ColumnInfo( name = "isCritical")
+
+    @ColumnInfo( name = "is_critical")
     public final boolean isCritical;
-    @Ignore
-    public final ViolationCategory category;
-    @ColumnInfo( name = "description")
-    public final String description;
+
+    @NonNull public final ViolationCategory category;
+    @NonNull public final String description;
 
 
     /////////////////////////////////////////////////////////////////////////////////////
