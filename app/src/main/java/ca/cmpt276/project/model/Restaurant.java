@@ -13,20 +13,24 @@ import androidx.room.PrimaryKey;
 
 @Entity ( tableName = "restaurants" )
 public class Restaurant implements Comparable<Restaurant> {
-    @PrimaryKey
     @NonNull
+    @PrimaryKey
+    @ColumnInfo(name = "tracking_number")
     public final String trackingNumber;     // unique ID
-    @ColumnInfo( name = "name")
+
+    @NonNull
     public final String name;
-    @ColumnInfo( name = "address")
+
+    @NonNull
     public final String address;
-    @ColumnInfo( name = "city")
+
+    @NonNull
     public final String city;
-//     GPS coordinates
-    @ColumnInfo( name = "latitude")
+
+    // GPS coordinates
     public final double latitude;
-    @ColumnInfo( name = "longitude")
     public final double longitude;
+
     @Ignore
     public final List<Inspection> inspections;
 

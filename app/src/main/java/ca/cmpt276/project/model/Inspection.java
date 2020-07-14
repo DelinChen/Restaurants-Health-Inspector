@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.ForeignKey;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
@@ -15,18 +16,25 @@ import java.util.Objects;
 @Entity( primaryKeys = {"trackingNumber", "date"}, tableName = "inspections")
 public class Inspection implements Comparable<Inspection> {
     @NonNull
+    @ColumnInfo(name = "tracking_number")
+    @ForeignKey(entity = Restaurant.class, parentColumns = "tracking_number", childColumns = "tracking_number")
     public final String trackingNumber;
-    @ColumnInfo ( name = "InspectionDate")
+    
+    @NonNull
     public final LocalDate date;
-    @Ignore  //don know how to deal with
+    
+    @NonNull
     public final InspectionType type;
-    @ColumnInfo ( name = "Critical Violations")
+    
+    @ColumnInfo(name = "num_crit_violations")
     public final int numCritViolations;
-    @ColumnInfo ( name =  "non Critical violations")
+
+    @ColumnInfo(name = "num_noncrit_violations")
     public final int numNonCritViolations;
-    @Ignore
+    
+    @ColumnInfo(name = "hazard_rating")
     public final HazardRating hazardRating;
-    @Ignore
+    
     public final List<Violation> violations;
 
 
