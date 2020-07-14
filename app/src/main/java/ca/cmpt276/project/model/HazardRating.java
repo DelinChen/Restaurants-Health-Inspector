@@ -12,13 +12,13 @@ public enum HazardRating {
     ///////////////////////////////////////////////////////////
     // Fields
 
-    private final String stringVal;
+    public final String stringVal;
 
 
     ///////////////////////////////////////////////////////////
     // Constructor
 
-    public HazardRating(String stringVal) {
+    HazardRating(String stringVal) {
         this.stringVal = stringVal;
     }
 
