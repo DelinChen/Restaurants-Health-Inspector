@@ -17,7 +17,7 @@ public enum InspectionType {
     ///////////////////////////////////////////////////////////
     // Constructor
 
-    public InspectionType(String stringVal) {
+    InspectionType(String stringVal) {
         this.stringVal = stringVal;
     }
 
