@@ -11,10 +11,12 @@ import java.util.Objects;
 
 
 //Because we have an ViolationCategory as class attribute, still haven't figure out how to deal with it yet..
-@Entity( tableName = "violations")
+@Entity(
+        tableName = "violations"
+)
 public class Violation {
     @PrimaryKey
-    @ColumnInfo(name = "code_number")
+    @ColumnInfo(name = "code_number", index = true)
     public final int codeNumber;
 
     @ColumnInfo(name = "is_critical")

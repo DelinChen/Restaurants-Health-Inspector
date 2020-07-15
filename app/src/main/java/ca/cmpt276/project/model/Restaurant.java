@@ -10,11 +10,13 @@ import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
-@Entity ( tableName = "restaurants" )
+@Entity (
+        tableName = "restaurants"
+)
 public class Restaurant implements Comparable<Restaurant> {
     @NonNull
     @PrimaryKey
-    @ColumnInfo(name = "tracking_number")
+    @ColumnInfo(name = "tracking_number", index = true)
     public final String trackingNumber;     // unique ID
 
     @NonNull public final String name;

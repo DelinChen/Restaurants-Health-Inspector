@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
+import androidx.room.Index;
 
 import java.time.LocalDate;
 
@@ -22,12 +23,12 @@ import java.time.LocalDate;
     }
 )
 public class InspectionViolationCrossref {
-    @ColumnInfo(name = "tracking_number")
+    @ColumnInfo(name = "tracking_number", index = true)
     @NonNull public final String trackingNumber;
 
     @NonNull public final LocalDate date;
 
-    @ColumnInfo(name = "code_number")
+    @ColumnInfo(name = "code_number", index = true)
     public final int codeNumber;
 
     public InspectionViolationCrossref(String trackingNumber, LocalDate date, int codeNumber) {

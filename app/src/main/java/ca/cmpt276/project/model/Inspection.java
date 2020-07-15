@@ -6,6 +6,7 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.Ignore;
+import androidx.room.Index;
 
 import java.time.LocalDate;
 import java.util.Collections;
@@ -19,13 +20,13 @@ import java.util.Objects;
         @ForeignKey(
             entity = Restaurant.class, parentColumns = "tracking_number", childColumns = "tracking_number",
             onDelete = ForeignKey.CASCADE, onUpdate = ForeignKey.CASCADE)
-    }
+    },
+    indices = @Index({"tracking_number", "date"})
 )
 public class Inspection implements Comparable<Inspection> {
-    @NonNull
     @ColumnInfo(name = "tracking_number")
-    public final String trackingNumber;
-    
+    @NonNull public final String trackingNumber;
+
     @NonNull public final LocalDate date;
     @NonNull public final InspectionType type;
     
