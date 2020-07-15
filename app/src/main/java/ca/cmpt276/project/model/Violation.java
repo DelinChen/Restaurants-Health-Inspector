@@ -5,7 +5,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
-import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 import java.util.Objects;
@@ -15,9 +14,10 @@ import java.util.Objects;
 @Entity( tableName = "violations")
 public class Violation {
     @PrimaryKey
+    @ColumnInfo(name = "code_number")
     public final int codeNumber;
 
-    @ColumnInfo( name = "is_critical")
+    @ColumnInfo(name = "is_critical")
     public final boolean isCritical;
 
     @NonNull public final ViolationCategory category;

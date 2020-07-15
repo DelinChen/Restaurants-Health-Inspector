@@ -5,20 +5,22 @@ import androidx.annotation.Nullable;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
-import androidx.room.Ignore;
-import androidx.room.PrimaryKey;
 
 import java.time.LocalDate;
-import java.util.Collections;
-import java.util.List;
 import java.util.Objects;
 
-@Entity( primaryKeys = {"trackingNumber", "date"}, tableName = "inspections")
-public class Inspection implements Comparable<Inspection> {
-    @NonNull
-    @ForeignKey(
+@Entity(
+    tableName = "inspections",
+    primaryKeys = {"tracking_number", "date"},
+    foreignKeys = {
+        @ForeignKey(
             entity = Restaurant.class, parentColumns = "tracking_number", childColumns = "tracking_number",
             onDelete = ForeignKey.CASCADE, onUpdate = ForeignKey.CASCADE)
+    }
+)
+public class Inspection implements Comparable<Inspection> {
+    @NonNull
+    @ColumnInfo(name = "tracking_number")
     public final String trackingNumber;
     
     @NonNull public final LocalDate date;
@@ -33,24 +35,18 @@ public class Inspection implements Comparable<Inspection> {
     @ColumnInfo(name = "hazard_rating")
     public final HazardRating hazardRating;
 
-    @Ignore
-    public final List<Violation> violations;
-
-
-
 
     /////////////////////////////////////////////////////////////////////////////////////
     // Constructor
 
-    public Inspection(String trackingNumber, LocalDate date, InspectionType type, int numCritViolations, int numNonCritViolations, HazardRating hazardRating, List<Violation> violations) {
-        validateConstructorArgs(trackingNumber, date, type, numCritViolations, numNonCritViolations, hazardRating, violations);
+    public Inspection(String trackingNumber, LocalDate date, InspectionType type, int numCritViolations, int numNonCritViolations, HazardRating hazardRating) {
+        validateConstructorArgs(trackingNumber, date, type, numCritViolations, numNonCritViolations, hazardRating);
         this.trackingNumber         = trackingNumber;
         this.date                   = date;
         this.type                   = type;
         this.numCritViolations      = numCritViolations;
         this.numNonCritViolations   = numNonCritViolations;
         this.hazardRating           = hazardRating;
-        this.violations             = Collections.unmodifiableList(violations);
     }
 
 
@@ -68,8 +64,7 @@ public class Inspection implements Comparable<Inspection> {
                 && type.equals(other.type)
                 && numCritViolations == other.numCritViolations
                 && numNonCritViolations == other.numNonCritViolations
-                && hazardRating.equals(other.hazardRating)
-                && violations.equals(other.violations);
+                && hazardRating.equals(other.hazardRating);
     }
 
     @Override
@@ -87,7 +82,7 @@ public class Inspection implements Comparable<Inspection> {
 
     @Override
     public int hashCode() {
-        return Objects.hash(trackingNumber, date, type, numCritViolations, numNonCritViolations, hazardRating, violations);
+        return Objects.hash(trackingNumber, date, type, numCritViolations, numNonCritViolations, hazardRating);
     }
 
     @NonNull
@@ -96,16 +91,16 @@ public class Inspection implements Comparable<Inspection> {
         // Used mainly for debugging purposes
         return "Inspection<" + trackingNumber + ", " + date + ", " + type
                 + ", " + numCritViolations + ", " + numNonCritViolations
-                + ", " + hazardRating + ", ... " + violations.size() + " violations>";
+                + ", " + hazardRating + ">";
     }
 
 
     ////////////////////////////////////////////////////////
     // Validate constructor args
 
-    private static void validateConstructorArgs(String trackingNumber, LocalDate date, InspectionType type, int numCritViolations, int numNonCritViolations, HazardRating hazardRating, List<Violation> violations) {
-        String[] argNames = {"trackingNumber", "date", "type", "numCritViolations", "numNonCritViolations", "hazardRating", "violations"};
-        Object[] argValues = {trackingNumber, date, type, numCritViolations, numNonCritViolations, hazardRating, violations};
+    private static void validateConstructorArgs(String trackingNumber, LocalDate date, InspectionType type, int numCritViolations, int numNonCritViolations, HazardRating hazardRating) {
+        String[] argNames = {"trackingNumber", "date", "type", "numCritViolations", "numNonCritViolations", "hazardRating"};
+        Object[] argValues = {trackingNumber, date, type, numCritViolations, numNonCritViolations, hazardRating};
         ConstructorArguments.requireArgsNonNull(argNames, argValues, Inspection.class);
 
         String[] stringArgNames = {"trackingNumber"};

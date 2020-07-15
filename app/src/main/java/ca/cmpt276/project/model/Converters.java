@@ -16,6 +16,7 @@ public class Converters {
         return hazardRating.stringVal;
     }
 
+
     @TypeConverter
     public static InspectionType inspectionTypeFromString(String inspection) {
         return InspectionType.fromString(inspection);
@@ -24,6 +25,7 @@ public class Converters {
     public static String inspectionTypeToString(InspectionType type) {
         return type.stringVal;
     }
+
 
     @TypeConverter
     public static ViolationCategory violationCategoryFromCodeNumber(int codeNumber) {
