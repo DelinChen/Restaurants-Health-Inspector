@@ -35,7 +35,7 @@ public class RestaurantTest {
 
         @Before
         public void initialize() {
-            instance = new Restaurant(trackingNumber, name, address, city, latitude, longitude, inspections);
+            instance = new Restaurant(trackingNumber, name, address, city, latitude, longitude);
         }
 
         @Test
@@ -63,24 +63,20 @@ public class RestaurantTest {
             assertEquals(longitude, instance.longitude, MAX_DELTA);
         }
         @Test
-        public void validInspectionsTest() {
-            assertEquals(inspections, instance.inspections);
-        }
-        @Test
         public void latitudeOnLowerBoundTest() {
-            Restaurant instance = new Restaurant(trackingNumber, name, address, city, MIN_LATITUDE, longitude, inspections);
+            Restaurant instance = new Restaurant(trackingNumber, name, address, city, MIN_LATITUDE, longitude);
         }
         @Test
         public void latitudeOnUpperBoundTest() {
-            Restaurant instance = new Restaurant(trackingNumber, name, address, city, MAX_LATITUDE, longitude, inspections);
+            Restaurant instance = new Restaurant(trackingNumber, name, address, city, MAX_LATITUDE, longitude);
         }
         @Test
         public void longitudeOnLowerBoundTest() {
-            Restaurant instance = new Restaurant(trackingNumber, name, address, city, latitude, MIN_LONGITUDE, inspections);
+            Restaurant instance = new Restaurant(trackingNumber, name, address, city, latitude, MIN_LONGITUDE);
         }
         @Test
         public void longitudeOnUpperBoundTest() {
-            Restaurant instance = new Restaurant(trackingNumber, name, address, city, latitude, MAX_LONGITUDE, inspections);
+            Restaurant instance = new Restaurant(trackingNumber, name, address, city, latitude, MAX_LONGITUDE);
         }
     }
 
@@ -94,36 +90,36 @@ public class RestaurantTest {
 
         @Test
         public void nullTrackingNumberTest() {
-            Restaurant instance = new Restaurant(null, name, address, city, latitude, longitude, inspections);
+            Restaurant instance = new Restaurant(null, name, address, city, latitude, longitude);
         }
         @Test
         public void nullNameTest() {
-            Restaurant instance = new Restaurant(trackingNumber, null, address, city, latitude, longitude, inspections);
+            Restaurant instance = new Restaurant(trackingNumber, null, address, city, latitude, longitude);
         }
         @Test
         public void nullAddressTest() {
-            Restaurant instance = new Restaurant(trackingNumber, name, null, city, latitude, longitude, inspections);
+            Restaurant instance = new Restaurant(trackingNumber, name, null, city, latitude, longitude);
         }
         @Test
         public void nullCityTest() {
-            Restaurant instance = new Restaurant(trackingNumber, name, address, null, latitude, longitude, inspections);
+            Restaurant instance = new Restaurant(trackingNumber, name, address, null, latitude, longitude);
         }
         @Test
         public void nullLatitudeTest() {
-            Restaurant instance = new Restaurant(trackingNumber, name, address, city, (Double)null, longitude, inspections);
+            Restaurant instance = new Restaurant(trackingNumber, name, address, city, (Double)null, longitude);
         }
         @Test
         public void nullLongitudeTest() {
-            Restaurant instance = new Restaurant(trackingNumber, name, address, city, latitude, (Double)null, inspections);
+            Restaurant instance = new Restaurant(trackingNumber, name, address, city, latitude, (Double)null);
         }
         @Test
         public void nullInspectionsTest() {
-            Restaurant instance = new Restaurant(trackingNumber, name, address, city, latitude, longitude, null);
+            Restaurant instance = new Restaurant(trackingNumber, name, address, city, latitude, longitude);
         }
 
         @Test
         public void allArgsNullTest() {
-            Restaurant instance = new Restaurant(null, null, null, null, (Double)null, (Double)null, null);
+            Restaurant instance = new Restaurant(null, null, null, null, (Double)null, (Double)null);
         }
     }
 
@@ -137,24 +133,24 @@ public class RestaurantTest {
 
         @Test
         public void emptyTrackingNumberTest() {
-            Restaurant instance = new Restaurant("", name, address, city, latitude, longitude, inspections);
+            Restaurant instance = new Restaurant("", name, address, city, latitude, longitude);
         }
         @Test
         public void emptyNameTest() {
-            Restaurant instance = new Restaurant(trackingNumber, "", address, city, latitude, longitude, inspections);
+            Restaurant instance = new Restaurant(trackingNumber, "", address, city, latitude, longitude);
         }
         @Test
         public void emptyAddressTest() {
-            Restaurant instance = new Restaurant(trackingNumber, name, "", city, latitude, longitude, inspections);
+            Restaurant instance = new Restaurant(trackingNumber, name, "", city, latitude, longitude);
         }
         @Test
         public void emptyCityTest() {
-            Restaurant instance = new Restaurant(trackingNumber, name, address, "", latitude, longitude, inspections);
+            Restaurant instance = new Restaurant(trackingNumber, name, address, "", latitude, longitude);
         }
 
         @Test
         public void allArgsEmptyTest() {
-            Restaurant instance = new Restaurant("", "", "", "", latitude, longitude, inspections);
+            Restaurant instance = new Restaurant("", "", "", "", latitude, longitude);
         }
     }
 
@@ -168,11 +164,11 @@ public class RestaurantTest {
 
         @Test
         public void latitudeNaNTest() {
-            Restaurant instance = new Restaurant(trackingNumber, name, address, city, Double.NaN, longitude, inspections);
+            Restaurant instance = new Restaurant(trackingNumber, name, address, city, Double.NaN, longitude);
         }
         @Test
         public void longitudeNaNTest() {
-            Restaurant instance = new Restaurant(trackingNumber, name, address, city, latitude, Double.NaN, inspections);
+            Restaurant instance = new Restaurant(trackingNumber, name, address, city, latitude, Double.NaN);
         }
     }
 
@@ -186,19 +182,19 @@ public class RestaurantTest {
 
         @Test
         public void latitudeUnderLowerBoundTest() {
-            Restaurant instance = new Restaurant(trackingNumber, name, address, city, MIN_LATITUDE - MAX_DELTA, longitude, inspections);
+            Restaurant instance = new Restaurant(trackingNumber, name, address, city, MIN_LATITUDE - MAX_DELTA, longitude);
         }
         @Test
         public void latitudeAboveUpperBoundTest() {
-            Restaurant instance = new Restaurant(trackingNumber, name, address, city, MAX_LATITUDE + MAX_DELTA, longitude, inspections);
+            Restaurant instance = new Restaurant(trackingNumber, name, address, city, MAX_LATITUDE + MAX_DELTA, longitude);
         }
         @Test
         public void longitudeUnderLowerBoundTest() {
-            Restaurant instance = new Restaurant(trackingNumber, name, address, city, latitude, MIN_LONGITUDE - MAX_DELTA, inspections);
+            Restaurant instance = new Restaurant(trackingNumber, name, address, city, latitude, MIN_LONGITUDE - MAX_DELTA);
         }
         @Test
         public void longitudeAboveLowerBoundTest() {
-            Restaurant instance = new Restaurant(trackingNumber, name, address, city, latitude, MAX_LONGITUDE + MAX_DELTA, inspections);
+            Restaurant instance = new Restaurant(trackingNumber, name, address, city, latitude, MAX_LONGITUDE + MAX_DELTA);
         }
     }
 }
