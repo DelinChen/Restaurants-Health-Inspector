@@ -2,10 +2,23 @@ package ca.cmpt276.project.model;
 
 import androidx.room.TypeConverter;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+
 public class Converters {
     private Converters() throws InstantiationException {
         throw new InstantiationException(getClass().getName() + " cannot be instantiated");
     }
+
+    @TypeConverter
+    public static LocalDate localDateFromString(String date) {
+        return LocalDate.parse(date, DateTimeFormatter.BASIC_ISO_DATE);
+    }
+    @TypeConverter
+    public static String localDateToString(LocalDate date) {
+        return date.format(DateTimeFormatter.BASIC_ISO_DATE);
+    }
+
 
     @TypeConverter
     public static HazardRating hazardRatingFromString(String hazardRating) {
