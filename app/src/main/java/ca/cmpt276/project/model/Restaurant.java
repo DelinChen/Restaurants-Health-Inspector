@@ -1,6 +1,7 @@
 package ca.cmpt276.project.model;
 
 import java.util.Collections;
+import java.util.Objects;
 
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
@@ -64,6 +65,10 @@ public class Restaurant implements Comparable<Restaurant> {
                 && (Double.compare(longitude, other.longitude) == 0);
     }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(trackingNumber, name, city, latitude, longitude);
+    }
 
     /////////////////////////////////////////////////////////////////////////////////////
     // Helper methods
