@@ -1,5 +1,6 @@
 package ca.cmpt276.project.model;
 
+import androidx.room.Dao;
 import androidx.room.Query;
 import androidx.room.Transaction;
 
@@ -7,6 +8,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Dao
 public abstract class InspectionDao implements BaseDao<Inspection> {
     @Query("SELECT * FROM inspections")
     public abstract List<Inspection> getAllInspections();
