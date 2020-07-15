@@ -1,11 +1,13 @@
 package ca.cmpt276.project.model;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.Objects;
 
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 @Entity ( tableName = "restaurants" )
@@ -22,6 +24,9 @@ public class Restaurant implements Comparable<Restaurant> {
     // GPS coordinates
     public final double latitude;
     public final double longitude;
+
+    @Ignore
+    public final List<Inspection> inspections = Collections.emptyList();
 
     public static final double MIN_LATITUDE = -90;
     public static final double MAX_LATITUDE = 90;

@@ -8,6 +8,7 @@ import androidx.room.ForeignKey;
 import java.time.LocalDate;
 
 @Entity(
+    tableName = "inspection_violations_crossref",
     primaryKeys = {"tracking_number", "date", "code_number"},
     foreignKeys = {
         @ForeignKey(

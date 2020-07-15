@@ -5,8 +5,11 @@ import androidx.annotation.Nullable;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
+import androidx.room.Ignore;
 
 import java.time.LocalDate;
+import java.util.Collections;
+import java.util.List;
 import java.util.Objects;
 
 @Entity(
@@ -35,6 +38,8 @@ public class Inspection implements Comparable<Inspection> {
     @ColumnInfo(name = "hazard_rating")
     public final HazardRating hazardRating;
 
+    @Ignore
+    public final List<Violation> violations = Collections.emptyList();
 
     /////////////////////////////////////////////////////////////////////////////////////
     // Constructor
