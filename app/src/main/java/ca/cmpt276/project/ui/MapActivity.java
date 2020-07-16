@@ -2,7 +2,10 @@ package ca.cmpt276.project.ui;
 
 import androidx.fragment.app.FragmentActivity;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -15,11 +18,23 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+
 import ca.cmpt276.project.R;
+import ca.cmpt276.project.model.RestaurantManager;
 
 public class MapActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
+    public static final String SHARED_PREFS = "sharedPrefs";
+    public static final String DEFAULT_DATE = "01/01/0001";
+    static final long TWENTY_H_IN_MS = 20 * 60 * 60 * 1000;
+    RestaurantManager manager = RestaurantManager.getInstance();
+    DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +44,49 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
+        try {
+            updateRestaurant();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void updateRestaurant() throws ParseException {
+        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
+        String lastUpdateStr = sharedPreferences.getString("last_update", DEFAULT_DATE);
+        Date currDate = Calendar.getInstance().getTime();
+        Date lastUpdate = dateFormat.parse(lastUpdateStr);
+        if(currDate.getTime() - lastUpdate.getTime() < TWENTY_H_IN_MS) {
+            return;
+        }
+        else {
+            //function to check if there is new data
+
+            //
+            createAskDialog();
+            
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putString("last_update", dateFormat.format(Calendar.getInstance().getTime()));
+            return;
+        }
+    }
+
+    private void createAskDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(MapActivity.this);
+        builder.setTitle(R.string.update_available_text)
+                .setMessage(R.string.update_now_text)
+                .setPositiveButton(R.string.yes_text, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        createUpdateDialog();
+                    }
+                })
+                .setNegativeButton(R.string.no_text, null)
+                .setCancelable(false);
+    }
+
+    private void createUpdateDialog() {
     }
 
     /**
