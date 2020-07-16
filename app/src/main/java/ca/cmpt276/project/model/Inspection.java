@@ -6,7 +6,7 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.Ignore;
-import androidx.room.Index;
+import androidx.room.PrimaryKey;
 
 import java.time.LocalDate;
 import java.util.Collections;
@@ -15,16 +15,18 @@ import java.util.Objects;
 
 @Entity(
     tableName = "inspections",
-    primaryKeys = {"tracking_number", "date"},
     foreignKeys = {
         @ForeignKey(
             entity = Restaurant.class, parentColumns = "tracking_number", childColumns = "tracking_number",
             onDelete = ForeignKey.CASCADE, onUpdate = ForeignKey.CASCADE)
-    },
-    indices = @Index({"tracking_number", "date"})
+    }
 )
 public class Inspection implements Comparable<Inspection> {
-    @ColumnInfo(name = "tracking_number")
+    @PrimaryKey
+    @ColumnInfo(name = "inspection_id", index = true)
+    @NonNull public int inspectionId;
+
+    @ColumnInfo(name = "tracking_number", index = true)
     @NonNull public final String trackingNumber;
 
     @NonNull public final LocalDate date;
@@ -47,6 +49,7 @@ public class Inspection implements Comparable<Inspection> {
 
     public Inspection(String trackingNumber, LocalDate date, InspectionType type, int numCritViolations, int numNonCritViolations, HazardRating hazardRating) {
         validateConstructorArgs(trackingNumber, date, type, numCritViolations, numNonCritViolations, hazardRating);
+        this.inspectionId           = Objects.hash(trackingNumber, date);
         this.trackingNumber         = trackingNumber;
         this.date                   = date;
         this.type                   = type;

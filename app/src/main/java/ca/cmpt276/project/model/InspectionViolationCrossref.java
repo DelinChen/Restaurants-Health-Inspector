@@ -10,10 +10,10 @@ import java.time.LocalDate;
 
 @Entity(
     tableName = "inspection_violations_crossref",
-    primaryKeys = {"tracking_number", "date", "code_number"},
+    primaryKeys = {"inspection_id", "code_number"},
     foreignKeys = {
         @ForeignKey(
-            entity = Inspection.class, parentColumns = {"tracking_number", "date"}, childColumns = {"tracking_number", "date"},
+            entity = Inspection.class, parentColumns = "inspection_id", childColumns = "inspection_id",
             onDelete = ForeignKey.CASCADE, onUpdate = ForeignKey.CASCADE
         ),
         @ForeignKey(
@@ -23,17 +23,15 @@ import java.time.LocalDate;
     }
 )
 public class InspectionViolationCrossref {
-    @ColumnInfo(name = "tracking_number", index = true)
-    @NonNull public final String trackingNumber;
+    @ColumnInfo(name = "inspection_id", index = true)
+    public final int inspectionId;
 
-    @NonNull public final LocalDate date;
 
     @ColumnInfo(name = "code_number", index = true)
     public final int codeNumber;
 
-    public InspectionViolationCrossref(String trackingNumber, LocalDate date, int codeNumber) {
-        this.trackingNumber = trackingNumber;
-        this.date = date;
+    public InspectionViolationCrossref(int inspectionId, int codeNumber) {
+        this.inspectionId = inspectionId;
         this.codeNumber = codeNumber;
     }
 }
