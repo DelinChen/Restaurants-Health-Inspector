@@ -4,8 +4,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DownloadManager;
+import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -40,6 +42,7 @@ import java.util.Date;
 
 import ca.cmpt276.project.R;
 
+import ca.cmpt276.project.model.Restaurant;
 import ca.cmpt276.project.model.RestaurantManager;
 
 
@@ -55,6 +58,10 @@ public class MainActivity extends AppCompatActivity implements RestListAdapter.R
     SimpleDateFormat inDaysFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm");
     private static LocalDateTime RestaurantslastUpdateDate = LocalDateTime.of(2020,06,30,23,59); //the last date we did update from server, assume we updated it at that date
     private static LocalDateTime InspectionslastUpdateDate = LocalDateTime.of(2020,06,30,23,59);//the last date we did update from server, assume we updated it at that date
+    private static LocalDateTime RestaurantslastModifiedDate = LocalDateTime.of(2020,06,30,23,59); //the last date we did update from server, assume we updated it at that date
+    private static LocalDateTime InspectionslastModifiedDate = LocalDateTime.of(2020,06,30,23,59);//the last date we did update from server, assume we updated it at that date
+    private static LocalDateTime LoginDate = LocalDateTime.now();
+
     TextView UrlText;
     TextView DateText;
 
@@ -75,112 +82,121 @@ public class MainActivity extends AppCompatActivity implements RestListAdapter.R
         restList.setAdapter(adapter);
         restList.setLayoutManager(new LinearLayoutManager(this));
 
+        Duration betweenUpdates = Duration.between(RestaurantslastUpdateDate,LoginDate);
+        //Update is define by more than Duration of 20 hours
+        Duration twentyHours = Duration.ofHours(20);
+        //check if the Duration bewteen two are more than or equal to 20h hours
+//                    UrlText.setText(restaurantDLUrl);
+//                    DateText.setText(RestaurantslastUpdateDate.toString());
+
         /*Request the server to check the latest update since last 20hours from server*/
-        RequestQueue requestQueue = Volley.newRequestQueue(this);
-        //the Restaurant JSON file request
-        JsonObjectRequest RestaurantObjectRequest = new JsonObjectRequest(Request.Method.GET,
-                "http://data.surrey.ca/api/3/action/package_show?id=restaurants",
-                null, new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
-                try {
-                    //Access the "result" field of JSON in the API request
-                    JSONObject jsonObject = response.getJSONObject("result");
-                    //Access the "resource " array in the "result field
-                    JSONArray resource = jsonObject.getJSONArray("resources");
-                    //Access the first JSonObject in the "resources" array
-                    JSONObject restaurantResources = resource.getJSONObject(0);
-                    //Get the Url to ready to download
-                    restaurantDLUrl = restaurantResources.getString("url");
-                    //Get the last modified date in String form
-                    String updateDate = restaurantResources.getString("last_modified");
-                    //THE LATEST MODIFIED DATE FROM API
-                    LocalDateTime latestUpdateDate = LocalDateTime.parse(updateDate);
-                    //the Duration between the the
-                    Duration betweenUpdates = Duration.between(RestaurantslastUpdateDate,latestUpdateDate);
-                    //Update is define by more than Duration of 20 hours
-                    Duration twentyHours = Duration.ofHours(20);
-                    //check if the Duration bewteen two are more than or equal to 20h hours
-                    UrlText.setText(restaurantDLUrl);
-                    DateText.setText(RestaurantslastUpdateDate.toString());
-                    if(betweenUpdates.compareTo(twentyHours) >= 0){
-                        //replace the latest update date to the new one
-                        RestaurantslastUpdateDate = latestUpdateDate;
-                        //Ask for Update and download
+        RequestQueue requestQueue = Volley.newRequestQueue(MainActivity.this);
+        if(betweenUpdates.compareTo(twentyHours) >= 0) {
+            //the Restaurant JSON file request
+            JsonObjectRequest RestaurantObjectRequest = new JsonObjectRequest(Request.Method.GET,
+                    "http://data.surrey.ca/api/3/action/package_show?id=restaurants",
+                    null, new Response.Listener<JSONObject>() {
+                @Override
+                public void onResponse(JSONObject response) {
+                    try {
+                        //Access the "result" field of JSON in the API request
+                        JSONObject jsonObject = response.getJSONObject("result");
+                        //Access the "resource " array in the "result field
+                        JSONArray resource = jsonObject.getJSONArray("resources");
+                        //Access the first JSonObject in the "resources" array
+                        JSONObject restaurantResources = resource.getJSONObject(0);
+                        //Get the Url to ready to download
+                        restaurantDLUrl = restaurantResources.getString("url");
+                        //Get the last modified date in String form
+                        String updateDate = restaurantResources.getString("last_modified");
+                        //THE LATEST MODIFIED DATE FROM API
+                        LocalDateTime latestModeifiedDate = LocalDateTime.parse(updateDate);
+                        //the Duration between the the
 
-                        //setup downloadManager
-                        DownloadManager downloadManager = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
-                        //setup the Request
-                        DownloadManager.Request request = new DownloadManager.Request(Uri.parse(restaurantDLUrl));
-                        //queue up for download
-                        downloadManager.enqueue(request);
+                        if (RestaurantslastUpdateDate.isBefore(latestModeifiedDate)) {
+                            //replace the latest update date to the new one
+                            RestaurantslastModifiedDate = latestModeifiedDate;
+                            //Ask for Update and download
+//                            Dialog creation
 
+                            //setup downloadManager
+                            DownloadManager downloadManager = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
+                            //setup the Request
+                            DownloadManager.Request request = new DownloadManager.Request(Uri.parse(restaurantDLUrl));
+                            //queue up for download
+//                            request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI | DownloadManager.Request.NETWORK_MOBILE);
+//                            request.setTitle("Download"); //set title in download notifcation;
 
-                    }   else {
-                        //Do nothing
+                            downloadManager.enqueue(request);
+
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
                     }
-                } catch (JSONException e) {
-                    e.printStackTrace();
                 }
-            }
-        }, new Response.ErrorListener(){
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                error.printStackTrace();
-            }
-        });
-
-        //the Restaurant JSON file request
-//        JsonObjectRequest RestaurantObjectRequest = new JsonObjectRequest(Request.Method.GET,
-//                "http://data.surrey.ca/api/3/action/package_show?id=restaurants",
-//                null, new Response.Listener<JSONObject>() {
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    error.printStackTrace();
+                }
+            });
+            //add the request to the queue
+            requestQueue.add(RestaurantObjectRequest);
+        }
 
 
+        Duration betweenUpdates2 = Duration.between(InspectionslastUpdateDate,LoginDate);
+        if(betweenUpdates2.compareTo(twentyHours) >= 0) {
+            /*Request the server to check the latest update since last 20hours from server*/
+            //the Inpsection JSON file request
+            JsonObjectRequest InspectionsObjectRequest = new JsonObjectRequest(Request.Method.GET,
+                    "http://data.surrey.ca/api/3/action/package_show?id=fraser-health-restaurant-inspection-reports",
+                    null, new Response.Listener<JSONObject>() {
+                @Override
+                public void onResponse(JSONObject response) {
+                    try {
+                        //Access the "result" field of JSON in the API request
+                        JSONObject jsonObject = response.getJSONObject("result");
+                        //Access the "resource " array in the "result field
+                        JSONArray resource = jsonObject.getJSONArray("resources");
+                        //Access the first JSonObject in the "resources" array
+                        JSONObject restaurantResources = resource.getJSONObject(0);
+                        //Get the Url to ready to download
+                        inspectionDLUrl = restaurantResources.getString("url");
+                        //Get the last modified date in String form
+                        String updateDate = restaurantResources.getString("last_modified");
+                        //THE LATEST MODIFIED DATE FROM API
+                        LocalDateTime latestModeifiedDate = LocalDateTime.parse(updateDate);
+                        //the Duration between the the
+                        //replace the latest update date to the new one
+                        if (InspectionslastUpdateDate.isBefore(latestModeifiedDate)) {
+                            //replace the latest update date to the new one
+                            InspectionslastUpdateDate = latestModeifiedDate;
+                            //Ask for Update and download
+                            // Dialog creation
+                            //setup downloadManager
+                            DownloadManager downloadManager = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
+                            //setup the Request
+                            DownloadManager.Request request = new DownloadManager.Request(Uri.parse(restaurantDLUrl));
+                            //queue up for download
+//                            request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI | DownloadManager.Request.NETWORK_MOBILE);
+//                            request.setTitle("Download"); //set title in download notifcation;
 
+                            downloadManager.enqueue(request);
+                        }
+                    } catch (JSONException ex) {
+                        ex.printStackTrace();
+                    }
+                }
+            }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        error.printStackTrace();
+                    }
+            });
+            requestQueue.add(InspectionsObjectRequest);
+        }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        //add the request to the queue
-        requestQueue.add(RestaurantObjectRequest);
-        /*Request the server to check the latest update since last 20hours from server*/
-
-        //remember to remove the two textView after doing checking in the future
-
-        //seems the Queue isn't running?
-        requestQueue.start();
     }
 
     @Override
@@ -189,31 +205,5 @@ public class MainActivity extends AppCompatActivity implements RestListAdapter.R
         intent.putExtra("tracking number", manager.restaurants().get(position).trackingNumber);
         startActivity(intent);
     }
-
-    //UPDATE DIALOG
-    /*      protected void onPreExecute() {
-            super.onPreExecute();
-            /**
-             * Progress Dialog for User Interaction
-
-
-            x=list.size();
-
-                    if(x==0)
-            jIndex=0;
-                    else
-            jIndex=x;
-
-            dialog = new ProgressDialog(MainActivity.this);
-                dialog.setTitle("Update to the latest info);
-                dialog.setMessage("I am updating");
-                dialog.show();
-    */
-//            protected void doInBackground(Void...params) throws IOException {
-//            JSONObject jsonObject = RestaurantJSONParser.getDataFromWeb();
-//
-//
-//
-//     }
 
 }
