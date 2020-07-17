@@ -4,11 +4,12 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.fragment.app.FragmentActivity;
 
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.location.LocationListener;
 import android.os.Bundle;
@@ -18,23 +19,23 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
-import java.util.concurrent.ConcurrentMap;
-
 import ca.cmpt276.project.R;
+import ca.cmpt276.project.model.Restaurant;
+import ca.cmpt276.project.model.RestaurantManager;
 
 public class MapActivity extends AppCompatActivity implements OnMapReadyCallback {
 
@@ -49,27 +50,22 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private GoogleMap mMap;
 
 
+    RestaurantManager manager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
+
+        manager = RestaurantManager.getInstance(getApplicationContext());
+
         getLocationPermission();
-
-        // get user location and center on current location
-
-        // display pegs showing the location of each restaurant with hazard icons
-
-        // show the hazard level of the most recent inspection report on pegs
 
         // tap peg to pop up name, address and hazard level
 
         // tap again to goto restaurant's full info page
     }
 
-    private void initMap() {
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
-        mapFragment.getMapAsync(MapActivity.this);
-    }
 
     private final LocationListener mLocationListener = new LocationListener() {
         @Override
@@ -78,6 +74,40 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         }
     };
 
+    // display pegs showing the location of each restaurant with hazard icons
+    private void geoLocate() {
+        Bitmap hazardIcon = BitmapFactory.decodeResource(getResources(), R.drawable.restaurant);
+        BitmapDescriptor hazardIconBit;
+
+        if (manager.size() > 0) {
+            for (Restaurant res : manager.restaurants()) {
+                if(!res.inspections.isEmpty()){
+                    if(res.inspections.get(0).hazardRating.toString() == "Low") {
+                        hazardIcon = BitmapFactory.decodeResource(getResources(), R.drawable.hazard_low);
+                    }
+                    else if (res.inspections.get(0).hazardRating.toString() ==  "Moderate") {
+                        hazardIcon = BitmapFactory.decodeResource(getResources(), R.drawable.hazard_medium);
+                    }
+                    else if (res.inspections.get(0).hazardRating.toString() ==  "High") {
+                        hazardIcon = BitmapFactory.decodeResource(getResources(), R.drawable.hazard_high);
+                    }
+                }
+                else{
+                    hazardIcon = BitmapFactory.decodeResource(getResources(), R.drawable.restaurant);
+                }
+                hazardIconBit = BitmapDescriptorFactory.fromBitmap(Bitmap.createScaledBitmap(hazardIcon, 100, 100, false));
+                MarkerOptions options = new MarkerOptions()
+                        .position(new LatLng(res.latitude, res.longitude))
+                        .title(res.name)
+                        .icon(hazardIconBit);
+                mMap.addMarker(options);
+            }
+
+        }
+
+    }
+
+    // get user location and center on current location
     private void getDeviceLocation() {
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         try {
@@ -91,7 +121,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                             Log.d(TAG, "onComplete: found location!");
                             Location currentLocation = (Location) task.getResult();
                             moveCamera(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()),
-                                    DEFAULT_ZOOM);
+                                    DEFAULT_ZOOM,
+                                    "My Location");
                         } else {
                             Log.d(TAG, "onComplete: current location is null");
                             Toast.makeText(MapActivity.this, "unable to get current location", Toast.LENGTH_SHORT).show();
@@ -105,7 +136,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         }
     }
 
-    private void moveCamera(LatLng latLng, float zoom) {
+    private void moveCamera(LatLng latLng, float zoom, String title) {
         Log.d(TAG, "moveCamera: moving camera to lat: " + latLng.latitude + ", lng: " + latLng.longitude);
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom));
     }
@@ -120,9 +151,10 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             if (ContextCompat.checkSelfPermission(this.getApplicationContext(),
                     COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
                 mLocationPermissionsGranted = true;
-                initMap();
+                SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+                mapFragment.getMapAsync(MapActivity.this);
             }
-        }else {
+        } else {
             ActivityCompat.requestPermissions(this, permissions, LOCATION_PERMISSION_REQUEST_CODE);
         }
     }
@@ -134,13 +166,20 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             case LOCATION_PERMISSION_REQUEST_CODE: {
                 if (grantResults.length > 0) {
                     for (int i = 0; i < grantResults.length; i++) {
-                        if(grantResults[i] != PackageManager.PERMISSION_GRANTED){
+                        if (grantResults[i] != PackageManager.PERMISSION_GRANTED) {
                             mLocationPermissionsGranted = false;
                             return;
                         }
                     }
                     mLocationPermissionsGranted = true;
-                    initMap();
+                    if (ActivityCompat.checkSelfPermission(this,
+                            Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                            ActivityCompat.checkSelfPermission(this,
+                                    Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                        return;
+                    }
+                    mMap.setMyLocationEnabled(true);
+                    mMap.getUiSettings().setZoomControlsEnabled(true);
                 }
             }
         }
@@ -160,6 +199,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             }
             mMap.setMyLocationEnabled(true);
             mMap.getUiSettings().setZoomControlsEnabled(true);
+
+            geoLocate();
 
         }
     }
