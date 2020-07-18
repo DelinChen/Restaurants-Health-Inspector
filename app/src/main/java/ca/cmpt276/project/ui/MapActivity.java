@@ -1,11 +1,13 @@
 package ca.cmpt276.project.ui;
 
 import androidx.fragment.app.FragmentActivity;
+import androidx.loader.content.AsyncTaskLoader;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -65,10 +67,10 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
 
             //
             createAskDialog();
-            
-            SharedPreferences.Editor editor = sharedPreferences.edit();
+
+            /*SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putString("last_update", dateFormat.format(Calendar.getInstance().getTime()));
-            return;
+            return;*/
         }
     }
 
@@ -86,7 +88,7 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
                 .setCancelable(false);
     }
 
-    private void createUpdateDialog() {
+    private void createUpdateDialog(){
     }
 
     /**
