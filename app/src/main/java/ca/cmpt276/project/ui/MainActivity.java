@@ -25,13 +25,22 @@ public class MainActivity extends AppCompatActivity implements RestListAdapter.R
         setContentView(R.layout.activity_main);
         getSupportActionBar().setTitle("Restaurant Health Inspector");
 
+        // check if updates(20 hrs+) available
 
+        // ask if user wants to update now
+
+        // dialog when updating
+
+        updateUI();
+
+    }
+
+    private void updateUI() {
         manager = RestaurantManager.getInstance(getApplicationContext());
         restList = findViewById(R.id.rest_list);
         RestListAdapter adapter = new RestListAdapter(this, manager, this);
         restList.setAdapter(adapter);
         restList.setLayoutManager(new LinearLayoutManager(this));
-
     }
 
     @Override
@@ -41,7 +50,7 @@ public class MainActivity extends AppCompatActivity implements RestListAdapter.R
         startActivity(intent);
     }
 
-
+    // create menu
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
