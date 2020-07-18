@@ -12,19 +12,20 @@ import androidx.room.TypeConverters;
         entities = {Restaurant.class, Inspection.class, Violation.class, InspectionViolationCrossref.class})
 @TypeConverters(Converters.class)
 public abstract class HealthDatabase extends RoomDatabase {
-    private static HealthDatabase instance;
+    // Follows from guideline found at http://tutorials.jenkov.com/java-concurrency/volatile.html
+    // and https://stackoverflow.com/a/50105730
+
+    private static volatile HealthDatabase instance;
 
     public abstract RestaurantDao getRestaurantDao();
     public abstract InspectionDao getInspectionDao();
     public abstract ViolationDao getViolationDao();
 
-    public static HealthDatabase getInstance(final Context context) {
-        synchronized(HealthDatabase.class) {
-            if(instance == null) {
-                instance = Room.databaseBuilder(context.getApplicationContext(), HealthDatabase.class, "health_db")
-                        .fallbackToDestructiveMigration()
-                        .build();
-            }
+    public static synchronized HealthDatabase getInstance(final Context context) {
+        if(instance == null) {
+            instance = Room.databaseBuilder(context.getApplicationContext(), HealthDatabase.class, "health_db")
+                    .fallbackToDestructiveMigration()
+                    .build();
         }
         return instance;
     }
