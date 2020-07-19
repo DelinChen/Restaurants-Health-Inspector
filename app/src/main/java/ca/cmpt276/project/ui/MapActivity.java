@@ -71,7 +71,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     RestaurantManager manager;
     int sum;
     UpdateTask updateTask;
-    SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -92,9 +91,9 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     }
     private void updateRestaurant() throws ParseException {
         SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
-        long lastUpdate = sharedPreferences.getLong(LAST_UPDATE, 0);
-        Date currDate = Calendar.getInstance().getTime();
-        if(currDate.getTime() - lastUpdate < TWENTY_H_IN_MS) {
+        long lastUpdate = sharedPreferences.getLong(LAST_UPDATE, DEFAULT_DATE);
+        long currDateLong = Calendar.getInstance().getTimeInMillis();
+        if(currDateLong - lastUpdate < TWENTY_H_IN_MS) {
             return;
         }
         else {
