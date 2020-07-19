@@ -21,4 +21,5 @@
     <string name="update_now_text">Do you want to update now?</string>
     <string name="yes_text">Yes</string>
     <string name="no_text">No</string>
+    <string name="please_wait_text">Please Wait...</string>
 </resources>

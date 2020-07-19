@@ -6,17 +6,24 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.location.LocationListener;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -33,6 +40,13 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Map;
+import java.util.concurrent.ExecutionException;
+
 import ca.cmpt276.project.R;
 import ca.cmpt276.project.model.Restaurant;
 import ca.cmpt276.project.model.RestaurantManager;
@@ -44,6 +58,9 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private static final String COARSE_LOCATION = Manifest.permission.ACCESS_COARSE_LOCATION;
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1234;
     private static final float DEFAULT_ZOOM = 15f;
+    private static final String SHARED_PREFS = "sharedPrefs";
+    public static final String DEFAULT_DATE = "01/01/2020";
+    private static final long TWENTY_H_IN_MS = 20 * 60 * 60 * 1000;
     private Boolean mLocationPermissionsGranted = false;
     private FusedLocationProviderClient mFusedLocationClient;
 
@@ -51,7 +68,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
 
     RestaurantManager manager;
-
+    int sum;
+    UpdateTask updateTask;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,8 +82,65 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         // tap peg to pop up name, address and hazard level
 
         // tap again to goto restaurant's full info page
+        try {
+            updateRestaurant();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+    }
+    private void updateRestaurant() throws ParseException {
+        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
+        String lastUpdateStr = sharedPreferences.getString("last_update", DEFAULT_DATE);
+        Date currDate = Calendar.getInstance().getTime();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        Date lastUpdate = dateFormat.parse(lastUpdateStr);
+        if(currDate.getTime() - lastUpdate.getTime() < TWENTY_H_IN_MS) {
+            return;
+        }
+        else {
+            //function to check if there is new data
+
+            //
+            createAskDialog();
+
+            /*SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putString("last_update", dateFormat.format(Calendar.getInstance().getTime()));
+            return;*/
+        }
     }
 
+    private void createAskDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(MapActivity.this);
+        builder.setTitle(R.string.update_available_text)
+                .setMessage(R.string.update_now_text)
+                .setPositiveButton(R.string.yes_text, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        //Toast.makeText(MapActivity.this, "onCLick" , Toast.LENGTH_SHORT).show();
+                        updateTask = new UpdateTask();
+                        updateTask.execute();
+                    }
+                })
+                .setNegativeButton(R.string.no_text, null)
+                .setCancelable(false)
+                .show();
+
+    }
+
+    private void createUpdateDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(MapActivity.this);
+        LayoutInflater inflater = LayoutInflater.from(MapActivity.this);
+        View view = inflater.inflate(R.layout.wait_dialog, null);
+        builder.setView(view)
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                    }
+                })
+                .show();
+
+    }
 
     private final LocationListener mLocationListener = new LocationListener() {
         @Override
@@ -225,4 +300,52 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
         return super.onOptionsItemSelected(item);
     }
+
+    class UpdateTask extends AsyncTask<RestaurantManager, Integer, Integer> {
+        AlertDialog UpdateDialog;
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            AlertDialog.Builder builder = new AlertDialog.Builder(MapActivity.this);
+            LayoutInflater inflater = LayoutInflater.from(MapActivity.this);
+            View view = inflater.inflate(R.layout.wait_dialog, null);
+            UpdateDialog = builder.setView(view)
+                    .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            UpdateDialog.dismiss();
+                            updateTask.cancel(true);
+                        }
+                    })
+                    .create();
+            UpdateDialog.show();
+        }
+
+        @Override
+        protected void onPostExecute(Integer add) {
+            super.onPostExecute(sum);
+            sum = add;
+            UpdateDialog.dismiss();
+            //geoLocate();
+            Toast.makeText(MapActivity.this, "Sum after execution is: " + sum, Toast.LENGTH_LONG).show();
+        }
+
+        @Override
+        protected Integer doInBackground(RestaurantManager... restaurantManagers) {
+            int add = 0;
+            for(int i = 0; i < 1000; i++) {
+                add++;
+            }
+            try {
+                Thread.sleep(5000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            for(int i = 0; i < 1000; i++) {
+                add++;
+            }
+            return add;
+        }
+    }
 }
+
