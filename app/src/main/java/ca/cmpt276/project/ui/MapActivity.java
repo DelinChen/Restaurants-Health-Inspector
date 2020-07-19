@@ -59,8 +59,9 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1234;
     private static final float DEFAULT_ZOOM = 15f;
     private static final String SHARED_PREFS = "sharedPrefs";
-    public static final String DEFAULT_DATE = "01/01/2020";
+    public static final long DEFAULT_DATE = 0;
     private static final long TWENTY_H_IN_MS = 20 * 60 * 60 * 1000;
+    private static  final String LAST_UPDATE = "last_update_long";
     private Boolean mLocationPermissionsGranted = false;
     private FusedLocationProviderClient mFusedLocationClient;
 
@@ -70,6 +71,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     RestaurantManager manager;
     int sum;
     UpdateTask updateTask;
+    SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -90,11 +92,9 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     }
     private void updateRestaurant() throws ParseException {
         SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
-        String lastUpdateStr = sharedPreferences.getString("last_update", DEFAULT_DATE);
+        long lastUpdate = sharedPreferences.getLong(LAST_UPDATE, 0);
         Date currDate = Calendar.getInstance().getTime();
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-        Date lastUpdate = dateFormat.parse(lastUpdateStr);
-        if(currDate.getTime() - lastUpdate.getTime() < TWENTY_H_IN_MS) {
+        if(currDate.getTime() - lastUpdate < TWENTY_H_IN_MS) {
             return;
         }
         else {
@@ -102,10 +102,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
             //
             createAskDialog();
-
-            /*SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putString("last_update", dateFormat.format(Calendar.getInstance().getTime()));
-            return;*/
         }
     }
 
@@ -327,7 +323,11 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             sum = add;
             UpdateDialog.dismiss();
             //geoLocate();
-            Toast.makeText(MapActivity.this, "Sum after execution is: " + sum, Toast.LENGTH_LONG).show();
+            SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putLong(LAST_UPDATE, Calendar.getInstance().getTimeInMillis());
+            editor.apply();
+            Toast.makeText(MapActivity.this, "Sum after ASYNCTASK = " + sum, Toast.LENGTH_LONG).show();
         }
 
         @Override
