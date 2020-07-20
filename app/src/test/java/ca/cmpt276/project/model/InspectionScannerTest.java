@@ -6,14 +6,13 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 
 import static ca.cmpt276.project.model.InspectionScanner.PATH_TO_INSPECTION_CSV_FROM_SRC;
 import static org.junit.Assert.*;
 
 public class InspectionScannerTest {
     @Test
-    public void scanOneInspectionTest() throws IOException, ParseException {
+    public void scanOneInspectionTest() throws IOException {
         InspectionScanner scanner = new InspectionScanner(PATH_TO_INSPECTION_CSV_FROM_SRC);
 
         // Expected fields
@@ -25,7 +24,7 @@ public class InspectionScannerTest {
         HazardRating rating = HazardRating.fromString("Low");
 
         Inspection expected
-                = new Inspection(trackingNumber, date, type, numCritViolations, numNonCritViolations, rating, new ArrayList<>());
+                = new Inspection(trackingNumber, date, type, numCritViolations, numNonCritViolations, rating);
         Inspection scanned = scanner.nextInspection();
         assertEquals(expected, scanned);
     }

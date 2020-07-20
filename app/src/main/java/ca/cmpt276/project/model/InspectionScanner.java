@@ -54,7 +54,7 @@ public class InspectionScanner extends CsvScanner {
         List<Violation> violations      = ViolationScanner.parseListFromLump(buffer[VIOLATIONS_LUMP]);
 
         Inspection nextResult = new Inspection(
-                trackingNumber, date, type, numCritViolations, numNonCritViolations, rating, violations);
+                trackingNumber, date, type, numCritViolations, numNonCritViolations, rating);
         return nextResult;
     }
 

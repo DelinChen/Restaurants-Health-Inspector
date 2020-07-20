@@ -7,7 +7,6 @@ import org.junit.experimental.runners.Enclosed;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 
-import java.lang.reflect.Array;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -38,7 +37,7 @@ public class InspectionTest {
     public static class ValidConstructorArgsTest {
         @Before
         public void initialize() {
-            inspection = new Inspection(trackingNumber, date, type, numCritViolations, numNonCritViolations, hazardRating, violations);
+            inspection = new Inspection(trackingNumber, date, type, numCritViolations, numNonCritViolations, hazardRating);
         }
 
         @Test
@@ -77,50 +76,50 @@ public class InspectionTest {
 
         @Before
         public void initialize() {
-            inspection = new Inspection(trackingNumber, date, type, numCritViolations, numNonCritViolations, hazardRating, violations);
+            inspection = new Inspection(trackingNumber, date, type, numCritViolations, numNonCritViolations, hazardRating);
         }
 
         @Test
         public void equalsReturnsTrueTest() {
-            Inspection equivalent = new Inspection(trackingNumber, date, type, numCritViolations, numNonCritViolations, hazardRating, violations);
+            Inspection equivalent = new Inspection(trackingNumber, date, type, numCritViolations, numNonCritViolations, hazardRating);
             assertEquals(equivalent, inspection);
         }
 
         @Test
         public void differentTrackingNumberTest() {
-            Inspection different = new Inspection("SDFO-8HKP7E", date, type, numCritViolations, numNonCritViolations, hazardRating, violations);
+            Inspection different = new Inspection("SDFO-8HKP7E", date, type, numCritViolations, numNonCritViolations, hazardRating);
             assertNotEquals(different, inspection);
         }
         @Test
         public void differentDateTest() {
-            Inspection different = new Inspection(trackingNumber, LocalDate.of(2019, 1, 29), type, numCritViolations, numNonCritViolations, hazardRating, violations);
+            Inspection different = new Inspection(trackingNumber, LocalDate.of(2019, 1, 29), type, numCritViolations, numNonCritViolations, hazardRating);
             assertNotEquals(different, inspection);
         }
         @Test
         public void differentTypeTest() {
-            Inspection different = new Inspection(trackingNumber, date, InspectionType.ROUTINE, numCritViolations, numNonCritViolations, hazardRating, violations);
+            Inspection different = new Inspection(trackingNumber, date, InspectionType.ROUTINE, numCritViolations, numNonCritViolations, hazardRating);
             assertNotEquals(different, inspection);
         }
         @Test
         public void differentNumCritViolationsTest() {
-            Inspection different = new Inspection(trackingNumber, date, type, 0, numNonCritViolations, hazardRating, violations);
+            Inspection different = new Inspection(trackingNumber, date, type, 0, numNonCritViolations, hazardRating);
             assertNotEquals(different, inspection);
         }
         @Test
         public void differentNumNonCritViolationsTest() {
-            Inspection different = new Inspection(trackingNumber, date, type, numCritViolations, 0, hazardRating, violations);
+            Inspection different = new Inspection(trackingNumber, date, type, numCritViolations, 0, hazardRating);
             assertNotEquals(different, inspection);
         }
         @Test
         public void differentHazardRatingTest() {
-            Inspection different = new Inspection("SDFO-8HKP7E", date, type, numCritViolations, numNonCritViolations, HazardRating.HIGH, violations);
+            Inspection different = new Inspection("SDFO-8HKP7E", date, type, numCritViolations, numNonCritViolations, HazardRating.HIGH);
             assertNotEquals(different, inspection);
         }
         @Test
         public void differentViolationsTest() {
             Violation[] differentBuffer = {violationsBuffer[0]};
             List<Violation> diffViolations = new ArrayList<>(Arrays.asList(differentBuffer));
-            Inspection different = new Inspection("SDFO-8HKP7E", date, type, numCritViolations, numNonCritViolations, hazardRating, diffViolations);
+            Inspection different = new Inspection("SDFO-8HKP7E", date, type, numCritViolations, numNonCritViolations, hazardRating);
             assertNotEquals(different, inspection);
         }
     }
@@ -135,36 +134,36 @@ public class InspectionTest {
 
         @Test
         public void nullTrackingNumberTest() {
-            inspection = new Inspection(null, date, type, numCritViolations, numNonCritViolations, hazardRating, violations);
+            inspection = new Inspection(null, date, type, numCritViolations, numNonCritViolations, hazardRating);
         }
         @Test
         public void nullDateTest() {
-            inspection = new Inspection(trackingNumber, null, type, numCritViolations, numNonCritViolations, hazardRating, violations);
+            inspection = new Inspection(trackingNumber, null, type, numCritViolations, numNonCritViolations, hazardRating);
         }
         @Test
         public void nullTypeTest() {
-            inspection = new Inspection(trackingNumber, date, null, numCritViolations, numNonCritViolations, hazardRating, violations);
+            inspection = new Inspection(trackingNumber, date, null, numCritViolations, numNonCritViolations, hazardRating);
         }
         @Test
         public void nullNumCritViolationsTest() {
-            inspection = new Inspection(trackingNumber, date, type, (Integer)null, numNonCritViolations, hazardRating, violations);
+            inspection = new Inspection(trackingNumber, date, type, (Integer)null, numNonCritViolations, hazardRating);
         }
         @Test
         public void nullNumNonCritViolationsTest() {
-            inspection = new Inspection(trackingNumber, date, type, numCritViolations, (Integer)null, hazardRating, violations);
+            inspection = new Inspection(trackingNumber, date, type, numCritViolations, (Integer)null, hazardRating);
         }
         @Test
         public void nullHazardRatingTest() {
-            inspection = new Inspection(trackingNumber, date, type, numCritViolations, numNonCritViolations, null, violations);
+            inspection = new Inspection(trackingNumber, date, type, numCritViolations, numNonCritViolations, null);
         }
         @Test
         public void nullViolationsTest() {
-            inspection = new Inspection(trackingNumber, date, type, numCritViolations, numNonCritViolations, hazardRating, null);
+            inspection = new Inspection(trackingNumber, date, type, numCritViolations, numNonCritViolations, hazardRating);
         }
 
         @Test
         public void allFieldsNullTest() {
-            inspection = new Inspection(null, null, null, (Integer)null, (Integer)null, null, null);
+            inspection = new Inspection(null, null, null, (Integer)null, (Integer)null, null);
         }
     }
 
@@ -178,7 +177,7 @@ public class InspectionTest {
 
         @Test
         public void emptyStringTrackingNumberTest() {
-            inspection = new Inspection("", date, type, numCritViolations, numNonCritViolations, hazardRating, violations);
+            inspection = new Inspection("", date, type, numCritViolations, numNonCritViolations, hazardRating);
         }
     }
 
@@ -192,15 +191,15 @@ public class InspectionTest {
 
         @Test
         public void negativeNumCritViolationsTest() {
-            inspection = new Inspection(trackingNumber, date, type, -1, numNonCritViolations, hazardRating, violations);
+            inspection = new Inspection(trackingNumber, date, type, -1, numNonCritViolations, hazardRating);
         }
         @Test
         public void negativeNumNonCritViolationsTest() {
-            inspection = new Inspection(trackingNumber, date, type, numCritViolations, -1, hazardRating, violations);
+            inspection = new Inspection(trackingNumber, date, type, numCritViolations, -1, hazardRating);
         }
         @Test
         public void allIntsNegativeTest() {
-            inspection = new Inspection(trackingNumber, date, type, -1, -1, hazardRating, violations);
+            inspection = new Inspection(trackingNumber, date, type, -1, -1, hazardRating);
         }
     }
 
@@ -214,8 +213,8 @@ public class InspectionTest {
 
         @Before
         public void initialize() {
-            firstInspection = new Inspection(trackingNumber, janFirst, type, numCritViolations, numNonCritViolations, hazardRating, violations);
-            secondInspection = new Inspection(trackingNumber, janSecond, type, numCritViolations, numNonCritViolations, hazardRating, violations);
+            firstInspection = new Inspection(trackingNumber, janFirst, type, numCritViolations, numNonCritViolations, hazardRating);
+            secondInspection = new Inspection(trackingNumber, janSecond, type, numCritViolations, numNonCritViolations, hazardRating);
         }
 
         @Test
@@ -244,11 +243,11 @@ public class InspectionTest {
 
         @Test
         public void inspectionTypeIsNullTypeTest() {
-            inspection = new Inspection(trackingNumber, date, InspectionType.NULL_TYPE, numCritViolations, numNonCritViolations, hazardRating, violations);
+            inspection = new Inspection(trackingNumber, date, InspectionType.NULL_TYPE, numCritViolations, numNonCritViolations, hazardRating);
         }
         @Test
         public void hazardRatingIsNullRatingTest() {
-            inspection = new Inspection(trackingNumber, date, InspectionType.NULL_TYPE, numCritViolations, numNonCritViolations, HazardRating.NULL_RATING, violations);
+            inspection = new Inspection(trackingNumber, date, InspectionType.NULL_TYPE, numCritViolations, numNonCritViolations, HazardRating.NULL_RATING);
         }
     }
 }

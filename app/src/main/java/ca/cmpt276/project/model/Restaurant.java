@@ -1,20 +1,34 @@
 package ca.cmpt276.project.model;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
+import androidx.annotation.NonNull;
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.Ignore;
+import androidx.room.PrimaryKey;
+
+@Entity (
+        tableName = "restaurants"
+)
 public class Restaurant implements Comparable<Restaurant> {
+    @NonNull
+    @PrimaryKey
+    @ColumnInfo(name = "tracking_number", index = true)
     public final String trackingNumber;     // unique ID
-    public final String name;
-    public final String address;
-    public final String city;
+
+    @NonNull public final String name;
+    @NonNull public final String address;
+    @NonNull public final String city;
+
     // GPS coordinates
     public final double latitude;
     public final double longitude;
 
-    public final List<Inspection> inspections;
+    @Ignore
+    public final List<Inspection> inspections = Collections.emptyList();
 
     public static final double MIN_LATITUDE = -90;
     public static final double MAX_LATITUDE = 90;
@@ -25,19 +39,14 @@ public class Restaurant implements Comparable<Restaurant> {
     /////////////////////////////////////////////////////////////////////////////////////
     // Constructors
 
-    public Restaurant(String trackingNumber, String name, String address, String city, double latitude, double longitude, List<Inspection> inspections) {
-        validateConstructorArgs(trackingNumber, name, address, city, latitude, longitude, inspections);
+    public Restaurant(String trackingNumber, String name, String address, String city, double latitude, double longitude) {
+        validateConstructorArgs(trackingNumber, name, address, city, latitude, longitude);
         this.trackingNumber = trackingNumber;
         this.name           = name;
         this.address        = address;
         this.city           = city;
         this.latitude       = latitude;
         this.longitude      = longitude;
-        this.inspections    = Collections.unmodifiableList(inspections);
-    }
-
-    public Restaurant(String trackingNumber, String name, String address, String city, double latitude, double longitude) {
-        this(trackingNumber, name, address, city, latitude, longitude, Collections.emptyList());
     }
 
 
@@ -60,17 +69,20 @@ public class Restaurant implements Comparable<Restaurant> {
                 && address.equals(other.address)
                 && city.equals(other.city)
                 && (Double.compare(latitude, other.latitude) == 0)
-                && (Double.compare(longitude, other.longitude) == 0)
-                && inspections.equals(other.inspections);
+                && (Double.compare(longitude, other.longitude) == 0);
     }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(trackingNumber, name, city, latitude, longitude);
+    }
 
     /////////////////////////////////////////////////////////////////////////////////////
     // Helper methods
 
-    private static void validateConstructorArgs(String trackingNumber, String name, String address, String city, double latitude, double longitude, List<Inspection> inspections) {
-        String[] argNames = {"trackingNumber", "name", "address", "city", "latitude", "longitude", "inspections"};
-        Object[] argValues = {trackingNumber, name, address, city, latitude, longitude, inspections};
+    private static void validateConstructorArgs(String trackingNumber, String name, String address, String city, double latitude, double longitude) {
+        String[] argNames = {"trackingNumber", "name", "address", "city", "latitude", "longitude"};
+        Object[] argValues = {trackingNumber, name, address, city, latitude, longitude};
         ConstructorArguments.requireArgsNonNull(argNames, argValues, Restaurant.class);
 
         String[] stringArgNames = {"trackingNumber", "name", "address", "city"};

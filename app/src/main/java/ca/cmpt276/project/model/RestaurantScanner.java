@@ -54,7 +54,7 @@ public class RestaurantScanner extends CsvScanner {
         double longitude    = Double.parseDouble(buffer[LONGITUDE]);
         List<Inspection> inspections = inspectionManager.getOrDefault(trackingNumber, Collections.emptyList());
 
-        return new Restaurant(trackingNumber, name, address, city, latitude, longitude, inspections);
+        return new Restaurant(trackingNumber, name, address, city, latitude, longitude);
     }
 
     public Map<String, Restaurant> scanAllRestaurants() {

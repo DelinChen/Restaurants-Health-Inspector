@@ -3,14 +3,27 @@ package ca.cmpt276.project.model;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
 
 import java.util.Objects;
 
+
+//Because we have an ViolationCategory as class attribute, still haven't figure out how to deal with it yet..
+@Entity(
+        tableName = "violations"
+)
 public class Violation {
+    @PrimaryKey
+    @ColumnInfo(name = "code_number", index = true)
     public final int codeNumber;
+
+    @ColumnInfo(name = "is_critical")
     public final boolean isCritical;
-    public final ViolationCategory category;
-    public final String description;
+
+    @NonNull public final ViolationCategory category;
+    @NonNull public final String description;
 
 
     /////////////////////////////////////////////////////////////////////////////////////

@@ -24,7 +24,7 @@ public class RestaurantScannerTest {
         InspectionManager inspectionManager = InspectionManager.getInstance();
         List<Inspection> inspectionsList = inspectionManager.getOrDefault("SDFO-8HKP7E", Collections.emptyList());
 
-        Restaurant expected = new Restaurant("SDFO-8HKP7E", "Pattullo A&W", "12808 King George Blvd", "Surrey", 49.20610961, -122.8668064, inspectionsList);
+        Restaurant expected = new Restaurant("SDFO-8HKP7E", "Pattullo A&W", "12808 King George Blvd", "Surrey", 49.20610961, -122.8668064);
         Restaurant scanned = scanner.nextRestaurant();
 
         assertEquals(expected, scanned);
