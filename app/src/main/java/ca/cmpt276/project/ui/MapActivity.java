@@ -62,10 +62,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         manager = RestaurantManager.getInstance(getApplicationContext());
 
         getLocationPermission();
-
-        // tap peg to pop up name, address and hazard level
-
-        // tap again to goto restaurant's full info page
     }
 
 
