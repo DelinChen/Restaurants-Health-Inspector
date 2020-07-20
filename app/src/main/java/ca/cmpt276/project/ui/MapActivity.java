@@ -1,6 +1,7 @@
 package ca.cmpt276.project.ui;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -33,12 +34,16 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.maps.android.clustering.ClusterItem;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import ca.cmpt276.project.R;
 import ca.cmpt276.project.model.Restaurant;
 import ca.cmpt276.project.model.RestaurantManager;
 
-public class MapActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnInfoWindowClickListener {
+public class MapActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnInfoWindowClickListener, ClusterItem {
 
     private static final String TAG = "MapActivity";
     private static final String FINE_LOCATION = Manifest.permission.ACCESS_FINE_LOCATION;
@@ -50,6 +55,9 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
     private GoogleMap mMap;
     private Marker mMarker;
+    private Location currentLocation;
+    private List<Marker> markers = new ArrayList<>();
+    private Cluster
 
 
     RestaurantManager manager;
@@ -61,6 +69,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
         manager = RestaurantManager.getInstance(getApplicationContext());
 
+
         getLocationPermission();
     }
 
@@ -68,7 +77,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private final LocationListener mLocationListener = new LocationListener() {
         @Override
         public void onLocationChanged(final Location location) {
-            //your code here
+            currentLocation = location;
+            moveCamera(new LatLng(location.getLatitude(),location.getLongitude()), DEFAULT_ZOOM);
         }
     };
 
@@ -99,10 +109,13 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                         .icon(hazardIconBit)
                         .snippet(snippet);
                 mMarker = mMap.addMarker(options);
+                markers.add(mMarker);
 
             }
+
         }
     }
+
 
     @Override
     public void onInfoWindowClick(Marker marker) {
@@ -112,8 +125,25 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
                 Intent intent = new Intent(this, RestaurantActivity.class);
                 intent.putExtra("tracking number", res.trackingNumber);
-                startActivity(intent);
+                startActivityForResult(intent, 1);
                 break;
+            }
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1) {
+            if (resultCode == RESULT_OK) {
+                double longitude = data.getDoubleExtra("longitude", 0);
+                for(Marker m: markers){
+                    if(m.getPosition().longitude == longitude){
+                        m.showInfoWindow();
+                        moveCamera(m.getPosition(),DEFAULT_ZOOM);
+                        break;
+                    }
+                }
             }
         }
     }
@@ -130,15 +160,25 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                     public void onComplete(@NonNull Task task) {
                         if (task.isSuccessful()) {
                             Log.d(TAG, "onComplete: found location!");
-                            Location currentLocation = (Location) task.getResult();
+                            currentLocation = (Location) task.getResult();
                             moveCamera(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()),
-                                    DEFAULT_ZOOM,
-                                    "My Location");
+                                    DEFAULT_ZOOM);
                         } else {
                             Log.d(TAG, "onComplete: current location is null");
                             Toast.makeText(MapActivity.this, "unable to get current location", Toast.LENGTH_SHORT).show();
                         }
+
+                        Intent i = getIntent();
+                        double longitude = i.getDoubleExtra("longitude",0);
+                        for(Marker m: markers){
+                            if(m.getPosition().longitude == longitude){
+                                m.showInfoWindow();
+                                moveCamera(m.getPosition(),DEFAULT_ZOOM);
+                                break;
+                            }
+                        }
                     }
+
                 });
             }
 
@@ -147,7 +187,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         }
     }
 
-    private void moveCamera(LatLng latLng, float zoom, String title) {
+    private void moveCamera(LatLng latLng, float zoom) {
         Log.d(TAG, "moveCamera: moving camera to lat: " + latLng.latitude + ", lng: " + latLng.longitude);
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom));
     }
@@ -197,7 +237,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        Toast.makeText(this, "map is ready!", Toast.LENGTH_SHORT).show();
         mMap = googleMap;
 
         if (mLocationPermissionsGranted) {
@@ -211,7 +250,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             mMap.getUiSettings().setZoomControlsEnabled(true);
             mMap.setOnInfoWindowClickListener(this);
             geoLocate();
-
         }
     }
 
@@ -237,5 +275,15 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     }
 
 
+    @NonNull
+    @Override
+    public LatLng getPosition() {
+        return null;
+    }
 
+    @Nullable
+    @Override
+    public String getSnippet() {
+        return null;
+    }
 }

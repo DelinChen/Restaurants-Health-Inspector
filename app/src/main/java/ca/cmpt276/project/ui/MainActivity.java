@@ -10,6 +10,9 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
+
+import com.google.android.gms.maps.model.Marker;
 
 import ca.cmpt276.project.R;
 
@@ -47,7 +50,22 @@ public class MainActivity extends AppCompatActivity implements RestListAdapter.R
     public void onClick(View v, int position) {
         Intent intent = new Intent(this, RestaurantActivity.class);
         intent.putExtra("tracking number", manager.restaurants().get(position).trackingNumber);
-        startActivity(intent);
+        startActivityForResult(intent, 1);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1) {
+            if (resultCode == RESULT_OK) {
+                Intent intent = new Intent(this, MapActivity.class);
+                double longitude = data.getDoubleExtra("longitude", 0);
+                intent.putExtra("longitude",longitude);
+                setResult(RESULT_OK, intent);
+                startActivity(intent);
+                finish();
+            }
+        }
     }
 
     // create menu

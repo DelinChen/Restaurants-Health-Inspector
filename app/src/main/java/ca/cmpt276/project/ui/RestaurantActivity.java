@@ -65,7 +65,18 @@ public class RestaurantActivity extends AppCompatActivity {
         name.setText(restaurant.name);
         address.setText(restaurant.address);
         coords.setText("(" + restaurant.latitude + ", " + restaurant.longitude + ")");
+
+        coords.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent();
+                intent.putExtra("longitude",restaurant.longitude);
+                setResult(RESULT_OK, intent);
+                finish();
+            }
+        });
     }
+
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
