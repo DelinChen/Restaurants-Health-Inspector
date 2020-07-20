@@ -35,15 +35,17 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.maps.android.clustering.ClusterItem;
+import com.google.maps.android.clustering.ClusterManager;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import ca.cmpt276.project.R;
+import ca.cmpt276.project.ui.Cluster;
 import ca.cmpt276.project.model.Restaurant;
 import ca.cmpt276.project.model.RestaurantManager;
 
-public class MapActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnInfoWindowClickListener, ClusterItem {
+public class MapActivity extends AppCompatActivity implements OnMapReadyCallback{
 
     private static final String TAG = "MapActivity";
     private static final String FINE_LOCATION = Manifest.permission.ACCESS_FINE_LOCATION;
@@ -57,7 +59,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private Marker mMarker;
     private Location currentLocation;
     private List<Marker> markers = new ArrayList<>();
-    private Cluster
+    private ClusterManager <Cluster> mClusterManager;
 
 
     RestaurantManager manager;
@@ -86,47 +88,34 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private void geoLocate() {
         Bitmap hazardIcon = BitmapFactory.decodeResource(getResources(), R.drawable.restaurant);
         BitmapDescriptor hazardIconBit;
+        setUpClusterer();
+        Cluster offsetItem;
 
         if (manager.size() > 0) {
             for (Restaurant res : manager.restaurants()) {
-                String snippet = res.address;
                 if (!res.inspections.isEmpty()) {
-                    if (res.inspections.get(0).hazardRating.toString() == "Low") {
-                        hazardIcon = BitmapFactory.decodeResource(getResources(), R.drawable.hazard_low);
-                    } else if (res.inspections.get(0).hazardRating.toString() == "Moderate") {
-                        hazardIcon = BitmapFactory.decodeResource(getResources(), R.drawable.hazard_medium);
-                    } else if (res.inspections.get(0).hazardRating.toString() == "High") {
-                        hazardIcon = BitmapFactory.decodeResource(getResources(), R.drawable.hazard_high);
-                    }
-                    snippet = snippet + ", Hazard: " + res.inspections.get(0).hazardRating.toString();
+                     offsetItem= new Cluster(res.latitude, res.longitude, res.name, res.address, res.inspections.get(0).hazardRating.toString());
                 } else {
-                    hazardIcon = BitmapFactory.decodeResource(getResources(), R.drawable.restaurant);
+                    offsetItem = new Cluster(res.latitude, res.longitude, res.name, res.address, "null");
                 }
-                hazardIconBit = BitmapDescriptorFactory.fromBitmap(Bitmap.createScaledBitmap(hazardIcon, 100, 100, false));
-                MarkerOptions options = new MarkerOptions()
-                        .position(new LatLng(res.latitude, res.longitude))
-                        .title(res.name)
-                        .icon(hazardIconBit)
-                        .snippet(snippet);
-                mMarker = mMap.addMarker(options);
-                markers.add(mMarker);
+                mClusterManager.addItem(offsetItem);
+                mMap.setInfoWindowAdapter(mClusterManager.getMarkerManager());
+                mClusterManager.setOnClusterItemInfoWindowClickListener(new ClusterManager.OnClusterItemInfoWindowClickListener<Cluster>() {
+                    @Override
+                    public void onClusterItemInfoWindowClick(Cluster item) {
+                        for(Restaurant res:manager.restaurants()){
+                            if (item.getPosition().longitude == res.longitude) {
+                                Intent intent = new Intent(MapActivity.this, RestaurantActivity.class);
+                                intent.putExtra("tracking number", res.trackingNumber);
+                                startActivityForResult(intent, 1);
+                                break;
+                            }
+                        }
+                    }
+                });
 
-            }
-
-        }
-    }
 
 
-    @Override
-    public void onInfoWindowClick(Marker marker) {
-        Toast.makeText(MapActivity.this, "clicked " + marker.getTitle(), Toast.LENGTH_SHORT).show();
-        for(Restaurant res:manager.restaurants()){
-            if (marker.getPosition().longitude == res.longitude) {
-
-                Intent intent = new Intent(this, RestaurantActivity.class);
-                intent.putExtra("tracking number", res.trackingNumber);
-                startActivityForResult(intent, 1);
-                break;
             }
         }
     }
@@ -147,6 +136,18 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             }
         }
     }
+
+    private void setUpClusterer() {
+
+        // Initialize the manager with the context and the map.
+        // (Activity extends context, so we can pass 'this' in the constructor.)
+        mClusterManager = new ClusterManager<Cluster>(this, mMap);
+        mClusterManager.setRenderer(new MarkerClusterRenderer(this, mMap, mClusterManager));
+
+        mMap.setOnCameraIdleListener(mClusterManager);
+
+    }
+
 
     // get user location and center on current location
     private void getDeviceLocation() {
@@ -170,15 +171,16 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
                         Intent i = getIntent();
                         double longitude = i.getDoubleExtra("longitude",0);
-                        for(Marker m: markers){
+                        for(Marker m: mClusterManager.getMarkerCollection().getMarkers()){
                             if(m.getPosition().longitude == longitude){
+                                Toast.makeText(MapActivity.this, "find", Toast.LENGTH_SHORT).show();
+
                                 m.showInfoWindow();
                                 moveCamera(m.getPosition(),DEFAULT_ZOOM);
                                 break;
                             }
                         }
                     }
-
                 });
             }
 
@@ -248,7 +250,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             }
             mMap.setMyLocationEnabled(true);
             mMap.getUiSettings().setZoomControlsEnabled(true);
-            mMap.setOnInfoWindowClickListener(this);
             geoLocate();
         }
     }
@@ -272,18 +273,5 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-
-    @NonNull
-    @Override
-    public LatLng getPosition() {
-        return null;
-    }
-
-    @Nullable
-    @Override
-    public String getSnippet() {
-        return null;
     }
 }
