@@ -7,7 +7,6 @@ import androidx.core.content.ContextCompat;
 
 import android.Manifest;
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -40,12 +39,10 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
+import java.io.IOException;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.Map;
-import java.util.concurrent.ExecutionException;
 
 import ca.cmpt276.project.R;
 import ca.cmpt276.project.model.Restaurant;
@@ -62,11 +59,21 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     public static final long DEFAULT_DATE = 0;
     private static final long TWENTY_H_IN_MS = 20 * 60 * 60 * 1000;
     private static  final String LAST_UPDATE = "last_update_long";
+    //IF there is no exact date there, it is impossible to compare with the server,
+    //which date was the last modified date on the server and the app.
+    private static  String restaurantlastModifiedDate = "2020-07-01T00:00";
+    private static final String  inspectionslastModifiedDate = "2020-07-01T00:00";
+    private static final String REST_LAST_MODIFIED_DATE = "rest_last_modified_date";
+    private static final String INSP_LAST_MODIFIED_DATE = "insp_last_modified_date";
+    private static final String REST_API_URL = "http://data.surrey.ca/api/3/action/package_show?id=restaurants";
+    private static final String INSP_API_URL = "http://data.surrey.ca/api/3/action/package_show?id=fraser-health-restaurant-inspection-reports";
+    private boolean isUpdated = false;
+
     private Boolean mLocationPermissionsGranted = false;
     private FusedLocationProviderClient mFusedLocationClient;
 
-    private GoogleMap mMap;
 
+    private GoogleMap mMap;
 
     RestaurantManager manager;
     int sum;
@@ -85,23 +92,35 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         // tap again to goto restaurant's full info page
         try {
             updateRestaurant();
-        } catch (ParseException e) {
+        } catch (ParseException | IOException e) {
             e.printStackTrace();
         }
+
+//        new MapActivity.JSONTask().execute(REST_API_URL);
     }
-    private void updateRestaurant() throws ParseException {
+
+//
+
+
+
+
+    private void updateRestaurant() throws ParseException, IOException {
         SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
         long lastUpdate = sharedPreferences.getLong(LAST_UPDATE, DEFAULT_DATE);
         long currDateLong = Calendar.getInstance().getTimeInMillis();
+        String restaurantDate = sharedPreferences.getString(REST_LAST_MODIFIED_DATE,restaurantlastModifiedDate);
+        String inspectionsDate = sharedPreferences.getString(INSP_LAST_MODIFIED_DATE, inspectionslastModifiedDate);
+
         if(currDateLong - lastUpdate < TWENTY_H_IN_MS) {
             return;
         }
         else {
+            LocalDateTime restDate = LocalDateTime.parse(restaurantDate);
             //function to check if there is new data
 
-            //
-            createAskDialog();
+
         }
+
     }
 
     private void createAskDialog() {
