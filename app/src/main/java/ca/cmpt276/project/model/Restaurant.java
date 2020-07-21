@@ -28,7 +28,7 @@ public class Restaurant implements Comparable<Restaurant> {
     public final double longitude;
 
     @Ignore
-    public final List<Inspection> inspections = Collections.emptyList();
+    public final List<Inspection> inspections;
 
     public static final double MIN_LATITUDE = -90;
     public static final double MAX_LATITUDE = 90;
@@ -39,7 +39,7 @@ public class Restaurant implements Comparable<Restaurant> {
     /////////////////////////////////////////////////////////////////////////////////////
     // Constructors
 
-    public Restaurant(String trackingNumber, String name, String address, String city, double latitude, double longitude) {
+    public Restaurant(String trackingNumber, String name, String address, String city, double latitude, double longitude, List<Inspection> inspections) {
         validateConstructorArgs(trackingNumber, name, address, city, latitude, longitude);
         this.trackingNumber = trackingNumber;
         this.name           = name;
@@ -47,13 +47,29 @@ public class Restaurant implements Comparable<Restaurant> {
         this.city           = city;
         this.latitude       = latitude;
         this.longitude      = longitude;
+        this.inspections    = inspections;
     }
 
+    public Restaurant(String trackingNumber, String name, String address, String city, double latitude, double longitude) {
+        this(trackingNumber, name, address, city, latitude, longitude, Collections.emptyList());
+    }
+
+
+    /////////////////////////////////////////////////////////////////////////////////////
+    // Comparable override methods
 
     @Override
     public int compareTo(Restaurant other) {
+        if(other == null) {
+            throw new NullPointerException();
+        }
+
         return name.compareTo(other.name);
     }
+
+
+    /////////////////////////////////////////////////////////////////////////////////////
+    // Object override methods
 
     @Override
     public boolean equals(Object o) {
@@ -76,6 +92,14 @@ public class Restaurant implements Comparable<Restaurant> {
     public int hashCode() {
         return Objects.hash(trackingNumber, name, city, latitude, longitude);
     }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return "Restaurant<" + trackingNumber + ", " + name
+                + ", " + address + ", " + city + ", " + latitude + ", " + longitude + ">";
+    }
+
 
     /////////////////////////////////////////////////////////////////////////////////////
     // Helper methods

@@ -6,7 +6,7 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.Ignore;
-import androidx.room.Index;
+import androidx.room.PrimaryKey;
 
 import java.time.LocalDate;
 import java.util.Collections;
@@ -15,16 +15,18 @@ import java.util.Objects;
 
 @Entity(
     tableName = "inspections",
-    primaryKeys = {"tracking_number", "date"},
     foreignKeys = {
         @ForeignKey(
             entity = Restaurant.class, parentColumns = "tracking_number", childColumns = "tracking_number",
             onDelete = ForeignKey.CASCADE, onUpdate = ForeignKey.CASCADE)
-    },
-    indices = @Index({"tracking_number", "date"})
+    }
 )
 public class Inspection implements Comparable<Inspection> {
-    @ColumnInfo(name = "tracking_number")
+    @PrimaryKey
+    @ColumnInfo(name = "inspection_id", index = true)
+    @NonNull public int inspectionId;
+
+    @ColumnInfo(name = "tracking_number", index = true)
     @NonNull public final String trackingNumber;
 
     @NonNull public final LocalDate date;
@@ -40,21 +42,51 @@ public class Inspection implements Comparable<Inspection> {
     public final HazardRating hazardRating;
 
     @Ignore
-    public final List<Violation> violations = Collections.emptyList();
+    public final List<Violation> violations;
 
     /////////////////////////////////////////////////////////////////////////////////////
     // Constructor
 
-    public Inspection(String trackingNumber, LocalDate date, InspectionType type, int numCritViolations, int numNonCritViolations, HazardRating hazardRating) {
+    public Inspection(String trackingNumber, LocalDate date, InspectionType type, int numCritViolations, int numNonCritViolations, HazardRating hazardRating, List<Violation> violations) {
         validateConstructorArgs(trackingNumber, date, type, numCritViolations, numNonCritViolations, hazardRating);
+        this.inspectionId           = Objects.hash(trackingNumber, date);
         this.trackingNumber         = trackingNumber;
         this.date                   = date;
         this.type                   = type;
         this.numCritViolations      = numCritViolations;
         this.numNonCritViolations   = numNonCritViolations;
         this.hazardRating           = hazardRating;
+        this.violations             = violations;
     }
 
+    public Inspection(String trackingNumber, LocalDate date, InspectionType type, int numCritViolations, int numNonCritViolations, HazardRating hazardRating) {
+        this(trackingNumber, date, type, numCritViolations, numNonCritViolations, hazardRating, Collections.emptyList());
+    }
+
+
+    /////////////////////////////////////////////////////////////////////////
+    // Comparable
+
+    @Override
+    public int compareTo(Inspection other) {
+        if(other == null) {
+            throw new NullPointerException();
+        }
+
+        if(date.isBefore(other.date)) {
+            return -1;
+        }
+        else if(date.isEqual(other.date)) {
+            return 0;
+        }
+        else {
+            return 1;
+        }
+    }
+
+
+    /////////////////////////////////////////////////////////////////////////
+    // Override Object methods
 
     @Override
     public boolean equals(@Nullable Object o) {
@@ -71,19 +103,6 @@ public class Inspection implements Comparable<Inspection> {
                 && numCritViolations == other.numCritViolations
                 && numNonCritViolations == other.numNonCritViolations
                 && hazardRating.equals(other.hazardRating);
-    }
-
-    @Override
-    public int compareTo(Inspection other) {
-        if(date.isBefore(other.date)) {
-            return -1;
-        }
-        else if(date.isEqual(other.date)) {
-            return 0;
-        }
-        else {
-            return 1;
-        }
     }
 
     @Override

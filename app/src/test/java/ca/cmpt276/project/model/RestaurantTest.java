@@ -112,10 +112,6 @@ public class RestaurantTest {
         public void nullLongitudeTest() {
             Restaurant instance = new Restaurant(trackingNumber, name, address, city, latitude, (Double)null);
         }
-        @Test
-        public void nullInspectionsTest() {
-            Restaurant instance = new Restaurant(trackingNumber, name, address, city, latitude, longitude);
-        }
 
         @Test
         public void allArgsNullTest() {
