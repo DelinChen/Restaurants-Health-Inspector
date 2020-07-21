@@ -5,14 +5,27 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
+import android.widget.TextView;
 
-import com.google.android.gms.maps.model.Marker;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.time.LocalDateTime;
 
 import ca.cmpt276.project.R;
 
@@ -22,21 +35,79 @@ import ca.cmpt276.project.model.RestaurantManager;
 public class MainActivity extends AppCompatActivity implements RestListAdapter.RestListClickListener {
     RestaurantManager manager;
     RecyclerView restList;
+
+
+    private static String REST_DL_URL;
+    private static final String REST_API_URL = "https://data.surrey.ca/api/3/action/package_show?id=restaurants";
+    private static LocalDateTime LAST_MODIFIED;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         getSupportActionBar().setTitle("Restaurant Health Inspector");
 
-        // check if updates(20 hrs+) available
 
-        // ask if user wants to update now
 
-        // dialog when updating
 
         updateUI();
-
+        new JSONTask().execute(REST_API_URL);
     }
+
+
+        public class JSONTask extends AsyncTask< String, String, String>{
+
+            @Override
+            protected String doInBackground(String...params){
+                HttpURLConnection connection;
+                BufferedReader reader;
+                URL url = null;
+                try {
+                    url = new URL(params[0]);
+                    connection = (HttpURLConnection) url.openConnection();
+                    connection.connect();
+
+                    InputStream stream = connection.getInputStream();
+                    reader = new BufferedReader(new InputStreamReader(stream));
+
+                    StringBuffer stringBuffer = new StringBuffer();
+                    String line = "";
+                    while((line = reader.readLine()) != null){
+                        stringBuffer.append(line);
+                    }
+
+                    String finalJson = stringBuffer.toString();
+                    JSONObject parentObject = new JSONObject(finalJson);
+                    JSONObject childObject =  parentObject.getJSONObject("result");
+                    JSONArray parentArray = childObject.getJSONArray("resources");
+                    JSONObject targetObject = parentArray.getJSONObject(0);
+
+                    REST_DL_URL = targetObject.getString("url");
+                    LAST_MODIFIED = LocalDateTime.parse(targetObject.getString("last_modified"));
+
+//
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(String s){
+                super.onPostExecute(s);
+
+            }
+        }
+
+
+
+
+
 
     private void updateUI() {
         manager = RestaurantManager.getInstance(getApplicationContext());
@@ -50,22 +121,7 @@ public class MainActivity extends AppCompatActivity implements RestListAdapter.R
     public void onClick(View v, int position) {
         Intent intent = new Intent(this, RestaurantActivity.class);
         intent.putExtra("tracking number", manager.restaurants().get(position).trackingNumber);
-        startActivityForResult(intent, 1);
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 1) {
-            if (resultCode == RESULT_OK) {
-                Intent intent = new Intent(this, MapActivity.class);
-                double longitude = data.getDoubleExtra("longitude", 0);
-                intent.putExtra("longitude",longitude);
-                setResult(RESULT_OK, intent);
-                startActivity(intent);
-                finish();
-            }
-        }
+        startActivity(intent);
     }
 
     // create menu

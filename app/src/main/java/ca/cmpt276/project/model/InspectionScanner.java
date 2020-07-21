@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -43,7 +44,9 @@ public class InspectionScanner extends CsvScanner {
         String line = super.nextLine();
         line = line.replace("\"", "");
         line = line.replace(",Not Repeat", "");
-        String[] buffer = line.split(",", VIOLATIONS_LUMP+1);
+        String[] buffer = Arrays.stream(line.split(",", VIOLATIONS_LUMP + 1))
+                .map(String::trim)
+                .toArray(String[]::new);
 
         String trackingNumber           = buffer[TRACKING_NUMBER];
         LocalDate date                  = LocalDate.parse(buffer[DATE], BASIC_ISO_DATE);
