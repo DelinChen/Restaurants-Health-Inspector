@@ -15,15 +15,15 @@ public class RestaurantDetails {
             parentColumn = "tracking_number",
             entityColumn = "tracking_number",
             entity = Inspection.class)
-    @NonNull public final List<InspectionDetails> inspections;
+    @NonNull public final List<InspectionDetails> inspectionDetailsList;
 
 
     ////////////////////////////////////////////////////
     // Constructor
 
-    public RestaurantDetails(Restaurant restaurant, List<InspectionDetails> inspections) {
+    public RestaurantDetails(Restaurant restaurant, List<InspectionDetails> inspectionDetailsList) {
         this.restaurant = restaurant;
-        this.inspections = Collections.unmodifiableList(inspections);
+        this.inspectionDetailsList = Collections.unmodifiableList(inspectionDetailsList);
     }
 
 
@@ -33,6 +33,6 @@ public class RestaurantDetails {
     @NonNull
     @Override
     public String toString() {
-        return "RestaurantDetails<" + "\n\t" + restaurant + ",\n\t" + inspections + "\n>";
+        return "RestaurantDetails<" + "\n\t" + restaurant + ",\n\t" + inspectionDetailsList + "\n>";
     }
 }
