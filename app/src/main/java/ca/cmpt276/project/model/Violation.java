@@ -3,14 +3,27 @@ package ca.cmpt276.project.model;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
 
 import java.util.Objects;
 
-public class Violation {
+
+//Because we have an ViolationCategory as class attribute, still haven't figure out how to deal with it yet..
+@Entity(
+        tableName = "violations"
+)
+public class Violation implements Comparable<Violation> {
+    @PrimaryKey
+    @ColumnInfo(name = "code_number", index = true)
     public final int codeNumber;
+
+    @ColumnInfo(name = "is_critical")
     public final boolean isCritical;
-    public final ViolationCategory category;
-    public final String description;
+
+    @NonNull public final ViolationCategory category;
+    @NonNull public final String description;
 
 
     /////////////////////////////////////////////////////////////////////////////////////
@@ -24,6 +37,22 @@ public class Violation {
         this.description = description;
     }
 
+
+    /////////////////////////////////////////////////////////////////////////
+    // Comparable
+
+    @Override
+    public int compareTo(Violation violation) {
+        if(violation == null) {
+            throw new NullPointerException();
+        }
+
+        return Integer.compare(this.codeNumber, violation.codeNumber);
+    }
+
+
+    /////////////////////////////////////////////////////////////////////////
+    // Override Object methods
 
     @NonNull
     @Override
@@ -51,6 +80,9 @@ public class Violation {
         return Objects.hash(codeNumber, isCritical, category, description);
     }
 
+
+    /////////////////////////////////////////////////////////////////////////
+    // Error checking
 
     private static void validateConstructorArgs(int codeNumber, boolean isCritical, ViolationCategory category, String description) {
         String[] argNames = {"codeNumber", "isCritical", "category", "description"};

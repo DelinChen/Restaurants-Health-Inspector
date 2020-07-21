@@ -62,9 +62,34 @@ public class RestaurantActivity extends AppCompatActivity {
         TextView name = findViewById(R.id.txtName);
         TextView address = findViewById(R.id.txtAddress);
         TextView coords = findViewById(R.id.txtCoords);
+        ImageView image = findViewById(R.id.rest_icon_restActivity);
         name.setText(restaurant.name);
         address.setText(restaurant.address);
         coords.setText("(" + restaurant.latitude + ", " + restaurant.longitude + ")");
+        if(restaurant.name.contains("Save On Foods")) {
+            image.setImageResource(R.drawable.saveonfood);
+        }else if(restaurant.name.contains("Boston Pizza")) {
+            image.setImageResource(R.drawable.bostonpizza);
+        }else if(restaurant.name.contains("A&W")) {
+            image.setImageResource(R.drawable.anw);
+        }else if(restaurant.name.contains("Subway")) {
+            image.setImageResource(R.drawable.subway);
+        }else if(restaurant.name.contains("McDonald's")) {
+            image.setImageResource(R.drawable.mcdonalds);
+        }else if(restaurant.name.contains("7-Eleven")) {
+            image.setImageResource(R.drawable.seveneleven);
+        }else if(restaurant.name.contains("Blenz Coffee")) {
+            image.setImageResource(R.drawable.blenz);
+        }else if(restaurant.name.contains("Safeway")) {
+            image.setImageResource(R.drawable.safeway);
+        }else if(restaurant.name.contains("White Spot")) {
+            image.setImageResource(R.drawable.whitespot);
+        }else if(restaurant.name.contains("Burger King")) {
+            image.setImageResource(R.drawable.burgerking);
+        }else {
+            image.setImageResource(R.drawable.restaurant);
+        }
+
     }
 
     @Override

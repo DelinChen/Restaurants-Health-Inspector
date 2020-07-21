@@ -4,6 +4,7 @@ import android.content.Context;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -44,7 +45,9 @@ public class RestaurantScanner extends CsvScanner {
     public Restaurant nextRestaurant() {
         String line = super.nextLine();
         line = line.replace("\"", "");
-        String[] buffer = line.split(",");
+        String[] buffer = Arrays.stream(line.split(","))
+                .map(String::trim)
+                .toArray(String[]::new);
 
         String trackingNumber = buffer[TRACKING_NUMBER];
         String name         = buffer[NAME];

@@ -12,6 +12,9 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <application
         android:allowBackup="true"
@@ -47,8 +50,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.RestaurantActivity" />
-        <activity android:name=".ui.InspectionActivity" />
+        <activity android:name="ca.cmpt276.project.ui.RestaurantActivity"></activity>
+        <activity android:name="ca.cmpt276.project.ui.InspectionActivity"></activity>
     </application>
 
 </manifest>
