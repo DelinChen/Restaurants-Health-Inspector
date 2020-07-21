@@ -18,10 +18,27 @@ public class InspectionDetails {
             entityColumn = "code_number",
             associateBy = @Junction(InspectionViolationCrossref.class)
     )
-    @NonNull public final List<Violation> violations;
+    public List<Violation> violations;
+
+
+    ////////////////////////////////////////////////////
+    // Constructor
 
     public InspectionDetails(Inspection inspection, List<Violation> violations) {
         this.inspection = inspection;
-        this.violations = Collections.unmodifiableList(violations);
+        this.violations = violations;
+    }
+
+
+    ////////////////////////////////////////////////////
+    // Object override methods
+
+    @NonNull
+    @Override
+    public String toString() {
+        return "InspectionDetails<"
+                + inspection.toString()
+                    .replace("Inspection<", "")
+                    .replace(">", ", ... " + violations.size() + " violations>");
     }
 }

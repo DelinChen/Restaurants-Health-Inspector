@@ -4,6 +4,7 @@ import android.content.Context;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -44,7 +45,9 @@ public class RestaurantScanner extends CsvScanner {
     public Restaurant nextRestaurant() {
         String line = super.nextLine();
         line = line.replace("\"", "");
-        String[] buffer = line.split(",");
+        String[] buffer = Arrays.stream(line.split(","))
+                .map(String::trim)
+                .toArray(String[]::new);
 
         String trackingNumber = buffer[TRACKING_NUMBER];
         String name         = buffer[NAME];
@@ -54,7 +57,7 @@ public class RestaurantScanner extends CsvScanner {
         double longitude    = Double.parseDouble(buffer[LONGITUDE]);
         List<Inspection> inspections = inspectionManager.getOrDefault(trackingNumber, Collections.emptyList());
 
-        return new Restaurant(trackingNumber, name, address, city, latitude, longitude);
+        return new Restaurant(trackingNumber, name, address, city, latitude, longitude, inspections);
     }
 
     public Map<String, Restaurant> scanAllRestaurants() {

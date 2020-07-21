@@ -17,8 +17,22 @@ public class RestaurantDetails {
             entity = Inspection.class)
     @NonNull public final List<InspectionDetails> inspections;
 
+
+    ////////////////////////////////////////////////////
+    // Constructor
+
     public RestaurantDetails(Restaurant restaurant, List<InspectionDetails> inspections) {
         this.restaurant = restaurant;
         this.inspections = Collections.unmodifiableList(inspections);
+    }
+
+
+    ////////////////////////////////////////////////////
+    // Object override methods
+
+    @NonNull
+    @Override
+    public String toString() {
+        return "RestaurantDetails<" + "\n\t" + restaurant + ",\n\t" + inspections + "\n>";
     }
 }

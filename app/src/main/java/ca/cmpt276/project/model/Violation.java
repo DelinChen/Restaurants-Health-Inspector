@@ -14,7 +14,7 @@ import java.util.Objects;
 @Entity(
         tableName = "violations"
 )
-public class Violation {
+public class Violation implements Comparable<Violation> {
     @PrimaryKey
     @ColumnInfo(name = "code_number", index = true)
     public final int codeNumber;
@@ -37,6 +37,22 @@ public class Violation {
         this.description = description;
     }
 
+
+    /////////////////////////////////////////////////////////////////////////
+    // Comparable
+
+    @Override
+    public int compareTo(Violation violation) {
+        if(violation == null) {
+            throw new NullPointerException();
+        }
+
+        return Integer.compare(this.codeNumber, violation.codeNumber);
+    }
+
+
+    /////////////////////////////////////////////////////////////////////////
+    // Override Object methods
 
     @NonNull
     @Override
@@ -64,6 +80,9 @@ public class Violation {
         return Objects.hash(codeNumber, isCritical, category, description);
     }
 
+
+    /////////////////////////////////////////////////////////////////////////
+    // Error checking
 
     private static void validateConstructorArgs(int codeNumber, boolean isCritical, ViolationCategory category, String description) {
         String[] argNames = {"codeNumber", "isCritical", "category", "description"};

@@ -34,4 +34,9 @@ public class InspectionViolationCrossref {
         this.inspectionId = inspectionId;
         this.codeNumber = codeNumber;
     }
+
+    public InspectionViolationCrossref(Inspection inspection, Violation violation) {
+        this.inspectionId = inspection.inspectionId;
+        this.codeNumber = violation.codeNumber;
+    }
 }

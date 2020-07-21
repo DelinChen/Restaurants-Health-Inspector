@@ -42,12 +42,12 @@ public class Inspection implements Comparable<Inspection> {
     public final HazardRating hazardRating;
 
     @Ignore
-    public final List<Violation> violations = Collections.emptyList();
+    public final List<Violation> violations;
 
     /////////////////////////////////////////////////////////////////////////////////////
     // Constructor
 
-    public Inspection(String trackingNumber, LocalDate date, InspectionType type, int numCritViolations, int numNonCritViolations, HazardRating hazardRating) {
+    public Inspection(String trackingNumber, LocalDate date, InspectionType type, int numCritViolations, int numNonCritViolations, HazardRating hazardRating, List<Violation> violations) {
         validateConstructorArgs(trackingNumber, date, type, numCritViolations, numNonCritViolations, hazardRating);
         this.inspectionId           = Objects.hash(trackingNumber, date);
         this.trackingNumber         = trackingNumber;
@@ -56,8 +56,37 @@ public class Inspection implements Comparable<Inspection> {
         this.numCritViolations      = numCritViolations;
         this.numNonCritViolations   = numNonCritViolations;
         this.hazardRating           = hazardRating;
+        this.violations             = violations;
     }
 
+    public Inspection(String trackingNumber, LocalDate date, InspectionType type, int numCritViolations, int numNonCritViolations, HazardRating hazardRating) {
+        this(trackingNumber, date, type, numCritViolations, numNonCritViolations, hazardRating, Collections.emptyList());
+    }
+
+
+    /////////////////////////////////////////////////////////////////////////
+    // Comparable
+
+    @Override
+    public int compareTo(Inspection other) {
+        if(other == null) {
+            throw new NullPointerException();
+        }
+
+        if(date.isBefore(other.date)) {
+            return -1;
+        }
+        else if(date.isEqual(other.date)) {
+            return 0;
+        }
+        else {
+            return 1;
+        }
+    }
+
+
+    /////////////////////////////////////////////////////////////////////////
+    // Override Object methods
 
     @Override
     public boolean equals(@Nullable Object o) {
@@ -74,19 +103,6 @@ public class Inspection implements Comparable<Inspection> {
                 && numCritViolations == other.numCritViolations
                 && numNonCritViolations == other.numNonCritViolations
                 && hazardRating.equals(other.hazardRating);
-    }
-
-    @Override
-    public int compareTo(Inspection other) {
-        if(date.isBefore(other.date)) {
-            return -1;
-        }
-        else if(date.isEqual(other.date)) {
-            return 0;
-        }
-        else {
-            return 1;
-        }
     }
 
     @Override
