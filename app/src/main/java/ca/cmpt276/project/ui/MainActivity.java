@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity implements RestListAdapter.R
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         getSupportActionBar().setTitle("Restaurant Health Inspector");
-        
+
 
         updateUI();
 
