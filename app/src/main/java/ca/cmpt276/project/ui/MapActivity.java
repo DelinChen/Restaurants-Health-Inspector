@@ -67,7 +67,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private static final String INSP_LAST_MODIFIED_DATE = "insp_last_modified_date";
     private static final String REST_API_URL = "http://data.surrey.ca/api/3/action/package_show?id=restaurants";
     private static final String INSP_API_URL = "http://data.surrey.ca/api/3/action/package_show?id=fraser-health-restaurant-inspection-reports";
-    private boolean isUpdated = false;
 
     private Boolean mLocationPermissionsGranted = false;
     private FusedLocationProviderClient mFusedLocationClient;
