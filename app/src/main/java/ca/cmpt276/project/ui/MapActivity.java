@@ -141,21 +141,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
     }
 
-    private void createUpdateDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(MapActivity.this);
-        LayoutInflater inflater = LayoutInflater.from(MapActivity.this);
-        View view = inflater.inflate(R.layout.wait_dialog, null);
-        builder.setView(view)
-                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-
-                    }
-                })
-                .show();
-
-    }
-
     private final LocationListener mLocationListener = new LocationListener() {
         @Override
         public void onLocationChanged(final Location location) {
