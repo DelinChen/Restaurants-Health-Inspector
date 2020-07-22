@@ -8,6 +8,9 @@ import org.junit.experimental.runners.Enclosed;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 
+import ca.cmpt276.project.model.data.Violation;
+import ca.cmpt276.project.model.data.ViolationCategory;
+
 import static org.junit.Assert.*;
 
 @RunWith(Enclosed.class)

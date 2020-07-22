@@ -12,18 +12,16 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.concurrent.TimeUnit;
 
 import ca.cmpt276.project.R;
 
-import ca.cmpt276.project.model.HazardRating;
-import ca.cmpt276.project.model.Inspection;
-import ca.cmpt276.project.model.Restaurant;
-import ca.cmpt276.project.model.RestaurantManager;
+import ca.cmpt276.project.model.data.HazardRating;
+import ca.cmpt276.project.model.data.Inspection;
+import ca.cmpt276.project.model.data.Restaurant;
+import ca.cmpt276.project.model.data.RestaurantManager;
 
 
 

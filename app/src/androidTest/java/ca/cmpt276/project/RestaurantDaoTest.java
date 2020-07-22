@@ -16,13 +16,13 @@ import org.junit.rules.TestRule;
 
 import java.util.List;
 
-import ca.cmpt276.project.model.HealthDatabase;
-import ca.cmpt276.project.model.Inspection;
-import ca.cmpt276.project.model.InspectionManager;
-import ca.cmpt276.project.model.Restaurant;
-import ca.cmpt276.project.model.RestaurantDao;
-import ca.cmpt276.project.model.RestaurantDetails;
-import ca.cmpt276.project.model.RestaurantManager;
+import ca.cmpt276.project.model.database.HealthDatabase;
+import ca.cmpt276.project.model.data.Inspection;
+import ca.cmpt276.project.model.data.InspectionManager;
+import ca.cmpt276.project.model.data.Restaurant;
+import ca.cmpt276.project.model.database.RestaurantDao;
+import ca.cmpt276.project.model.data.RestaurantDetails;
+import ca.cmpt276.project.model.data.RestaurantManager;
 
 @SmallTest
 public class RestaurantDaoTest {

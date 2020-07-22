@@ -7,7 +7,9 @@ import org.junit.rules.ExpectedException;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-import static ca.cmpt276.project.model.RestaurantScanner.PATH_TO_RESTAURANT_CSV_FROM_SRC;
+import ca.cmpt276.project.model.data.CsvScanner;
+
+import static ca.cmpt276.project.model.data.RestaurantScanner.PATH_TO_RESTAURANT_CSV_FROM_SRC;
 import static org.junit.Assert.*;
 
 public class CsvScannerTest {

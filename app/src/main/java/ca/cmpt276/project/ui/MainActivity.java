@@ -8,13 +8,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
-import org.json.JSONObject;
-
-import java.io.IOException;
-
 import ca.cmpt276.project.R;
 
-import ca.cmpt276.project.model.RestaurantManager;
+import ca.cmpt276.project.model.data.RestaurantManager;
 
 
 public class MainActivity extends AppCompatActivity implements RestListAdapter.RestListClickListener {

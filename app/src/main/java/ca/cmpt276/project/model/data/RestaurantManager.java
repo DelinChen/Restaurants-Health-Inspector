@@ -1,4 +1,4 @@
-package ca.cmpt276.project.model;
+package ca.cmpt276.project.model.data;
 
 import android.content.Context;
 
@@ -10,8 +10,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import static ca.cmpt276.project.model.RestaurantScanner.PATH_TO_RESTAURANT_CSV_FROM_ASSETS;
-import static ca.cmpt276.project.model.RestaurantScanner.PATH_TO_RESTAURANT_CSV_FROM_SRC;
+import static ca.cmpt276.project.model.data.RestaurantScanner.PATH_TO_RESTAURANT_CSV_FROM_ASSETS;
+import static ca.cmpt276.project.model.data.RestaurantScanner.PATH_TO_RESTAURANT_CSV_FROM_SRC;
 
 
 public final class RestaurantManager {

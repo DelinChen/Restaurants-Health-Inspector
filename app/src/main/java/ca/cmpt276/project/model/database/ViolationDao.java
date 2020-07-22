@@ -1,11 +1,12 @@
-package ca.cmpt276.project.model;
+package ca.cmpt276.project.model.database;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Query;
-import androidx.room.Transaction;
 
 import java.util.List;
+
+import ca.cmpt276.project.model.data.Violation;
 
 @Dao
 public abstract class ViolationDao implements BaseDao<Violation> {

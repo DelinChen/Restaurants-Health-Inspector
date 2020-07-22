@@ -9,6 +9,9 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
 
+import ca.cmpt276.project.model.data.Restaurant;
+import ca.cmpt276.project.model.data.RestaurantManager;
+
 import static org.hamcrest.core.Is.isA;
 import static org.junit.Assert.*;
 

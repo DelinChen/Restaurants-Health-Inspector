@@ -1,13 +1,6 @@
-package ca.cmpt276.project.model;
+package ca.cmpt276.project.model.data;
 
 import androidx.annotation.NonNull;
-
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 import ca.cmpt276.project.R;
 

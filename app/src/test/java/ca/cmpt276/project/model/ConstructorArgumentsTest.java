@@ -4,7 +4,9 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-import static org.junit.Assert.*;
+import ca.cmpt276.project.model.data.ConstructorArguments;
+import ca.cmpt276.project.model.data.Violation;
+import ca.cmpt276.project.model.data.ViolationCategory;
 
 public class ConstructorArgumentsTest {
     private static final int codeNumber = 201;

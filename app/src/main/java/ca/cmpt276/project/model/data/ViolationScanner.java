@@ -1,11 +1,11 @@
-package ca.cmpt276.project.model;
+package ca.cmpt276.project.model.data;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static ca.cmpt276.project.model.ViolationScanner.ViolationCsvColumns.*;
+import static ca.cmpt276.project.model.data.ViolationScanner.ViolationCsvColumns.*;
 
 
 public class ViolationScanner {

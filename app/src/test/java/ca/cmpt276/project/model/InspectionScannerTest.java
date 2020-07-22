@@ -7,7 +7,12 @@ import java.text.ParseException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
-import static ca.cmpt276.project.model.InspectionScanner.PATH_TO_INSPECTION_CSV_FROM_SRC;
+import ca.cmpt276.project.model.data.HazardRating;
+import ca.cmpt276.project.model.data.Inspection;
+import ca.cmpt276.project.model.data.InspectionScanner;
+import ca.cmpt276.project.model.data.InspectionType;
+
+import static ca.cmpt276.project.model.data.InspectionScanner.PATH_TO_INSPECTION_CSV_FROM_SRC;
 import static org.junit.Assert.*;
 
 public class InspectionScannerTest {
