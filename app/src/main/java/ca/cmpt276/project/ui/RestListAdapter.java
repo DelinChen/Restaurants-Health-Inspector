@@ -51,7 +51,30 @@ public class RestListAdapter extends RecyclerView.Adapter<RestListAdapter.RestLi
         Restaurant currRest = manager.restaurants().get(position);
         holder.name.setText(currRest.name);
         holder.address.setText(currRest.address);
-        holder.restIcon.setImageResource(R.drawable.restaurant);
+
+        if(currRest.name.contains("Save On Foods")) {
+            holder.restIcon.setImageResource(R.drawable.saveonfood);
+        }else if(currRest.name.contains("Boston Pizza")) {
+            holder.restIcon.setImageResource(R.drawable.bostonpizza);
+        }else if(currRest.name.contains("A&W")) {
+            holder.restIcon.setImageResource(R.drawable.anw);
+        }else if(currRest.name.contains("Subway")) {
+            holder.restIcon.setImageResource(R.drawable.subway);
+        }else if(currRest.name.contains("McDonald's")) {
+            holder.restIcon.setImageResource(R.drawable.mcdonalds);
+        }else if(currRest.name.contains("7-Eleven")) {
+            holder.restIcon.setImageResource(R.drawable.seveneleven);
+        }else if(currRest.name.contains("Blenz Coffee")) {
+            holder.restIcon.setImageResource(R.drawable.blenz);
+        }else if(currRest.name.contains("Safeway")) {
+            holder.restIcon.setImageResource(R.drawable.safeway);
+        }else if(currRest.name.contains("White Spot")) {
+            holder.restIcon.setImageResource(R.drawable.whitespot);
+        }else if(currRest.name.contains("Burger King")) {
+            holder.restIcon.setImageResource(R.drawable.burgerking);
+        }else {
+            holder.restIcon.setImageResource(R.drawable.restaurant);
+        }
 
         Inspection currInspect;
         int numIssues;

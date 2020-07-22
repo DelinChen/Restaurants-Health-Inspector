@@ -29,6 +29,7 @@ import ca.cmpt276.project.model.data.RestaurantManager;
 
 // Display details of single restaurant
 public class RestaurantActivity extends AppCompatActivity {
+    Intent intent;
     RestaurantManager manager;
     Restaurant restaurant;
     String trackingNumber;
@@ -40,8 +41,20 @@ public class RestaurantActivity extends AppCompatActivity {
         getSupportActionBar().setTitle("Restaurant Health Inspector");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        // set restaurant info
+        populateRestaurantInfo();
+
+        // click coords to go back to map activity
+
+
+        // set the inspections list
+        populateListView();
+
+    }
+
+    private void populateRestaurantInfo() {
         // get the intent and set the restaurant information
-        Intent intent = getIntent();
+        intent = getIntent();
         trackingNumber = intent.getStringExtra("tracking number");
         manager = RestaurantManager.getInstance();
         restaurant = manager.get(trackingNumber);
@@ -49,22 +62,46 @@ public class RestaurantActivity extends AppCompatActivity {
         TextView name = findViewById(R.id.txtName);
         TextView address = findViewById(R.id.txtAddress);
         TextView coords = findViewById(R.id.txtCoords);
+        ImageView image = findViewById(R.id.rest_icon_restActivity);
         name.setText(restaurant.name);
         address.setText(restaurant.address);
         coords.setText("(" + restaurant.latitude + ", " + restaurant.longitude + ")");
 
-        // get the inspections
-        inspections = restaurant.inspections;
+        coords.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent();
+                intent.putExtra("longitude",restaurant.longitude);
+                setResult(RESULT_OK, intent);
+                finish();
+            }
+        });
+        if(restaurant.name.contains("Save On Foods")) {
+            image.setImageResource(R.drawable.saveonfood);
+        }else if(restaurant.name.contains("Boston Pizza")) {
+            image.setImageResource(R.drawable.bostonpizza);
+        }else if(restaurant.name.contains("A&W")) {
+            image.setImageResource(R.drawable.anw);
+        }else if(restaurant.name.contains("Subway")) {
+            image.setImageResource(R.drawable.subway);
+        }else if(restaurant.name.contains("McDonald's")) {
+            image.setImageResource(R.drawable.mcdonalds);
+        }else if(restaurant.name.contains("7-Eleven")) {
+            image.setImageResource(R.drawable.seveneleven);
+        }else if(restaurant.name.contains("Blenz Coffee")) {
+            image.setImageResource(R.drawable.blenz);
+        }else if(restaurant.name.contains("Safeway")) {
+            image.setImageResource(R.drawable.safeway);
+        }else if(restaurant.name.contains("White Spot")) {
+            image.setImageResource(R.drawable.whitespot);
+        }else if(restaurant.name.contains("Burger King")) {
+            image.setImageResource(R.drawable.burgerking);
+        }else {
+            image.setImageResource(R.drawable.restaurant);
+        }
 
-        // set the inspections listview
-        if(inspections.isEmpty()){
-            TextView empty = findViewById(R.id.txtEmpty);
-            empty.setVisibility(View.VISIBLE);
-        }
-        else {
-            populateListView();
-        }
     }
+
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch(item.getItemId()) {
@@ -76,20 +113,27 @@ public class RestaurantActivity extends AppCompatActivity {
         }
     }
 
-
     private void populateListView() {
-        ArrayAdapter <Inspection> adapter = new MyListAdapter();
-        ListView list = findViewById(R.id.listInspections);
-        list.setAdapter(adapter);
-        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Intent intent = new Intent(RestaurantActivity.this, InspectionActivity.class);
-                intent.putExtra("tracking number", restaurant.trackingNumber);
-                intent.putExtra("position", i);
-                startActivity(intent);
-            }
-        });
+        inspections = restaurant.inspections;
+
+        if(inspections.isEmpty()){
+            TextView empty = findViewById(R.id.txtEmpty);
+            empty.setVisibility(View.VISIBLE);
+        }
+        else {
+            ArrayAdapter<Inspection> adapter = new MyListAdapter();
+            ListView list = findViewById(R.id.listInspections);
+            list.setAdapter(adapter);
+            list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                    Intent intent = new Intent(RestaurantActivity.this, InspectionActivity.class);
+                    intent.putExtra("tracking number", restaurant.trackingNumber);
+                    intent.putExtra("position", i);
+                    startActivity(intent);
+                }
+            });
+        }
     }
 
     private class MyListAdapter extends ArrayAdapter<Inspection>{
