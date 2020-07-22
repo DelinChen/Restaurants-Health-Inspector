@@ -49,9 +49,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.MainActivity"></activity>
-        <activity android:name="ca.cmpt276.project.ui.RestaurantActivity"></activity>
-        <activity android:name="ca.cmpt276.project.ui.InspectionActivity"></activity>
+        <activity android:name=".ui.MainActivity" />
+        <activity android:name=".ui.RestaurantActivity" />
+        <activity android:name=".ui.InspectionActivity" />
     </application>
 
 </manifest>

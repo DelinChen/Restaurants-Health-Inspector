@@ -16,6 +16,7 @@ import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.location.LocationListener;
 import android.os.AsyncTask;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -31,13 +32,19 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptor;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
-
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.maps.android.clustering.ClusterItem;
+import com.google.maps.android.clustering.ClusterManager;
+import com.google.maps.android.clustering.view.DefaultClusterRenderer;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -72,8 +79,12 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private Boolean mLocationPermissionsGranted = false;
     private FusedLocationProviderClient mFusedLocationClient;
 
-
     private GoogleMap mMap;
+    private Location currentLocation;
+    private List<Marker> markers = new ArrayList<>();
+    private ClusterManager<Cluster> mClusterManager;
+    MarkerClusterRenderer mRenderer;
+    LocationManager locationManager;
 
     RestaurantManager manager;
     int sum;
@@ -84,6 +95,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         setContentView(R.layout.activity_map);
 
         manager = RestaurantManager.getInstance(getApplicationContext());
+        locationManager = (LocationManager) this.getSystemService(MapActivity.LOCATION_SERVICE);
 
         getLocationPermission();
 
@@ -144,40 +156,70 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private final LocationListener mLocationListener = new LocationListener() {
         @Override
         public void onLocationChanged(final Location location) {
-            //your code here
+            currentLocation = location;
+
+            moveCamera(new LatLng(location.getLatitude(),location.getLongitude()), DEFAULT_ZOOM);
         }
     };
 
     // display pegs showing the location of each restaurant with hazard icons
     private void geoLocate() {
-        Bitmap hazardIcon = BitmapFactory.decodeResource(getResources(), R.drawable.restaurant);
-        BitmapDescriptor hazardIconBit;
+        setUpClusterer();
+        Cluster offsetItem;
 
         if (manager.size() > 0) {
             for (Restaurant res : manager.restaurants()) {
-                if(!res.inspections.isEmpty()){
-                    if(res.inspections.get(0).hazardRating.toString() == "Low") {
-                        hazardIcon = BitmapFactory.decodeResource(getResources(), R.drawable.hazard_low);
-                    }
-                    else if (res.inspections.get(0).hazardRating.toString() ==  "Moderate") {
-                        hazardIcon = BitmapFactory.decodeResource(getResources(), R.drawable.hazard_medium);
-                    }
-                    else if (res.inspections.get(0).hazardRating.toString() ==  "High") {
-                        hazardIcon = BitmapFactory.decodeResource(getResources(), R.drawable.hazard_high);
-                    }
+                if (!res.inspections.isEmpty()) {
+                    offsetItem= new Cluster(res.latitude, res.longitude, res.name, res.address, res.inspections.get(0).hazardRating.toString());
+                } else {
+                    offsetItem = new Cluster(res.latitude, res.longitude, res.name, res.address, "null");
                 }
-                else{
-                    hazardIcon = BitmapFactory.decodeResource(getResources(), R.drawable.restaurant);
-                }
-                hazardIconBit = BitmapDescriptorFactory.fromBitmap(Bitmap.createScaledBitmap(hazardIcon, 100, 100, false));
-                MarkerOptions options = new MarkerOptions()
-                        .position(new LatLng(res.latitude, res.longitude))
-                        .title(res.name)
-                        .icon(hazardIconBit);
-                mMap.addMarker(options);
+                //mRenderer = new DefaultClusterRenderer(MapActivity.this, mMap, mClusterManager);
+                //mClusterManager.setRenderer(mRenderer);
+                mClusterManager.addItem(offsetItem);
+                mClusterManager.setOnClusterItemInfoWindowClickListener(new ClusterManager.OnClusterItemInfoWindowClickListener<Cluster>() {
+                    @Override
+                    public void onClusterItemInfoWindowClick(Cluster item) {
+                        for(Restaurant res:manager.restaurants()){
+                            if (item.getPosition().longitude == res.longitude) {
+                                Intent intent = new Intent(MapActivity.this, RestaurantActivity.class);
+                                intent.putExtra("tracking number", res.trackingNumber);
+                                startActivityForResult(intent, 1);
+                                break;
+                            }
+                        }
+                    }
+                });
             }
-
         }
+    }
+
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1) {
+            if (resultCode == RESULT_OK) {
+                double longitude = data.getDoubleExtra("longitude", 0);
+                for(Marker m: markers){
+                    if(m.getPosition().longitude == longitude){
+                        m.showInfoWindow();
+                        moveCamera(m.getPosition(),DEFAULT_ZOOM);
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
+    private void setUpClusterer() {
+
+        // Initialize the manager with the context and the map.
+        // (Activity extends context, so we can pass 'this' in the constructor.)
+        mClusterManager = new ClusterManager<Cluster>(this, mMap);
+        mRenderer = new MarkerClusterRenderer(this, mMap, mClusterManager);
+        mClusterManager.setRenderer(mRenderer);
+        mMap.setOnCameraIdleListener(mClusterManager);
 
     }
 
@@ -193,13 +235,34 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                     public void onComplete(@NonNull Task task) {
                         if (task.isSuccessful()) {
                             Log.d(TAG, "onComplete: found location!");
-                            Location currentLocation = (Location) task.getResult();
-                            moveCamera(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()),
-                                    DEFAULT_ZOOM,
-                                    "My Location");
+                            currentLocation = (Location) task.getResult();
+                            if(currentLocation!=null) {
+                                moveCamera(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()),
+                                        DEFAULT_ZOOM);
+                            }
                         } else {
                             Log.d(TAG, "onComplete: current location is null");
                             Toast.makeText(MapActivity.this, "unable to get current location", Toast.LENGTH_SHORT).show();
+                        }
+
+                        Boolean isTrue = true;
+                        Intent i = getIntent();
+                        double longitude = i.getDoubleExtra("longitude",0);
+                        for(Cluster m: mClusterManager.getAlgorithm().getItems()){
+                            if(m.getPosition().longitude == longitude) {
+                                isTrue = false;
+                                // mRenderer.clusterMarkerMap.get(m).showInfoWindow();
+                                moveCamera(m.getPosition(),DEFAULT_ZOOM);
+                                break;
+                            }
+                        }
+                        if (isTrue){
+                            if (ActivityCompat.checkSelfPermission(MapActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(MapActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                                return;
+                            }
+                            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
+                                    200,
+                                    10, mLocationListener);
                         }
                     }
                 });
@@ -210,7 +273,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         }
     }
 
-    private void moveCamera(LatLng latLng, float zoom, String title) {
+    private void moveCamera(LatLng latLng, float zoom) {
         Log.d(TAG, "moveCamera: moving camera to lat: " + latLng.latitude + ", lng: " + latLng.longitude);
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom));
     }
