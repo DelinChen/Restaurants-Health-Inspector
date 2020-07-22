@@ -4,6 +4,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.Manifest;
 import android.app.AlertDialog;
@@ -53,7 +55,10 @@ import java.util.Calendar;
 
 import ca.cmpt276.project.R;
 import ca.cmpt276.project.model.data.Restaurant;
+import ca.cmpt276.project.model.data.RestaurantDetails;
 import ca.cmpt276.project.model.data.RestaurantManager;
+import ca.cmpt276.project.model.viewmodel.HealthViewModel;
+import ca.cmpt276.project.model.viewmodel.HealthViewModelFactory;
 
 public class MapActivity extends AppCompatActivity implements OnMapReadyCallback {
 
@@ -86,7 +91,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     MarkerClusterRenderer mRenderer;
     LocationManager locationManager;
 
-    RestaurantManager manager;
+    //RestaurantManager manager;
+    HealthViewModel model;
     int sum;
     UpdateTask updateTask;
     @Override
@@ -94,7 +100,10 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
 
-        manager = RestaurantManager.getInstance(getApplicationContext());
+        //manager = RestaurantManager.getInstance(getApplicationContext());
+        ViewModelProvider.Factory factory = new HealthViewModelFactory(this);
+        model = new ViewModelProvider(this, factory).get(HealthViewModel.class);
+
         locationManager = (LocationManager) this.getSystemService(MapActivity.LOCATION_SERVICE);
 
         getLocationPermission();
@@ -102,12 +111,13 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         // tap peg to pop up name, address and hazard level
 
         // tap again to goto restaurant's full info page
-        try {
-            updateRestaurant();
-        } catch (ParseException | IOException e) {
-            e.printStackTrace();
-        }
-
+        model.restaurantDetailsData.observe(this, restaurantDetailsList -> {
+            try {
+                updateRestaurant();
+            } catch (ParseException | IOException e) {
+                e.printStackTrace();
+            }
+        });
 //        new MapActivity.JSONTask().execute(REST_API_URL);
     }
 
@@ -150,7 +160,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 .setNegativeButton(R.string.no_text, null)
                 .setCancelable(false)
                 .show();
-
     }
 
     private final LocationListener mLocationListener = new LocationListener() {
@@ -163,16 +172,16 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     };
 
     // display pegs showing the location of each restaurant with hazard icons
-    private void geoLocate() {
+    private void geoLocate(List<RestaurantDetails> list) {
         setUpClusterer();
         Cluster offsetItem;
 
-        if (manager.size() > 0) {
-            for (Restaurant res : manager.restaurants()) {
-                if (!res.inspections.isEmpty()) {
-                    offsetItem= new Cluster(res.latitude, res.longitude, res.name, res.address, res.inspections.get(0).hazardRating.toString());
+        if (list.size() > 0) {
+            for (RestaurantDetails res : list) {
+                if (!res.inspectionDetailsList.isEmpty()) {
+                    offsetItem= new Cluster(res.restaurant.latitude, res.restaurant.longitude, res.restaurant.name, res.restaurant.address, res.inspectionDetailsList.get(0).inspection.hazardRating.toString());
                 } else {
-                    offsetItem = new Cluster(res.latitude, res.longitude, res.name, res.address, "null");
+                    offsetItem = new Cluster(res.restaurant.latitude, res.restaurant.longitude, res.restaurant.name, res.restaurant.address, "null");
                 }
                 //mRenderer = new DefaultClusterRenderer(MapActivity.this, mMap, mClusterManager);
                 //mClusterManager.setRenderer(mRenderer);
@@ -180,10 +189,10 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 mClusterManager.setOnClusterItemInfoWindowClickListener(new ClusterManager.OnClusterItemInfoWindowClickListener<Cluster>() {
                     @Override
                     public void onClusterItemInfoWindowClick(Cluster item) {
-                        for(Restaurant res:manager.restaurants()){
-                            if (item.getPosition().longitude == res.longitude) {
+                        for(RestaurantDetails res : list){
+                            if (item.getPosition().longitude == res.restaurant.longitude) {
                                 Intent intent = new Intent(MapActivity.this, RestaurantActivity.class);
-                                intent.putExtra("tracking number", res.trackingNumber);
+                                intent.putExtra("tracking number", res.restaurant.trackingNumber);
                                 startActivityForResult(intent, 1);
                                 break;
                             }
@@ -337,8 +346,9 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             mMap.setMyLocationEnabled(true);
             mMap.getUiSettings().setZoomControlsEnabled(true);
 
-            geoLocate();
-
+            model.restaurantDetailsData.observe(this, restaurantDetailsList -> {
+                geoLocate(restaurantDetailsList);
+            });
         }
     }
 
@@ -372,7 +382,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             LayoutInflater inflater = LayoutInflater.from(MapActivity.this);
             View view = inflater.inflate(R.layout.wait_dialog, null);
             UpdateDialog = builder.setView(view)
-                    .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    .setNegativeButton(R.string.cancel_txt, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
                             UpdateDialog.dismiss();

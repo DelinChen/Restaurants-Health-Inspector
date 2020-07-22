@@ -36,6 +36,7 @@ import java.util.List;
 
 import ca.cmpt276.project.R;
 
+import ca.cmpt276.project.model.data.Restaurant;
 import ca.cmpt276.project.model.data.RestaurantDetails;
 import ca.cmpt276.project.model.data.RestaurantManager;
 import ca.cmpt276.project.model.viewmodel.HealthViewModel;
@@ -57,72 +58,17 @@ public class MainActivity extends AppCompatActivity implements RestListAdapter.R
         setContentView(R.layout.activity_main);
         ViewModelProvider.Factory factory = new HealthViewModelFactory(this);
         model = new ViewModelProvider(this, factory).get(HealthViewModel.class);
-
-        updateUI();
-        //new JSONTask().execute(REST_API_URL);
+        
+        model.restaurantDetailsData.observe(this, restaurantDetailsList -> {
+            updateUI(restaurantDetailsList);
+        });
     }
 
-
-    /*public class JSONTask extends AsyncTask< String, String, String>{
-
-        @Override
-        protected String doInBackground(String...params){
-            HttpURLConnection connection;
-            BufferedReader reader;
-            URL url = null;
-            try {
-                url = new URL(params[0]);
-                connection = (HttpURLConnection) url.openConnection();
-                connection.connect();
-
-                InputStream stream = connection.getInputStream();
-                reader = new BufferedReader(new InputStreamReader(stream));
-
-                StringBuffer stringBuffer = new StringBuffer();
-                String line = "";
-                while((line = reader.readLine()) != null){
-                    stringBuffer.append(line);
-                }
-
-                String finalJson = stringBuffer.toString();
-                JSONObject parentObject = new JSONObject(finalJson);
-                JSONObject childObject =  parentObject.getJSONObject("result");
-                JSONArray parentArray = childObject.getJSONArray("resources");
-                JSONObject targetObject = parentArray.getJSONObject(0);
-
-                REST_DL_URL = targetObject.getString("url");
-                LAST_MODIFIED = LocalDateTime.parse(targetObject.getString("last_modified"));
-
-//
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(String s){
-            super.onPostExecute(s);
-
-        }
-    }*/
-
-
-
-
-
-
-    private void updateUI() {
+    private void updateUI(List<RestaurantDetails> list) {
         restList = findViewById(R.id.rest_list);
-        model.restaurantDetailsData.observe(this, restaurantDetailsList -> {
-            RestListAdapter adapter = new RestListAdapter(this, restaurantDetailsList, this);
-            restList.setAdapter(adapter);
-            restList.setLayoutManager(new LinearLayoutManager(this));
-        });
+        RestListAdapter adapter = new RestListAdapter(this, list, this);
+        restList.setAdapter(adapter);
+        restList.setLayoutManager(new LinearLayoutManager(this));
     }
 
     @Override
