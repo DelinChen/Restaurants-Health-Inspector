@@ -9,32 +9,39 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.LiveData;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.text.SimpleDateFormat;
 import java.time.ZoneId;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 
 import ca.cmpt276.project.R;
 
 import ca.cmpt276.project.model.data.HazardRating;
 import ca.cmpt276.project.model.data.Inspection;
 import ca.cmpt276.project.model.data.Restaurant;
+import ca.cmpt276.project.model.data.RestaurantDetails;
 import ca.cmpt276.project.model.data.RestaurantManager;
-
-
+import ca.cmpt276.project.model.viewmodel.HealthViewModel;
 
 
 public class RestListAdapter extends RecyclerView.Adapter<RestListAdapter.RestListViewHolder> {
 
     private Context context;
-    private RestaurantManager manager;
+    //private RestaurantManager manager;
+    //private HealthViewModel model;
+    List<RestaurantDetails> list;
     private RestListClickListener listener;
 
-    public RestListAdapter(Context context, RestaurantManager manager, RestListClickListener listener) {
+    public RestListAdapter(Context context, List<RestaurantDetails> list, RestListClickListener listener) {
         this.context = context;
-        this.manager = manager;
+        //this.manager = manager;
+        //this.model = model;
+        this.list = list;
         this.listener = listener;
     }
 
@@ -48,7 +55,8 @@ public class RestListAdapter extends RecyclerView.Adapter<RestListAdapter.RestLi
 
     @Override
     public void onBindViewHolder(@NonNull RestListViewHolder holder, int position) {
-        Restaurant currRest = manager.restaurants().get(position);
+        //Restaurant currRest = manager.restaurants().get(position);
+        Restaurant currRest = list.get(position).restaurant;
         holder.name.setText(currRest.name);
         holder.address.setText(currRest.address);
 
@@ -82,8 +90,9 @@ public class RestListAdapter extends RecyclerView.Adapter<RestListAdapter.RestLi
         Date currDate;
         Date inspectDate;
         long days;
-        if(!currRest.inspections.isEmpty()) {
-            currInspect = currRest.inspections.get(0);
+        if(!list.get(position).inspectionDetailsList.isEmpty()) {
+            //currInspect = currRest.inspections.get(0);
+            currInspect = list.get(position).inspectionDetailsList.get(0).inspection;
             numIssues = currInspect.numCritViolations + currInspect.numNonCritViolations;
             hazardLevel = currInspect.hazardRating;
             currDate = Calendar.getInstance().getTime();
@@ -138,7 +147,8 @@ public class RestListAdapter extends RecyclerView.Adapter<RestListAdapter.RestLi
 
     @Override
     public int getItemCount() {
-        return manager.restaurants().size();
+        //return manager.restaurants().size();
+        return list.size();
     }
 
     public class RestListViewHolder extends RecyclerView.ViewHolder implements  View.OnClickListener{
