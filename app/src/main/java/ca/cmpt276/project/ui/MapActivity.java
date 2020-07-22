@@ -7,6 +7,7 @@ import androidx.core.content.ContextCompat;
 
 import android.Manifest;
 import android.app.AlertDialog;
+import android.app.DownloadManager;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -15,8 +16,10 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.location.LocationListener;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -39,10 +42,23 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
 import java.text.ParseException;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 import ca.cmpt276.project.R;
 import ca.cmpt276.project.model.data.Restaurant;
@@ -70,6 +86,16 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
     private Boolean mLocationPermissionsGranted = false;
     private FusedLocationProviderClient mFusedLocationClient;
+
+    private static String INSP_DL_URL;
+    private static String REST_DL_URL;
+    /*The date of */
+    private static LocalDateTime REST_LAST_UPDATED;
+    private static LocalDateTime INSP_LAST_UPDATED;
+    private static LocalDateTime REST_LAST_MODIFIED;
+    private static LocalDateTime INSP_LAST_MODIFIED;
+    private static List<String[]> RestaurantCSV;
+    private static List<String[]> InspectionCSV;
 
 
     private GoogleMap mMap;
@@ -109,15 +135,20 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         long currDateLong = Calendar.getInstance().getTimeInMillis();
         String restaurantDate = sharedPreferences.getString(REST_LAST_MODIFIED_DATE,restaurantlastModifiedDate);
         String inspectionsDate = sharedPreferences.getString(INSP_LAST_MODIFIED_DATE, inspectionslastModifiedDate);
+        REST_LAST_UPDATED = LocalDateTime.parse(restaurantlastModifiedDate);
+        INSP_LAST_UPDATED = LocalDateTime.parse(inspectionslastModifiedDate);
 
+        //CHECK the hours of last update < 20h
         if(currDateLong - lastUpdate < TWENTY_H_IN_MS) {
             return;
         }
         else {
-            LocalDateTime restDate = LocalDateTime.parse(restaurantDate);
-            //function to check if there is new data
-
-
+            //CHECK the hours of last update >= 20h
+            //Run the JSON OBJECT TO KNOW IF WE NEED UPDATE
+            createAskDialog();
+            createUpdateDialog();
+            new RESTJSONTask().execute(REST_API_URL);
+            new INSPJSONTask().execute(INSP_API_URL);
         }
 
     }
@@ -314,6 +345,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         return super.onOptionsItemSelected(item);
     }
 
+    /*For update AsyncTasks */
     class UpdateTask extends AsyncTask<RestaurantManager, Integer, Integer> {
         AlertDialog UpdateDialog;
         @Override
@@ -363,6 +395,157 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             }
             return add;
         }
+    }
+
+    //API request for RESTAURANT LIST
+    public class RESTJSONTask extends AsyncTask< String, Long, String>{
+
+        @Override
+        protected String doInBackground(String...params){
+            HttpURLConnection connection;
+            BufferedReader reader;
+            URL url = null;
+            try {
+                url = new URL(params[0]);
+                connection = (HttpURLConnection) url.openConnection();
+                connection.connect();
+
+                InputStream stream = connection.getInputStream();
+                reader = new BufferedReader(new InputStreamReader(stream));
+
+                StringBuffer stringBuffer = new StringBuffer();
+                String line = "";
+                while((line = reader.readLine()) != null){
+                    stringBuffer.append(line);
+                }
+
+                String finalJson = stringBuffer.toString();
+                JSONObject parentObject = new JSONObject(finalJson);
+                JSONObject childObject =  parentObject.getJSONObject("result");
+                JSONArray parentArray = childObject.getJSONArray("resources");
+                JSONObject targetObject = parentArray.getJSONObject(0);
+
+                REST_DL_URL = targetObject.getString("url");
+                REST_LAST_MODIFIED = LocalDateTime.parse(targetObject.getString("last_modified"));
+
+//
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String s){
+            super.onPostExecute(s);
+            //The lastest modified date is before the latest updated date
+            if(REST_LAST_UPDATED.isBefore(REST_LAST_MODIFIED)){
+                try {
+                    RestaurantCSV = readCsV(REST_DL_URL);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                //download file locally
+                downloadCsv("restaurant", REST_DL_URL );
+                //pointed the new updated date after updated
+                REST_LAST_UPDATED = REST_LAST_MODIFIED;
+            }
+
+        }
+    }
+
+    //API request for inspections list
+    public class INSPJSONTask extends AsyncTask< String, String, String>{
+
+        @Override
+        protected String doInBackground(String...params){
+            HttpURLConnection connection;
+            BufferedReader reader;
+            URL url = null;
+            try {
+                url = new URL(params[0]);
+                connection = (HttpURLConnection) url.openConnection();
+                connection.connect();
+
+                InputStream stream = connection.getInputStream();
+                reader = new BufferedReader(new InputStreamReader(stream));
+
+                StringBuffer stringBuffer = new StringBuffer();
+                String line = "";
+                while((line = reader.readLine()) != null){
+                    stringBuffer.append(line);
+                }
+
+                String finalJson = stringBuffer.toString();
+                JSONObject parentObject = new JSONObject(finalJson);
+                JSONObject childObject =  parentObject.getJSONObject("result");
+                JSONArray parentArray = childObject.getJSONArray("resources");
+                JSONObject targetObject = parentArray.getJSONObject(0);
+
+                INSP_DL_URL = targetObject.getString("url");
+                INSP_LAST_MODIFIED = LocalDateTime.parse(targetObject.getString("last_modified"));
+
+//
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String s){
+            super.onPostExecute(s);
+            //The lastest modified date is before the latest updated date
+            if(INSP_LAST_UPDATED.isBefore(INSP_LAST_MODIFIED)) {
+                try {
+                    InspectionCSV = readCsV(INSP_DL_URL);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                //download file locally
+                downloadCsv("inspections", INSP_DL_URL);
+                //pointed the new updated date after updated
+                INSP_LAST_UPDATED = INSP_LAST_MODIFIED;
+            }
+
+        }
+    }
+
+    public void downloadCsv(String filename, String url){
+        DownloadManager dm = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
+        DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
+        request.setAllowedNetworkTypes( DownloadManager.Request.NETWORK_MOBILE | DownloadManager.Request.NETWORK_WIFI)
+                .setTitle(filename)
+                .setDescription("Downloading..." + filename)
+                .setAllowedOverMetered(true)
+                .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
+                .setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, filename);
+
+        dm.enqueue(request);
+    }
+
+    public List<String[]> readCsV(String url) throws IOException {
+        URL url1 = new URL(url);
+        URLConnection urlConnection = url1.openConnection();
+        BufferedReader br = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
+        String[] content;
+        List<String[]> CSV = new ArrayList<>();
+        String line = "";
+
+
+        while( (line = br.readLine()) != null){
+            content = line.split(",");
+            CSV.add(content);
+        }
+        return CSV;
     }
 }
 
