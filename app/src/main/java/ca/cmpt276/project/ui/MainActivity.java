@@ -76,7 +76,24 @@ public class MainActivity extends AppCompatActivity implements RestListAdapter.R
         Intent intent = new Intent(this, RestaurantActivity.class);
         intent.putExtra("tracking number",model.restaurantDetailsData.getValue().get(position).restaurant.trackingNumber);
         startActivity(intent);
+        startActivityForResult(intent, 1);
     }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1) {
+            if (resultCode == RESULT_OK) {
+                double longitude = data.getDoubleExtra("longitude", 0);
+                Intent intent = new Intent(this, MapActivity.class);
+                intent.putExtra("longitude",longitude);
+                setResult(RESULT_OK, intent);
+                startActivity(intent);
+                finish();
+            }
+        }
+    }
+
 
     // create menu
     @Override
