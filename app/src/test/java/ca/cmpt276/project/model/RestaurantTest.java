@@ -11,10 +11,13 @@ import org.junit.runner.RunWith;
 import java.util.ArrayList;
 import java.util.List;
 
-import static ca.cmpt276.project.model.Restaurant.MAX_LATITUDE;
-import static ca.cmpt276.project.model.Restaurant.MAX_LONGITUDE;
-import static ca.cmpt276.project.model.Restaurant.MIN_LATITUDE;
-import static ca.cmpt276.project.model.Restaurant.MIN_LONGITUDE;
+import ca.cmpt276.project.model.data.Inspection;
+import ca.cmpt276.project.model.data.Restaurant;
+
+import static ca.cmpt276.project.model.data.Restaurant.MAX_LATITUDE;
+import static ca.cmpt276.project.model.data.Restaurant.MAX_LONGITUDE;
+import static ca.cmpt276.project.model.data.Restaurant.MIN_LATITUDE;
+import static ca.cmpt276.project.model.data.Restaurant.MIN_LONGITUDE;
 import static org.junit.Assert.*;
 
 @RunWith(Enclosed.class)

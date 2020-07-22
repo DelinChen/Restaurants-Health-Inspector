@@ -1,4 +1,4 @@
-package ca.cmpt276.project.model;
+package ca.cmpt276.project.model.database;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
@@ -9,7 +9,12 @@ import androidx.room.Transaction;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
+
+import ca.cmpt276.project.model.data.Inspection;
+import ca.cmpt276.project.model.data.InspectionDetails;
+import ca.cmpt276.project.model.data.Restaurant;
+import ca.cmpt276.project.model.data.RestaurantDetails;
+import ca.cmpt276.project.model.data.Violation;
 
 @Dao
 public abstract class RestaurantDao implements BaseDao<Restaurant> {

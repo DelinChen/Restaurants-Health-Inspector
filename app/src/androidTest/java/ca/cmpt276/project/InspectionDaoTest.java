@@ -19,14 +19,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import ca.cmpt276.project.model.HazardRating;
-import ca.cmpt276.project.model.HealthDatabase;
-import ca.cmpt276.project.model.Inspection;
-import ca.cmpt276.project.model.InspectionDao;
-import ca.cmpt276.project.model.InspectionDetails;
-import ca.cmpt276.project.model.InspectionType;
-import ca.cmpt276.project.model.Violation;
-import ca.cmpt276.project.model.ViolationCategory;
+import ca.cmpt276.project.model.data.HazardRating;
+import ca.cmpt276.project.model.database.HealthDatabase;
+import ca.cmpt276.project.model.data.Inspection;
+import ca.cmpt276.project.model.database.InspectionDao;
+import ca.cmpt276.project.model.data.InspectionDetails;
+import ca.cmpt276.project.model.data.InspectionType;
+import ca.cmpt276.project.model.data.Violation;
+import ca.cmpt276.project.model.data.ViolationCategory;
 
 @SmallTest
 public class InspectionDaoTest {

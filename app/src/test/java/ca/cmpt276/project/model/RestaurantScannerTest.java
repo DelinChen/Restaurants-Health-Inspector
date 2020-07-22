@@ -9,6 +9,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import ca.cmpt276.project.model.data.Inspection;
+import ca.cmpt276.project.model.data.InspectionManager;
+import ca.cmpt276.project.model.data.Restaurant;
+import ca.cmpt276.project.model.data.RestaurantScanner;
+
 import static org.junit.Assert.*;
 
 public class RestaurantScannerTest {

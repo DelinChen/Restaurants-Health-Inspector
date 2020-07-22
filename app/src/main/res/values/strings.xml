@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">276Project</string>
+    <string name="app_name">Restaurant Health Inspector</string>
     <string name="number_of_issues_text">Number of Issues: </string>
     <string name="latest_inspection_text">Latest Inspection: </string>
     <string name="title_activity_test">TestActivity</string>
@@ -16,7 +16,7 @@
 
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
-    <string name="title_activity_map">Map</string>
+    <string name="title_activity_map">Restaurant Health Inspector</string>
     <string name="update_available_text">Update Available</string>
     <string name="update_now_text">Do you want to update now?</string>
     <string name="yes_text">Yes</string>

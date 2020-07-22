@@ -1,4 +1,4 @@
-package ca.cmpt276.project.model;
+package ca.cmpt276.project.model.viewmodel;
 
 import android.content.Context;
 
@@ -11,49 +11,49 @@ import java.util.Map;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
+import ca.cmpt276.project.model.data.InspectionDetails;
+import ca.cmpt276.project.model.data.RestaurantDetails;
+import ca.cmpt276.project.model.data.Violation;
+import ca.cmpt276.project.model.database.HealthDatabase;
+import ca.cmpt276.project.model.database.InspectionDao;
+import ca.cmpt276.project.model.database.RestaurantDao;
+import ca.cmpt276.project.model.database.ViolationDao;
+
 public class HealthRepository {
     private final RestaurantDao restaurantDao;
     private final InspectionDao inspectionDao;
     private final ViolationDao violationDao;
 
-    private final LiveData<List<RestaurantDetails>> allRestaurantDetails;
-    private final LiveData<List<InspectionDetails>> allInspectionDetails;
-    private final LiveData<List<Violation>> allViolations;
 
     public HealthRepository(final Context anyContext) {
         HealthDatabase db = HealthDatabase.getInstance(anyContext);
-
         restaurantDao = db.getRestaurantDao();
         inspectionDao = db.getInspectionDao();
         violationDao = db.getViolationDao();
-
-        allRestaurantDetails = restaurantDao.getAllRestaurantsDetails();
-        allInspectionDetails = inspectionDao.getAllInspectionDetails();
-        allViolations = violationDao.getAllViolations();
     }
 
     public LiveData<List<RestaurantDetails>> getAllRestaurantDetails() {
-        return allRestaurantDetails;
+        return restaurantDao.getAllRestaurantsDetails();
     }
 
     public LiveData<List<InspectionDetails>> getAllInspectionDetails() {
-        return allInspectionDetails;
+        return inspectionDao.getAllInspectionDetails();
     }
 
     public LiveData<List<Violation>> getAllViolations() {
-        return allViolations;
+        return violationDao.getAllViolations();
     }
 
     public LiveData<Map<String, RestaurantDetails>> getRestaurantDetailsMap() {
-        return Mapper.getRestaurantDetailsMap(allRestaurantDetails);
+        return Mapper.getRestaurantDetailsMap(getAllRestaurantDetails());
     }
 
     public LiveData<Map<String, InspectionDetails>> getInspectionDetailsMap() {
-        return Mapper.getInspectionDetailsMap(allInspectionDetails);
+        return Mapper.getInspectionDetailsMap(getAllInspectionDetails());
     }
 
     public LiveData<Map<Integer, Violation>> getViolationMap() {
-        return Mapper.getViolationMap(allViolations);
+        return Mapper.getViolationMap(getAllViolations());
     }
 
 

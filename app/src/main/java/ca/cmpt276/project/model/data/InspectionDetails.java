@@ -1,13 +1,13 @@
-package ca.cmpt276.project.model;
+package ca.cmpt276.project.model.data;
 
 import androidx.annotation.NonNull;
 import androidx.room.Embedded;
-import androidx.room.Entity;
 import androidx.room.Junction;
 import androidx.room.Relation;
 
-import java.util.Collections;
 import java.util.List;
+
+import ca.cmpt276.project.model.database.InspectionViolationCrossref;
 
 public class InspectionDetails {
     @Embedded

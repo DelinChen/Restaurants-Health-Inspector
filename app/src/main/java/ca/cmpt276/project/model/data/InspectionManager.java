@@ -1,4 +1,4 @@
-package ca.cmpt276.project.model;
+package ca.cmpt276.project.model.data;
 
 import android.content.Context;
 
@@ -8,11 +8,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
-import static ca.cmpt276.project.model.InspectionScanner.PATH_TO_INSPECTION_CSV_FROM_ASSETS;
-import static ca.cmpt276.project.model.InspectionScanner.PATH_TO_INSPECTION_CSV_FROM_SRC;
+import static ca.cmpt276.project.model.data.InspectionScanner.PATH_TO_INSPECTION_CSV_FROM_ASSETS;
+import static ca.cmpt276.project.model.data.InspectionScanner.PATH_TO_INSPECTION_CSV_FROM_SRC;
 
 public final class InspectionManager {
     private static InspectionManager instance = null;

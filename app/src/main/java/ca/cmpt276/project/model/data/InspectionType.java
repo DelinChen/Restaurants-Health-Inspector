@@ -1,12 +1,11 @@
-package ca.cmpt276.project.model;
+package ca.cmpt276.project.model.data;
 
 import androidx.annotation.NonNull;
 
-public enum HazardRating {
-    LOW("Low"),
-    MODERATE("Moderate"),
-    HIGH("High"),
-    NULL_RATING("");
+public enum InspectionType {
+    ROUTINE("Routine"),
+    FOLLOWUP("Follow-Up"),
+    NULL_TYPE("");
 
 
     ///////////////////////////////////////////////////////////
@@ -18,26 +17,26 @@ public enum HazardRating {
     ///////////////////////////////////////////////////////////
     // Constructor
 
-    HazardRating(String stringVal) {
+    InspectionType(String stringVal) {
         this.stringVal = stringVal;
     }
 
     @NonNull
     @Override
     public String toString() {
-        return stringVal;
+        return this.stringVal;
     }
 
 
     ///////////////////////////////////////////////////////////
     // Factory method
 
-    public static HazardRating fromString(String input) {
-        for(HazardRating rating : HazardRating.values()) {
-            if(rating.stringVal.equals(input)) {
-                return rating;
+    public static InspectionType fromString(String input) {
+        for(InspectionType type : InspectionType.values()) {
+            if(type.stringVal.equals(input)) {
+                return type;
             }
         }
-        return NULL_RATING;
+        return NULL_TYPE;
     }
 }
