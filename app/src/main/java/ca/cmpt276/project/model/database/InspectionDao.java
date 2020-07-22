@@ -39,11 +39,11 @@ public abstract class InspectionDao implements BaseDao<Inspection> {
     public abstract void insertAll(Collection<Inspection> inspections, Collection<Violation> violations);
 
     @Transaction
-    @Query("SELECT * FROM inspections")
+    @Query("SELECT * FROM inspections ORDER BY date")
     public abstract LiveData<List<InspectionDetails>> getAllInspectionDetails();
 
     @Transaction
-    @Query("SELECT * FROM inspections WHERE tracking_number = :trackingNumber")
+    @Query("SELECT * FROM inspections WHERE tracking_number = :trackingNumber ORDER BY date DESC")
     public abstract LiveData<List<InspectionDetails>> findAllInspectionDetailsForRestaurant(String trackingNumber);
 
 }

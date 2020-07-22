@@ -59,14 +59,14 @@ public abstract class RestaurantDao implements BaseDao<Restaurant> {
     }
 
 
-    @Query("SELECT * FROM restaurants")
+    @Query("SELECT * FROM restaurants ORDER BY name")
     public abstract LiveData<List<Restaurant>> getAllRestaurants();
 
     @Query("SELECT * FROM restaurants WHERE tracking_number = :trackingNumber LIMIT 1")
     public abstract Restaurant findRestaurantWithTrackingNumber(String trackingNumber);
 
     @Transaction
-    @Query("SELECT * FROM restaurants")
+    @Query("SELECT * FROM restaurants ORDER BY name")
     public abstract LiveData<List<RestaurantDetails>> getAllRestaurantsDetails();
 
     @Transaction

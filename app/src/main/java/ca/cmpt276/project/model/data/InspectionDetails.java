@@ -5,11 +5,12 @@ import androidx.room.Embedded;
 import androidx.room.Junction;
 import androidx.room.Relation;
 
+import java.util.Collections;
 import java.util.List;
 
 import ca.cmpt276.project.model.database.InspectionViolationCrossref;
 
-public class InspectionDetails {
+public class InspectionDetails implements Comparable<InspectionDetails> {
     @Embedded
     @NonNull public final Inspection inspection;
 
@@ -26,7 +27,7 @@ public class InspectionDetails {
 
     public InspectionDetails(Inspection inspection, List<Violation> violations) {
         this.inspection = inspection;
-        this.violations = violations;
+        this.violations = Collections.unmodifiableList(violations);
     }
 
 
@@ -40,5 +41,14 @@ public class InspectionDetails {
                 + inspection.toString()
                     .replace("Inspection<", "")
                     .replace(">", ", ... " + violations.size() + " violations>");
+    }
+
+
+    ////////////////////////////////////////////////////
+    // Comparable method
+
+    @Override
+    public int compareTo(InspectionDetails other) {
+        return this.inspection.compareTo(other.inspection);
     }
 }

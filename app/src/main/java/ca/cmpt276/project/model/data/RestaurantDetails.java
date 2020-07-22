@@ -6,8 +6,9 @@ import androidx.room.Relation;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
-public class RestaurantDetails {
+public class RestaurantDetails implements Comparable<RestaurantDetails> {
     @Embedded
     @NonNull public final Restaurant restaurant;
 
@@ -23,7 +24,9 @@ public class RestaurantDetails {
 
     public RestaurantDetails(Restaurant restaurant, List<InspectionDetails> inspectionDetailsList) {
         this.restaurant = restaurant;
-        this.inspectionDetailsList = Collections.unmodifiableList(inspectionDetailsList);
+        this.inspectionDetailsList = inspectionDetailsList.stream()
+                .sorted(Collections.reverseOrder())
+                .collect(Collectors.collectingAndThen(Collectors.toList(), Collections::unmodifiableList));
     }
 
 
@@ -34,5 +37,14 @@ public class RestaurantDetails {
     @Override
     public String toString() {
         return "RestaurantDetails<" + "\n\t" + restaurant + ",\n\t" + inspectionDetailsList + "\n>";
+    }
+
+
+    ////////////////////////////////////////////////////
+    // Comparable method
+
+    @Override
+    public int compareTo(RestaurantDetails other) {
+        return this.restaurant.compareTo(other.restaurant);
     }
 }

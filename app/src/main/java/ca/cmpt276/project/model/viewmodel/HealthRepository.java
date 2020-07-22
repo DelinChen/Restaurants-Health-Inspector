@@ -57,8 +57,8 @@ public class HealthRepository {
     }
 
 
-    private static class Mapper {
-        private static LiveData<Map<String, RestaurantDetails>> getRestaurantDetailsMap(LiveData<List<RestaurantDetails>> restaurantDetailsData) {
+    public static class Mapper {
+        public static LiveData<Map<String, RestaurantDetails>> getRestaurantDetailsMap(LiveData<List<RestaurantDetails>> restaurantDetailsData) {
             return Transformations.map(
                     restaurantDetailsData,
                     restaurantDetailsList -> restaurantDetailsList
