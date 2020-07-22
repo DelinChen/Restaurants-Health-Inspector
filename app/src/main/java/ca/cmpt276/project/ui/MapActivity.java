@@ -105,6 +105,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
 
     private void updateRestaurant() throws ParseException, IOException {
+        //function to check if there is new data
+
         SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
         long lastUpdate = sharedPreferences.getLong(LAST_UPDATE, DEFAULT_DATE);
         long currDateLong = Calendar.getInstance().getTimeInMillis();
@@ -115,12 +117,10 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             return;
         }
         else {
-            LocalDateTime restDate = LocalDateTime.parse(restaurantDate);
-            //function to check if there is new data
-
+            //LocalDateTime restDate = LocalDateTime.parse(restaurantDate);
+            createAskDialog();
 
         }
-
     }
 
     private void createAskDialog() {
@@ -331,6 +331,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                             updateTask.cancel(true);
                         }
                     })
+                    .setCancelable(false)
                     .create();
             UpdateDialog.show();
         }
