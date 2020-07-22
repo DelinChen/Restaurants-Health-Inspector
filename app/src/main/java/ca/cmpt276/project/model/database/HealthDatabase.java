@@ -1,13 +1,15 @@
-package ca.cmpt276.project.model;
+package ca.cmpt276.project.model.database;
 
 import android.content.Context;
 
-import androidx.annotation.NonNull;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.room.TypeConverters;
-import androidx.sqlite.db.SupportSQLiteDatabase;
+
+import ca.cmpt276.project.model.data.Inspection;
+import ca.cmpt276.project.model.data.Restaurant;
+import ca.cmpt276.project.model.data.Violation;
 
 @Database(
         version = 1,
@@ -32,5 +34,10 @@ public abstract class HealthDatabase extends RoomDatabase {
                     .build();
         }
         return instance;
+    }
+
+    public static HealthDatabase getInMemoryInstance(final Context context) {
+        return Room.inMemoryDatabaseBuilder(context.getApplicationContext(), HealthDatabase.class)
+                .build();
     }
 }

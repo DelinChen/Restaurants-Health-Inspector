@@ -12,6 +12,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import ca.cmpt276.project.model.data.HazardRating;
+import ca.cmpt276.project.model.data.Inspection;
+import ca.cmpt276.project.model.data.InspectionType;
+import ca.cmpt276.project.model.data.Violation;
+import ca.cmpt276.project.model.data.ViolationCategory;
+
 import static org.junit.Assert.*;
 
 @RunWith(Enclosed.class)

@@ -1,12 +1,11 @@
-package ca.cmpt276.project.model;
+package ca.cmpt276.project.model.database;
 
-import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
-import androidx.room.Index;
 
-import java.time.LocalDate;
+import ca.cmpt276.project.model.data.Inspection;
+import ca.cmpt276.project.model.data.Violation;
 
 @Entity(
     tableName = "inspection_violations_crossref",

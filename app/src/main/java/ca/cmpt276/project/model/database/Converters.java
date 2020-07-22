@@ -1,9 +1,13 @@
-package ca.cmpt276.project.model;
+package ca.cmpt276.project.model.database;
 
 import androidx.room.TypeConverter;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+
+import ca.cmpt276.project.model.data.HazardRating;
+import ca.cmpt276.project.model.data.InspectionType;
+import ca.cmpt276.project.model.data.ViolationCategory;
 
 public class Converters {
     private Converters() throws InstantiationException {

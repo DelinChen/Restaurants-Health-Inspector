@@ -1,4 +1,4 @@
-package ca.cmpt276.project.model;
+package ca.cmpt276.project.model.data;
 
 
 import java.io.IOException;
@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static ca.cmpt276.project.model.InspectionScanner.InspectionCsvColumns.*;
+import static ca.cmpt276.project.model.data.InspectionScanner.InspectionCsvColumns.*;
 import static java.time.format.DateTimeFormatter.BASIC_ISO_DATE;
 
 public class InspectionScanner extends CsvScanner {

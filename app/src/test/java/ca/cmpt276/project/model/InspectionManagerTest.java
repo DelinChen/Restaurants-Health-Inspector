@@ -10,6 +10,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import ca.cmpt276.project.model.data.Inspection;
+import ca.cmpt276.project.model.data.InspectionManager;
+
 import static org.hamcrest.core.Is.isA;
 import static org.junit.Assert.assertTrue;
 

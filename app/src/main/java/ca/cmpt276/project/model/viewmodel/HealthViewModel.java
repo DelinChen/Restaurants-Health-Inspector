@@ -1,16 +1,20 @@
-package ca.cmpt276.project.model;
+package ca.cmpt276.project.model.viewmodel;
 
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collector;
-import java.util.stream.Collectors;
+
+import ca.cmpt276.project.model.data.InspectionDetails;
+import ca.cmpt276.project.model.data.RestaurantDetails;
+import ca.cmpt276.project.model.data.Violation;
 
 public class HealthViewModel extends ViewModel {
+    public final LiveData<List<RestaurantDetails>> restaurantDetailsData;
+    public final LiveData<List<InspectionDetails>> inspectionDetailsData;
+    public final LiveData<List<Violation>> violationData;
+
     public final LiveData<Map<String, RestaurantDetails>> restaurantDetailsMap;
     public final LiveData<Map<String, InspectionDetails>> inspectionDetailsMap;
     public final LiveData<Map<Integer, Violation>> violationsMap;
@@ -20,12 +24,14 @@ public class HealthViewModel extends ViewModel {
     // Constructor
 
     public HealthViewModel(HealthRepository repo) {
+        restaurantDetailsData = repo.getAllRestaurantDetails();
+        inspectionDetailsData = repo.getAllInspectionDetails();
+        violationData = repo.getAllViolations();
+
         restaurantDetailsMap = repo.getRestaurantDetailsMap();
         inspectionDetailsMap = repo.getInspectionDetailsMap();
         violationsMap = repo.getViolationMap();
     }
-
-
 
 
 /*

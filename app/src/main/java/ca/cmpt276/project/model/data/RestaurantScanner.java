@@ -1,4 +1,4 @@
-package ca.cmpt276.project.model;
+package ca.cmpt276.project.model.data;
 
 import android.content.Context;
 
@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static ca.cmpt276.project.model.RestaurantScanner.RestaurantCsvColumns.*;
+import static ca.cmpt276.project.model.data.RestaurantScanner.RestaurantCsvColumns.*;
 
 public class RestaurantScanner extends CsvScanner {
     public static final String PATH_TO_RESTAURANT_CSV_FROM_SRC = "src/main/assets/ProjectData/restaurants_itr1.csv";

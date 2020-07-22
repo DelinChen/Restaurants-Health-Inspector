@@ -18,11 +18,11 @@ import org.junit.rules.TestRule;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import ca.cmpt276.project.model.HealthDatabase;
-import ca.cmpt276.project.model.InspectionManager;
-import ca.cmpt276.project.model.Violation;
-import ca.cmpt276.project.model.ViolationCategory;
-import ca.cmpt276.project.model.ViolationDao;
+import ca.cmpt276.project.model.database.HealthDatabase;
+import ca.cmpt276.project.model.data.InspectionManager;
+import ca.cmpt276.project.model.data.Violation;
+import ca.cmpt276.project.model.data.ViolationCategory;
+import ca.cmpt276.project.model.database.ViolationDao;
 
 @SmallTest
 public class ViolationDaoTest {

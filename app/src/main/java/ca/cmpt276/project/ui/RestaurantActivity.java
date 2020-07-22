@@ -23,9 +23,9 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import ca.cmpt276.project.model.Inspection;
-import ca.cmpt276.project.model.Restaurant;
-import ca.cmpt276.project.model.RestaurantManager;
+import ca.cmpt276.project.model.data.Inspection;
+import ca.cmpt276.project.model.data.Restaurant;
+import ca.cmpt276.project.model.data.RestaurantManager;
 
 // Display details of single restaurant
 public class RestaurantActivity extends AppCompatActivity {

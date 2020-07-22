@@ -17,17 +17,15 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.material.snackbar.Snackbar;
-
 import java.text.SimpleDateFormat;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
 
 import ca.cmpt276.project.R;
-import ca.cmpt276.project.model.Inspection;
-import ca.cmpt276.project.model.RestaurantManager;
-import ca.cmpt276.project.model.Violation;
+import ca.cmpt276.project.model.data.Inspection;
+import ca.cmpt276.project.model.data.RestaurantManager;
+import ca.cmpt276.project.model.data.Violation;
 
 public class InspectionActivity extends AppCompatActivity {
     RestaurantManager manager;

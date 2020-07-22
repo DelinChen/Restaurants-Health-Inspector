@@ -1,4 +1,4 @@
-package ca.cmpt276.project.model;
+package ca.cmpt276.project.model.database;
 
 import androidx.room.Dao;
 import androidx.room.Insert;
