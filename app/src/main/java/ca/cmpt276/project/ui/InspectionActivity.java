@@ -33,7 +33,6 @@ import ca.cmpt276.project.model.viewmodel.HealthViewModel;
 import ca.cmpt276.project.model.viewmodel.HealthViewModelFactory;
 
 public class InspectionActivity extends AppCompatActivity {
-    //RestaurantManager manager;
     String trackingNumber;
     Inspection inspection;
     int position;
@@ -44,33 +43,16 @@ public class InspectionActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_inspection);
-        getSupportActionBar().setTitle("Restaurant Health Inspector");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         ViewModelProvider.Factory factory = new HealthViewModelFactory(this);
         model = new ViewModelProvider(this, factory).get(HealthViewModel.class);
 
-        // set manager
-        //manager = RestaurantManager.getInstance();
 
         // get intent and get necessary extras
         Intent intent = getIntent();
         trackingNumber = intent.getStringExtra("tracking number");
         position = intent.getIntExtra("position", 0);
-        /*inspection = manager.get(trackingNumber).inspections.get(position);
-
-        // get violations
-        violations = inspection.violations;
-
-        populateInspection();
-
-        if(violations.isEmpty()){
-            TextView empty = findViewById(R.id.txtEmpty);
-            empty.setVisibility(View.VISIBLE);
-        }
-        else {
-            populateViolations();
-        }*/
 
         model.restaurantDetailsMap.observe(this, restaurantDetailsMap -> {
             populateInspection(restaurantDetailsMap);

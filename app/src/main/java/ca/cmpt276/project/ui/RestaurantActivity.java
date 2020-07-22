@@ -45,7 +45,6 @@ public class RestaurantActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_restaurant);
-        getSupportActionBar().setTitle("Restaurant Health Inspector");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         ViewModelProvider.Factory factory = new HealthViewModelFactory(this);
