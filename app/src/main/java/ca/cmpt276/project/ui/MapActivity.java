@@ -314,9 +314,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        Toast.makeText(this, "map is ready!", Toast.LENGTH_SHORT).show();
         mMap = googleMap;
-
         if (mLocationPermissionsGranted) {
             getDeviceLocation();
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
