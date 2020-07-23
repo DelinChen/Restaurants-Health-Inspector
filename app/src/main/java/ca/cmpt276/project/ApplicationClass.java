@@ -4,5 +4,5 @@ import android.app.Application;
 
 public class ApplicationClass extends Application {
     public static boolean dontUpdate = false;
-    
+
 }

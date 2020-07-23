@@ -72,7 +72,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     public static final long DEFAULT_DATE = 0;
     private static final long TWENTY_H_IN_MS = 20 * 60 * 60 * 1000;
     private static  final String LAST_UPDATE = "last_update_long";
-    private boolean isUpdated = false;
 
     private Boolean mLocationPermissionsGranted = false;
     private FusedLocationProviderClient mFusedLocationClient;
@@ -92,7 +91,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
 
-        //manager = RestaurantManager.getInstance(getApplicationContext());
         ViewModelProvider.Factory factory = new HealthViewModelFactory(this);
         model = new ViewModelProvider(this, factory).get(HealthViewModel.class);
 
@@ -111,11 +109,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             }
         });
     }
-
-//
-
-
-
 
     private void updateRestaurant() throws ParseException, IOException {
         if(ApplicationClass.dontUpdate) {
@@ -348,7 +341,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         return super.onOptionsItemSelected(item);
     }
 
-    class UpdateTask extends AsyncTask<RestaurantManager, Integer, Integer> {
+    class UpdateTask extends AsyncTask<Void, Integer, Integer> {
         AlertDialog UpdateDialog;
         @Override
         protected void onPreExecute() {
@@ -383,7 +376,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         }
 
         @Override
-        protected Integer doInBackground(RestaurantManager... restaurantManagers) {
+        protected Integer doInBackground(Void... voids) {
             int add = 0;
             for(int i = 0; i < 1000; i++) {
                 add++;
