@@ -79,7 +79,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
     private GoogleMap mMap;
     private Location currentLocation;
-    private List<Marker> markers = new ArrayList<>();
     private ClusterManager<Cluster> mClusterManager;
     MarkerClusterRenderer mRenderer;
     LocationManager locationManager;
@@ -188,7 +187,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                             if (item.getPosition().longitude == res.restaurant.longitude) {
                                 Intent intent = new Intent(MapActivity.this, RestaurantActivity.class);
                                 intent.putExtra("tracking number", res.restaurant.trackingNumber);
-                                startActivityForResult(intent, 1);
+                                startActivity(intent);
                                 break;
                             }
                         }
@@ -198,23 +197,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         }
     }
 
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 1) {
-            if (resultCode == RESULT_OK) {
-                double longitude = data.getDoubleExtra("longitude", 0);
-                for(Marker m: markers){
-                    if(m.getPosition().longitude == longitude){
-                        m.showInfoWindow();
-                        moveCamera(m.getPosition(),DEFAULT_ZOOM);
-                        break;
-                    }
-                }
-            }
-        }
-    }
 
     private void setUpClusterer() {
 
@@ -328,9 +310,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        Toast.makeText(this, "map is ready!", Toast.LENGTH_SHORT).show();
         mMap = googleMap;
-
         if (mLocationPermissionsGranted) {
             getDeviceLocation();
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
