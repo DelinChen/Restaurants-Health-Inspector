@@ -35,9 +35,4 @@ public abstract class HealthDatabase extends RoomDatabase {
         }
         return instance;
     }
-
-    public static HealthDatabase getInMemoryInstance(final Context context) {
-        return Room.inMemoryDatabaseBuilder(context.getApplicationContext(), HealthDatabase.class)
-                .build();
-    }
 }

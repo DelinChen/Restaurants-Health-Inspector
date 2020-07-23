@@ -1,4 +1,4 @@
-package ca.cmpt276.project;
+package ca.cmpt276.project.model.database;
 
 import android.content.Context;
 import android.util.Log;
@@ -20,9 +20,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import ca.cmpt276.project.model.data.HazardRating;
-import ca.cmpt276.project.model.database.HealthDatabase;
 import ca.cmpt276.project.model.data.Inspection;
-import ca.cmpt276.project.model.database.InspectionDao;
 import ca.cmpt276.project.model.data.InspectionDetails;
 import ca.cmpt276.project.model.data.InspectionType;
 import ca.cmpt276.project.model.data.Violation;
@@ -42,7 +40,7 @@ public class InspectionDaoTest {
 
     private Context appContext;
     private HealthDatabase db;
-    private Inspection instance;
+    private InspectionDetails instance;
     private InspectionDao inspectionDao;
 
 
@@ -51,6 +49,8 @@ public class InspectionDaoTest {
 
     @Before
     public void initialize() {
+        Inspection inspection = new Inspection(trackingNumber, date, type, numCritViolations, numNonCritViolations, hazardRating);
+
         final Violation firstViolation = new Violation(
                 308, false, ViolationCategory.fromCodeNumber(308),
                 "Equipment/utensils/food contact surfaces are not in good working order [s. 16(b)]");
@@ -60,7 +60,7 @@ public class InspectionDaoTest {
         final Violation[] violationsBuffer = {firstViolation, secondViolation};
         violations = new ArrayList<>(Arrays.asList(violationsBuffer));
 
-        instance = new Inspection(trackingNumber, date, type, numCritViolations, numNonCritViolations, hazardRating, violations);
+        instance = new InspectionDetails(inspection, violations);
         appContext = ApplicationProvider.getApplicationContext();
         db = Room.inMemoryDatabaseBuilder(appContext, HealthDatabase.class)
                 .fallbackToDestructiveMigration()
@@ -73,7 +73,7 @@ public class InspectionDaoTest {
     public void insertSingleInspection_successTest() {
         db.getViolationDao().insertAll(instance.violations);
         inspectionDao.getAllInspectionDetails().observeForever(printAll);
-        inspectionDao.insert(instance, instance.violations);
+        inspectionDao.insert(instance.inspection, instance.violations);
 
     }
 

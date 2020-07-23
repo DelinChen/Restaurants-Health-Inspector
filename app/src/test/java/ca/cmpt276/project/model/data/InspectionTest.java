@@ -1,4 +1,4 @@
-package ca.cmpt276.project.model;
+package ca.cmpt276.project.model.data;
 
 import org.junit.Before;
 import org.junit.Rule;

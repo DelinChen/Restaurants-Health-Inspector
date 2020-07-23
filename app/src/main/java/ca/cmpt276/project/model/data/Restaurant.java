@@ -1,13 +1,11 @@
 package ca.cmpt276.project.model.data;
 
 import java.util.Collections;
-import java.util.List;
 import java.util.Objects;
 
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
-import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 @Entity (
@@ -27,9 +25,6 @@ public class Restaurant implements Comparable<Restaurant> {
     public final double latitude;
     public final double longitude;
 
-    @Ignore
-    public final List<Inspection> inspections;
-
     public static final double MIN_LATITUDE = -90;
     public static final double MAX_LATITUDE = 90;
     public static final double MIN_LONGITUDE = -180;
@@ -39,7 +34,7 @@ public class Restaurant implements Comparable<Restaurant> {
     /////////////////////////////////////////////////////////////////////////////////////
     // Constructors
 
-    public Restaurant(String trackingNumber, String name, String address, String city, double latitude, double longitude, List<Inspection> inspections) {
+    public Restaurant(String trackingNumber, String name, String address, String city, double latitude, double longitude) {
         validateConstructorArgs(trackingNumber, name, address, city, latitude, longitude);
         this.trackingNumber = trackingNumber;
         this.name           = name;
@@ -47,11 +42,6 @@ public class Restaurant implements Comparable<Restaurant> {
         this.city           = city;
         this.latitude       = latitude;
         this.longitude      = longitude;
-        this.inspections    = inspections;
-    }
-
-    public Restaurant(String trackingNumber, String name, String address, String city, double latitude, double longitude) {
-        this(trackingNumber, name, address, city, latitude, longitude, Collections.emptyList());
     }
 
 

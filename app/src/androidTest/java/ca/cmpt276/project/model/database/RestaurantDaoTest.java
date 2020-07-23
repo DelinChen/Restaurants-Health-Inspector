@@ -1,4 +1,4 @@
-package ca.cmpt276.project;
+package ca.cmpt276.project.model.database;
 
 import android.content.Context;
 import android.util.Log;
@@ -48,7 +48,7 @@ public class RestaurantDaoTest {
     public void initialize() {
         appContext = ApplicationProvider.getApplicationContext();
         List<Inspection> inspections = InspectionManager.getInstance(appContext).get(trackingNumber);
-        instance = new Restaurant(trackingNumber, name, address, city, latitude, longitude, inspections);
+        instance = new Restaurant(trackingNumber, name, address, city, latitude, longitude);
         db = Room.inMemoryDatabaseBuilder(appContext, HealthDatabase.class)
                 .fallbackToDestructiveMigration()
                 .build();

@@ -1,4 +1,4 @@
-package ca.cmpt276.project;
+package ca.cmpt276.project.model.database;
 
 import android.content.Context;
 import android.util.Log;

@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,6 +15,7 @@ import static java.time.format.DateTimeFormatter.BASIC_ISO_DATE;
 public class InspectionScanner extends CsvScanner {
     public static final String PATH_TO_INSPECTION_CSV_FROM_SRC = "src/main/assets/ProjectData/inspectionreports_itr1.csv";
     public static final String PATH_TO_INSPECTION_CSV_FROM_ASSETS = "ProjectData/inspectionreports_itr1.csv";
+
 
     ///////////////////////////////////////////////////////////////////////////////////
     // Constructors
@@ -40,13 +40,10 @@ public class InspectionScanner extends CsvScanner {
     ///////////////////////////////////////////////////////////////////////////////////
     // Methods
 
+    // TODO: DEPRECATED!
     public Inspection nextInspection() {
         String line = super.nextLine();
-        line = line.replace("\"", "");
-        line = line.replace(",Not Repeat", "");
-        String[] buffer = Arrays.stream(line.split(",", VIOLATIONS_LUMP + 1))
-                .map(String::trim)
-                .toArray(String[]::new);
+        String[] buffer = cleanLineForParsing(line);
 
         String trackingNumber           = buffer[TRACKING_NUMBER];
         LocalDate date                  = LocalDate.parse(buffer[DATE], BASIC_ISO_DATE);
@@ -57,10 +54,39 @@ public class InspectionScanner extends CsvScanner {
         List<Violation> violations      = ViolationScanner.parseListFromLump(buffer[VIOLATIONS_LUMP]);
 
         Inspection nextResult = new Inspection(
-                trackingNumber, date, type, numCritViolations, numNonCritViolations, rating, violations);
+                trackingNumber, date, type, numCritViolations, numNonCritViolations, rating);
         return nextResult;
     }
 
+    public InspectionDetails nextInspectionDetails() {
+        String line = super.nextLine();
+        String[] buffer = cleanLineForParsing(line);
+
+        String trackingNumber           = buffer[TRACKING_NUMBER];
+        LocalDate date                  = LocalDate.parse(buffer[DATE], BASIC_ISO_DATE);
+        InspectionType type             = InspectionType.fromString(buffer[TYPE]);
+        int numCritViolations           = Integer.parseInt(buffer[NUM_CRITICAL]);
+        int numNonCritViolations        = Integer.parseInt(buffer[NUM_NONCRITICAL]);
+        HazardRating rating             = HazardRating.fromString(buffer[HAZARD_RATING]);
+
+        List<Violation> violations      = ViolationScanner.parseListFromLump(buffer[VIOLATIONS_LUMP]);
+        Inspection inspection
+                = new Inspection(trackingNumber, date, type, numCritViolations, numNonCritViolations, rating);
+
+        InspectionDetails nextResult = new InspectionDetails(inspection, violations);
+        return nextResult;
+    }
+    private String[] cleanLineForParsing(String line) {
+        line = line.replace("\"", "");
+        line = line.replace(",Not Repeat", "");
+        String[] buffer = line.split(",", VIOLATIONS_LUMP + 1);
+        for(int i = 0; i < buffer.length; i++) {
+            buffer[i] = buffer[i].trim();
+        }
+        return buffer;
+    }
+
+    // TODO: DEPRECATED!
     public Map<String, List<Inspection>> scanAllInspections() {
         Map<String, List<Inspection>> inspectionsMap = new HashMap<>();
         while(hasNextLine()) {
@@ -78,6 +104,16 @@ public class InspectionScanner extends CsvScanner {
         }
         close();
         return inspectionsMap;
+    }
+
+    public List<InspectionDetails> scanAllInspectionDetails() {
+        List<InspectionDetails> inspectionDetailsList = new ArrayList<>();
+        while(hasNextLine()) {
+            InspectionDetails nextResult = nextInspectionDetails();
+            inspectionDetailsList.add(nextResult);
+        }
+        close();
+        return inspectionDetailsList;
     }
 
 

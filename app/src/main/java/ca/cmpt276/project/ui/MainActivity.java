@@ -14,31 +14,11 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.TextView;
-import android.widget.Toast;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.BufferedInputStream;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.time.LocalDateTime;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
 import ca.cmpt276.project.R;
 
-import ca.cmpt276.project.model.data.Restaurant;
 import ca.cmpt276.project.model.data.RestaurantDetails;
-import ca.cmpt276.project.model.data.RestaurantManager;
 import ca.cmpt276.project.model.viewmodel.HealthViewModel;
 import ca.cmpt276.project.model.viewmodel.HealthViewModelFactory;
 
@@ -46,11 +26,6 @@ import ca.cmpt276.project.model.viewmodel.HealthViewModelFactory;
 public class MainActivity extends AppCompatActivity implements RestListAdapter.RestListClickListener {
     RecyclerView restList;
     HealthViewModel model;
-
-    private static String REST_DL_URL;
-    private static final String REST_API_URL = "https://data.surrey.ca/api/3/action/package_show?id=restaurants";
-    private static LocalDateTime LAST_MODIFIED;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

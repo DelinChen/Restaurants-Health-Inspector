@@ -5,12 +5,10 @@ import androidx.annotation.Nullable;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
-import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 import java.time.LocalDate;
 import java.util.Collections;
-import java.util.List;
 import java.util.Objects;
 
 @Entity(
@@ -41,13 +39,10 @@ public class Inspection implements Comparable<Inspection> {
     @ColumnInfo(name = "hazard_rating")
     public final HazardRating hazardRating;
 
-    @Ignore
-    public final List<Violation> violations;
-
     /////////////////////////////////////////////////////////////////////////////////////
     // Constructor
 
-    public Inspection(String trackingNumber, LocalDate date, InspectionType type, int numCritViolations, int numNonCritViolations, HazardRating hazardRating, List<Violation> violations) {
+    public Inspection(String trackingNumber, LocalDate date, InspectionType type, int numCritViolations, int numNonCritViolations, HazardRating hazardRating) {
         validateConstructorArgs(trackingNumber, date, type, numCritViolations, numNonCritViolations, hazardRating);
         this.inspectionId           = Objects.hash(trackingNumber, date);
         this.trackingNumber         = trackingNumber;
@@ -56,11 +51,6 @@ public class Inspection implements Comparable<Inspection> {
         this.numCritViolations      = numCritViolations;
         this.numNonCritViolations   = numNonCritViolations;
         this.hazardRating           = hazardRating;
-        this.violations             = violations;
-    }
-
-    public Inspection(String trackingNumber, LocalDate date, InspectionType type, int numCritViolations, int numNonCritViolations, HazardRating hazardRating) {
-        this(trackingNumber, date, type, numCritViolations, numNonCritViolations, hazardRating, Collections.emptyList());
     }
 
 
