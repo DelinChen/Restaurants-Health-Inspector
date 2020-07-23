@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<network-security-config>
+    <domain-config cleartextTrafficPermitted="true">
+        <domain includeSubdomains="true">http://data.surrey.ca/api/3/action/package_show?id=restaurants</domain>
+        <domain includeSubdomains="true">http://data.surrey.ca/api/3/action/package_show?id=fraser-health-restaurant-inspection-reports</domain>
+    </domain-config>
+</network-security-config>

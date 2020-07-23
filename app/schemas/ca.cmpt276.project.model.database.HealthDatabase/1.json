@@ -1,0 +1,272 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 1,
+    "identityHash": "4c695366b626806e52604100724da4d4",
+    "entities": [
+      {
+        "tableName": "restaurants",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`tracking_number` TEXT NOT NULL, `name` TEXT NOT NULL, `address` TEXT NOT NULL, `city` TEXT NOT NULL, `latitude` REAL NOT NULL, `longitude` REAL NOT NULL, PRIMARY KEY(`tracking_number`))",
+        "fields": [
+          {
+            "fieldPath": "trackingNumber",
+            "columnName": "tracking_number",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "address",
+            "columnName": "address",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "city",
+            "columnName": "city",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "latitude",
+            "columnName": "latitude",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "longitude",
+            "columnName": "longitude",
+            "affinity": "REAL",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "tracking_number"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [
+          {
+            "name": "index_restaurants_tracking_number",
+            "unique": false,
+            "columnNames": [
+              "tracking_number"
+            ],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_restaurants_tracking_number` ON `${TABLE_NAME}` (`tracking_number`)"
+          }
+        ],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "inspections",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`inspection_id` INTEGER NOT NULL, `tracking_number` TEXT NOT NULL, `date` TEXT NOT NULL, `type` TEXT NOT NULL, `num_crit_violations` INTEGER NOT NULL, `num_noncrit_violations` INTEGER NOT NULL, `hazard_rating` TEXT, PRIMARY KEY(`inspection_id`), FOREIGN KEY(`tracking_number`) REFERENCES `restaurants`(`tracking_number`) ON UPDATE CASCADE ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "inspectionId",
+            "columnName": "inspection_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "trackingNumber",
+            "columnName": "tracking_number",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "date",
+            "columnName": "date",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "type",
+            "columnName": "type",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "numCritViolations",
+            "columnName": "num_crit_violations",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "numNonCritViolations",
+            "columnName": "num_noncrit_violations",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "hazardRating",
+            "columnName": "hazard_rating",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "inspection_id"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [
+          {
+            "name": "index_inspections_inspection_id",
+            "unique": false,
+            "columnNames": [
+              "inspection_id"
+            ],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_inspections_inspection_id` ON `${TABLE_NAME}` (`inspection_id`)"
+          },
+          {
+            "name": "index_inspections_tracking_number",
+            "unique": false,
+            "columnNames": [
+              "tracking_number"
+            ],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_inspections_tracking_number` ON `${TABLE_NAME}` (`tracking_number`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "restaurants",
+            "onDelete": "CASCADE",
+            "onUpdate": "CASCADE",
+            "columns": [
+              "tracking_number"
+            ],
+            "referencedColumns": [
+              "tracking_number"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "violations",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`code_number` INTEGER NOT NULL, `is_critical` INTEGER NOT NULL, `category` TEXT NOT NULL, `description` TEXT NOT NULL, PRIMARY KEY(`code_number`))",
+        "fields": [
+          {
+            "fieldPath": "codeNumber",
+            "columnName": "code_number",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "isCritical",
+            "columnName": "is_critical",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "category",
+            "columnName": "category",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "description",
+            "columnName": "description",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "code_number"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [
+          {
+            "name": "index_violations_code_number",
+            "unique": false,
+            "columnNames": [
+              "code_number"
+            ],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_violations_code_number` ON `${TABLE_NAME}` (`code_number`)"
+          }
+        ],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "inspection_violations_crossref",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`inspection_id` INTEGER NOT NULL, `code_number` INTEGER NOT NULL, PRIMARY KEY(`inspection_id`, `code_number`), FOREIGN KEY(`inspection_id`) REFERENCES `inspections`(`inspection_id`) ON UPDATE CASCADE ON DELETE CASCADE , FOREIGN KEY(`code_number`) REFERENCES `violations`(`code_number`) ON UPDATE CASCADE ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "inspectionId",
+            "columnName": "inspection_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "codeNumber",
+            "columnName": "code_number",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "inspection_id",
+            "code_number"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [
+          {
+            "name": "index_inspection_violations_crossref_inspection_id",
+            "unique": false,
+            "columnNames": [
+              "inspection_id"
+            ],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_inspection_violations_crossref_inspection_id` ON `${TABLE_NAME}` (`inspection_id`)"
+          },
+          {
+            "name": "index_inspection_violations_crossref_code_number",
+            "unique": false,
+            "columnNames": [
+              "code_number"
+            ],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_inspection_violations_crossref_code_number` ON `${TABLE_NAME}` (`code_number`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "inspections",
+            "onDelete": "CASCADE",
+            "onUpdate": "CASCADE",
+            "columns": [
+              "inspection_id"
+            ],
+            "referencedColumns": [
+              "inspection_id"
+            ]
+          },
+          {
+            "table": "violations",
+            "onDelete": "CASCADE",
+            "onUpdate": "CASCADE",
+            "columns": [
+              "code_number"
+            ],
+            "referencedColumns": [
+              "code_number"
+            ]
+          }
+        ]
+      }
+    ],
+    "views": [],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '4c695366b626806e52604100724da4d4')"
+    ]
+  }
+}
