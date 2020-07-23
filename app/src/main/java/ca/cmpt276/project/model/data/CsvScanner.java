@@ -41,6 +41,16 @@ public abstract class CsvScanner {
         return lineScanner.nextLine();
     }
 
+    protected String[] splitCsvLine(String line) {
+        // Adapted from https://stackoverflow.com/questions/15738918/splitting-a-csv-file-with-quotes-as-text-delimiter-using-string-split/15905916#15905916
+        String[] buffer = line.split(",(?=([^\"]*\"[^\"]*\")*[^\"]*$)", -1);
+        for(int i = 0; i < buffer.length; i++) {
+            buffer[i] = buffer[i].replace("\"", "");
+            buffer[i] = buffer[i].trim();
+        }
+        return buffer;
+    }
+
     public void close() {
         lineScanner.close();
     }
