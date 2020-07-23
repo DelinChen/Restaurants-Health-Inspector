@@ -38,76 +38,14 @@ public class MainActivity extends AppCompatActivity implements RestListAdapter.R
     RecyclerView restList;
 
 
-    private static String REST_DL_URL;
-    private static final String REST_API_URL = "https://data.surrey.ca/api/3/action/package_show?id=restaurants";
-    private static LocalDateTime LAST_MODIFIED;
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         getSupportActionBar().setTitle("Restaurant Health Inspector");
 
-
-
-
         updateUI();
-        new JSONTask().execute(REST_API_URL);
     }
-
-
-    public class JSONTask extends AsyncTask< String, String, String>{
-
-        @Override
-        protected String doInBackground(String...params){
-            HttpURLConnection connection;
-            BufferedReader reader;
-            URL url = null;
-            try {
-                url = new URL(params[0]);
-                connection = (HttpURLConnection) url.openConnection();
-                connection.connect();
-
-                InputStream stream = connection.getInputStream();
-                reader = new BufferedReader(new InputStreamReader(stream));
-
-                StringBuffer stringBuffer = new StringBuffer();
-                String line = "";
-                while((line = reader.readLine()) != null){
-                    stringBuffer.append(line);
-                }
-
-                String finalJson = stringBuffer.toString();
-                JSONObject parentObject = new JSONObject(finalJson);
-                JSONObject childObject =  parentObject.getJSONObject("result");
-                JSONArray parentArray = childObject.getJSONArray("resources");
-                JSONObject targetObject = parentArray.getJSONObject(0);
-
-                REST_DL_URL = targetObject.getString("url");
-                LAST_MODIFIED = LocalDateTime.parse(targetObject.getString("last_modified"));
-
-//
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(String s){
-            super.onPostExecute(s);
-
-        }
-    }
-
-
-
-
 
 
     private void updateUI() {

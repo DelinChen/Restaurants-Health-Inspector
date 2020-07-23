@@ -1,4 +1,4 @@
-package ca.cmpt276.project;
+package ca.cmpt276.project.model.viewmodel;
 
 
 import android.os.Handler;
@@ -34,6 +34,7 @@ import java.util.stream.Collectors;
 import ca.cmpt276.project.model.data.RestaurantDetails;
 import ca.cmpt276.project.model.data.RestaurantManager;
 import ca.cmpt276.project.model.database.HealthDatabase;
+import ca.cmpt276.project.model.viewmodel.HealthDataMapper;
 import ca.cmpt276.project.model.viewmodel.HealthRepository;
 import ca.cmpt276.project.model.viewmodel.HealthViewModel;
 import ca.cmpt276.project.model.viewmodel.HealthViewModelFactory;
@@ -72,7 +73,7 @@ public class HealthViewModelTest {
                 .build();
 
         LiveData<List<RestaurantDetails>> restaurantData = db.getRestaurantDao().getAllRestaurantsDetails();
-        LiveData<Map<String, RestaurantDetails>> restaurantDataMap = HealthRepository.Mapper.getRestaurantDetailsMap(restaurantData);
+        LiveData<Map<String, RestaurantDetails>> restaurantDataMap = HealthDataMapper.getRestaurantDetailsMap(restaurantData);
 
         restaurantDataMap.observe(mainActivity, printAllRestaurantDetails);
 

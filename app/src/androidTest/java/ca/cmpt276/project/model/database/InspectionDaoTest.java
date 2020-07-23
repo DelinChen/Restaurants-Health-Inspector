@@ -1,4 +1,4 @@
-package ca.cmpt276.project;
+package ca.cmpt276.project.model.database;
 
 import android.content.Context;
 import android.util.Log;
@@ -20,9 +20,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import ca.cmpt276.project.model.data.HazardRating;
-import ca.cmpt276.project.model.database.HealthDatabase;
 import ca.cmpt276.project.model.data.Inspection;
-import ca.cmpt276.project.model.database.InspectionDao;
 import ca.cmpt276.project.model.data.InspectionDetails;
 import ca.cmpt276.project.model.data.InspectionType;
 import ca.cmpt276.project.model.data.Violation;
@@ -60,7 +58,7 @@ public class InspectionDaoTest {
         final Violation[] violationsBuffer = {firstViolation, secondViolation};
         violations = new ArrayList<>(Arrays.asList(violationsBuffer));
 
-        instance = new Inspection(trackingNumber, date, type, numCritViolations, numNonCritViolations, hazardRating, violations);
+        instance = new Inspection(trackingNumber, date, type, numCritViolations, numNonCritViolations, hazardRating);
         appContext = ApplicationProvider.getApplicationContext();
         db = Room.inMemoryDatabaseBuilder(appContext, HealthDatabase.class)
                 .fallbackToDestructiveMigration()

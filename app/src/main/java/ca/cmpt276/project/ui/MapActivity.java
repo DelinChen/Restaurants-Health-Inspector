@@ -52,8 +52,8 @@ import java.time.LocalDateTime;
 import java.util.Calendar;
 
 import ca.cmpt276.project.R;
-import ca.cmpt276.project.model.Restaurant;
-import ca.cmpt276.project.model.RestaurantManager;
+import ca.cmpt276.project.model.data.Restaurant;
+import ca.cmpt276.project.model.data.RestaurantManager;
 
 public class MapActivity extends AppCompatActivity implements OnMapReadyCallback {
 

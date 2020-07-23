@@ -4,8 +4,8 @@ import android.content.Context;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,15 +15,20 @@ import static ca.cmpt276.project.model.data.RestaurantScanner.RestaurantCsvColum
 public class RestaurantScanner extends CsvScanner {
     public static final String PATH_TO_RESTAURANT_CSV_FROM_SRC = "src/main/assets/ProjectData/restaurants_itr1.csv";
     public static final String PATH_TO_RESTAURANT_CSV_FROM_ASSETS = "ProjectData/restaurants_itr1.csv";
-    private final InspectionManager inspectionManager;
 
 
     ///////////////////////////////////////////////////////////////////////////////////
     // Constructors
 
+    public RestaurantScanner(InputStream input, boolean hasHeaderRow) {
+        super(input, hasHeaderRow);
+    }
+    public RestaurantScanner(InputStream input) {
+        this(input, true);
+    }
+
     public RestaurantScanner(Context anyContext, InputStream input, boolean hasHeaderRow) {
         super(input, hasHeaderRow);
-        this.inspectionManager = InspectionManager.getInstance(anyContext);
     }
     public RestaurantScanner(Context anyContext, InputStream input) {
         this(anyContext, input, true);
@@ -31,7 +36,6 @@ public class RestaurantScanner extends CsvScanner {
 
     public RestaurantScanner(String pathToCsvData, boolean hasHeaderRow) throws IOException {
         super(pathToCsvData, hasHeaderRow);
-        this.inspectionManager = InspectionManager.getInstance();
     }
 
     public RestaurantScanner(String pathToCsvData) throws IOException {
@@ -55,9 +59,8 @@ public class RestaurantScanner extends CsvScanner {
         String city         = buffer[CITY];
         double latitude     = Double.parseDouble(buffer[LATITUDE]);
         double longitude    = Double.parseDouble(buffer[LONGITUDE]);
-        List<Inspection> inspections = inspectionManager.getOrDefault(trackingNumber, Collections.emptyList());
 
-        return new Restaurant(trackingNumber, name, address, city, latitude, longitude, inspections);
+        return new Restaurant(trackingNumber, name, address, city, latitude, longitude);
     }
 
     public Map<String, Restaurant> scanAllRestaurants() {
@@ -70,6 +73,14 @@ public class RestaurantScanner extends CsvScanner {
         return allRestaurants;
     }
 
+    public List<Restaurant> scanAllRestaurantsAsList() {
+        List<Restaurant> allRestaurants = new ArrayList<>();
+        while(hasNextLine()) {
+            Restaurant nextResult = nextRestaurant();
+            allRestaurants.add(nextResult);
+        }
+        return allRestaurants;
+    }
 
     ///////////////////////////////////////////////////////////////////////////////////
     // For clarity when parsing the csv data
