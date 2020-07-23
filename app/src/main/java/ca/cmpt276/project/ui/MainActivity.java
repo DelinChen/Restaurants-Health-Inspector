@@ -75,7 +75,6 @@ public class MainActivity extends AppCompatActivity implements RestListAdapter.R
     public void onClick(View v, int position) {
         Intent intent = new Intent(this, RestaurantActivity.class);
         intent.putExtra("tracking number",model.restaurantDetailsData.getValue().get(position).restaurant.trackingNumber);
-        startActivity(intent);
         startActivityForResult(intent, 1);
     }
 
