@@ -39,11 +39,13 @@ public class HealthViewModel extends ViewModel {
     }
 
     public boolean isDataUpToDate() {
+        boolean isUpToDate = false;
         try {
-            repo.isDataUpToDate();
+            isUpToDate = repo.isDataUpToDate();
         } catch (ExecutionException | InterruptedException e) {
             e.printStackTrace();
         }
+        return isUpToDate;
     }
 
     public void updateData() {
