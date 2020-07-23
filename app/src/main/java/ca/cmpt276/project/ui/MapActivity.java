@@ -1,22 +1,15 @@
 package ca.cmpt276.project.ui;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-
 import android.Manifest;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.location.LocationListener;
-import android.os.AsyncTask;
 import android.location.LocationManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -26,34 +19,33 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.lifecycle.ViewModelProvider;
+
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.maps.android.clustering.ClusterItem;
 import com.google.maps.android.clustering.ClusterManager;
-import com.google.maps.android.clustering.view.DefaultClusterRenderer;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 import java.io.IOException;
 import java.text.ParseException;
-import java.time.LocalDateTime;
 import java.util.Calendar;
+import java.util.List;
 
+import ca.cmpt276.project.ApplicationClass;
 import ca.cmpt276.project.R;
-import ca.cmpt276.project.model.data.Restaurant;
-import ca.cmpt276.project.model.data.RestaurantManager;
+import ca.cmpt276.project.model.data.RestaurantDetails;
+import ca.cmpt276.project.model.viewmodel.HealthViewModel;
+import ca.cmpt276.project.model.viewmodel.HealthViewModelFactory;
 
 public class MapActivity extends AppCompatActivity implements OnMapReadyCallback {
 
@@ -66,14 +58,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     public static final long DEFAULT_DATE = 0;
     private static final long TWENTY_H_IN_MS = 20 * 60 * 60 * 1000;
     private static  final String LAST_UPDATE = "last_update_long";
-    //IF there is no exact date there, it is impossible to compare with the server,
-    //which date was the last modified date on the server and the app.
-    private static  String restaurantlastModifiedDate = "2020-07-01T00:00";
-    private static final String  inspectionslastModifiedDate = "2020-07-01T00:00";
-    private static final String REST_LAST_MODIFIED_DATE = "rest_last_modified_date";
-    private static final String INSP_LAST_MODIFIED_DATE = "insp_last_modified_date";
-    private static final String REST_API_URL = "http://data.surrey.ca/api/3/action/package_show?id=restaurants";
-    private static final String INSP_API_URL = "http://data.surrey.ca/api/3/action/package_show?id=fraser-health-restaurant-inspection-reports";
     private boolean isUpdated = false;
 
     private Boolean mLocationPermissionsGranted = false;
@@ -81,20 +65,23 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
     private GoogleMap mMap;
     private Location currentLocation;
-    private List<Marker> markers = new ArrayList<>();
     private ClusterManager<Cluster> mClusterManager;
     MarkerClusterRenderer mRenderer;
     LocationManager locationManager;
 
-    RestaurantManager manager;
+    HealthViewModel model;
     int sum;
     UpdateTask updateTask;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
 
-        manager = RestaurantManager.getInstance(getApplicationContext());
+        //manager = RestaurantManager.getInstance(getApplicationContext());
+        ViewModelProvider.Factory factory = new HealthViewModelFactory(this);
+        model = new ViewModelProvider(this, factory).get(HealthViewModel.class);
+
         locationManager = (LocationManager) this.getSystemService(MapActivity.LOCATION_SERVICE);
 
         getLocationPermission();
@@ -102,13 +89,13 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         // tap peg to pop up name, address and hazard level
 
         // tap again to goto restaurant's full info page
-        try {
-            updateRestaurant();
-        } catch (ParseException | IOException e) {
-            e.printStackTrace();
-        }
-
-//        new MapActivity.JSONTask().execute(REST_API_URL);
+        model.restaurantDetailsData.observe(this, restaurantDetailsList -> {
+            try {
+                updateRestaurant();
+            } catch (ParseException | IOException e) {
+                e.printStackTrace();
+            }
+        });
     }
 
 //
@@ -117,22 +104,21 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
 
     private void updateRestaurant() throws ParseException, IOException {
+        if(ApplicationClass.dontUpdate) {
+            return;
+        }
+        //function to check if there is new data
+
         SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
         long lastUpdate = sharedPreferences.getLong(LAST_UPDATE, DEFAULT_DATE);
         long currDateLong = Calendar.getInstance().getTimeInMillis();
-        String restaurantDate = sharedPreferences.getString(REST_LAST_MODIFIED_DATE,restaurantlastModifiedDate);
-        String inspectionsDate = sharedPreferences.getString(INSP_LAST_MODIFIED_DATE, inspectionslastModifiedDate);
 
         if(currDateLong - lastUpdate < TWENTY_H_IN_MS) {
             return;
         }
         else {
-            LocalDateTime restDate = LocalDateTime.parse(restaurantDate);
-            //function to check if there is new data
-
-
+            createAskDialog();
         }
-
     }
 
     private void createAskDialog() {
@@ -142,30 +128,18 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 .setPositiveButton(R.string.yes_text, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        //Toast.makeText(MapActivity.this, "onCLick" , Toast.LENGTH_SHORT).show();
                         updateTask = new UpdateTask();
                         updateTask.execute();
                     }
                 })
-                .setNegativeButton(R.string.no_text, null)
-                .setCancelable(false)
-                .show();
-
-    }
-
-    private void createUpdateDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(MapActivity.this);
-        LayoutInflater inflater = LayoutInflater.from(MapActivity.this);
-        View view = inflater.inflate(R.layout.wait_dialog, null);
-        builder.setView(view)
-                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                .setNegativeButton(R.string.no_text, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-
+                        ApplicationClass.dontUpdate = true;
                     }
                 })
+                .setCancelable(false)
                 .show();
-
     }
 
     private final LocationListener mLocationListener = new LocationListener() {
@@ -178,16 +152,16 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     };
 
     // display pegs showing the location of each restaurant with hazard icons
-    private void geoLocate() {
+    private void geoLocate(List<RestaurantDetails> list) {
         setUpClusterer();
         Cluster offsetItem;
 
-        if (manager.size() > 0) {
-            for (Restaurant res : manager.restaurants()) {
-                if (!res.inspections.isEmpty()) {
-                    offsetItem= new Cluster(res.latitude, res.longitude, res.name, res.address, res.inspections.get(0).hazardRating.toString());
+        if (list.size() > 0) {
+            for (RestaurantDetails res : list) {
+                if (!res.inspectionDetailsList.isEmpty()) {
+                    offsetItem= new Cluster(res.restaurant.latitude, res.restaurant.longitude, res.restaurant.name, res.restaurant.address, res.inspectionDetailsList.get(0).inspection.hazardRating.toString());
                 } else {
-                    offsetItem = new Cluster(res.latitude, res.longitude, res.name, res.address, "null");
+                    offsetItem = new Cluster(res.restaurant.latitude, res.restaurant.longitude, res.restaurant.name, res.restaurant.address, "null");
                 }
                 //mRenderer = new DefaultClusterRenderer(MapActivity.this, mMap, mClusterManager);
                 //mClusterManager.setRenderer(mRenderer);
@@ -195,11 +169,11 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 mClusterManager.setOnClusterItemInfoWindowClickListener(new ClusterManager.OnClusterItemInfoWindowClickListener<Cluster>() {
                     @Override
                     public void onClusterItemInfoWindowClick(Cluster item) {
-                        for(Restaurant res:manager.restaurants()){
-                            if (item.getPosition().longitude == res.longitude) {
+                        for(RestaurantDetails res : list){
+                            if (item.getPosition().longitude == res.restaurant.longitude) {
                                 Intent intent = new Intent(MapActivity.this, RestaurantActivity.class);
-                                intent.putExtra("tracking number", res.trackingNumber);
-                                startActivityForResult(intent, 1);
+                                intent.putExtra("tracking number", res.restaurant.trackingNumber);
+                                startActivity(intent);
                                 break;
                             }
                         }
@@ -209,23 +183,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         }
     }
 
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 1) {
-            if (resultCode == RESULT_OK) {
-                double longitude = data.getDoubleExtra("longitude", 0);
-                for(Marker m: markers){
-                    if(m.getPosition().longitude == longitude){
-                        m.showInfoWindow();
-                        moveCamera(m.getPosition(),DEFAULT_ZOOM);
-                        break;
-                    }
-                }
-            }
-        }
-    }
 
     private void setUpClusterer() {
 
@@ -339,9 +296,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        Toast.makeText(this, "map is ready!", Toast.LENGTH_SHORT).show();
         mMap = googleMap;
-
         if (mLocationPermissionsGranted) {
             getDeviceLocation();
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
@@ -352,8 +307,9 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             mMap.setMyLocationEnabled(true);
             mMap.getUiSettings().setZoomControlsEnabled(true);
 
-            geoLocate();
-
+            model.restaurantDetailsData.observe(this, restaurantDetailsList -> {
+                geoLocate(restaurantDetailsList);
+            });
         }
     }
 
@@ -378,7 +334,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         return super.onOptionsItemSelected(item);
     }
 
-    class UpdateTask extends AsyncTask<RestaurantManager, Integer, Integer> {
+    class UpdateTask extends AsyncTask<Void, Integer, Integer> {
         AlertDialog UpdateDialog;
         @Override
         protected void onPreExecute() {
@@ -387,13 +343,14 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             LayoutInflater inflater = LayoutInflater.from(MapActivity.this);
             View view = inflater.inflate(R.layout.wait_dialog, null);
             UpdateDialog = builder.setView(view)
-                    .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    .setNegativeButton(R.string.cancel_txt, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
                             UpdateDialog.dismiss();
                             updateTask.cancel(true);
                         }
                     })
+                    .setCancelable(false)
                     .create();
             UpdateDialog.show();
         }
@@ -412,7 +369,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         }
 
         @Override
-        protected Integer doInBackground(RestaurantManager... restaurantManagers) {
+        protected Integer doInBackground(Void... voids) {
             int add = 0;
             for(int i = 0; i < 1000; i++) {
                 add++;

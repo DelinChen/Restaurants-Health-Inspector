@@ -3,6 +3,7 @@ package ca.cmpt276.project.ui;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Intent;
 import android.graphics.Color;
@@ -21,47 +22,42 @@ import java.text.SimpleDateFormat;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import ca.cmpt276.project.R;
 import ca.cmpt276.project.model.data.Inspection;
+import ca.cmpt276.project.model.data.RestaurantDetails;
 import ca.cmpt276.project.model.data.RestaurantManager;
 import ca.cmpt276.project.model.data.Violation;
+import ca.cmpt276.project.model.viewmodel.HealthViewModel;
+import ca.cmpt276.project.model.viewmodel.HealthViewModelFactory;
 
 public class InspectionActivity extends AppCompatActivity {
-    RestaurantManager manager;
     String trackingNumber;
     Inspection inspection;
     int position;
     private List<Violation> violations;
+    HealthViewModel model;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_inspection);
-        getSupportActionBar().setTitle("Restaurant Health Inspector");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        // set manager
-        manager = RestaurantManager.getInstance();
+        ViewModelProvider.Factory factory = new HealthViewModelFactory(this);
+        model = new ViewModelProvider(this, factory).get(HealthViewModel.class);
+
 
         // get intent and get necessary extras
         Intent intent = getIntent();
         trackingNumber = intent.getStringExtra("tracking number");
         position = intent.getIntExtra("position", 0);
-        inspection = manager.get(trackingNumber).inspections.get(position);
 
-        // get violations
-        violations = inspection.violations;
-
-        populateInspection();
-
-        if(violations.isEmpty()){
-            TextView empty = findViewById(R.id.txtEmpty);
-            empty.setVisibility(View.VISIBLE);
-        }
-        else {
-            populateViolations();
-        }
+        model.restaurantDetailsMap.observe(this, restaurantDetailsMap -> {
+            populateInspection(restaurantDetailsMap);
+            populateViolations(restaurantDetailsMap);
+        });
 
     }
     @Override
@@ -75,7 +71,14 @@ public class InspectionActivity extends AppCompatActivity {
         }
     }
 
-    private void populateViolations() {
+    private void populateViolations(Map<String, RestaurantDetails> map) {
+        violations = map.get(trackingNumber).inspectionDetailsList.get(position).violations;
+        if(violations.isEmpty()){
+            TextView empty = findViewById(R.id.txtEmpty);
+            empty.setVisibility(View.VISIBLE);
+            return;
+        }
+
         ArrayAdapter <Violation> adapter = new MyListAdapter();
         ListView list = findViewById(R.id.listViolations);
         list.setAdapter(adapter);
@@ -164,8 +167,9 @@ public class InspectionActivity extends AppCompatActivity {
         }
     }
 
-    private void populateInspection() {
+    private void populateInspection(Map<String, RestaurantDetails> map) {
         // find single inspection data
+        inspection = map.get(trackingNumber).inspectionDetailsList.get(position).inspection;
         String hazardLevel = inspection.hazardRating.toString();
         String inspectionType = inspection.type.toString();
         SimpleDateFormat formatDate = new SimpleDateFormat("MMMM dd, yyyy");

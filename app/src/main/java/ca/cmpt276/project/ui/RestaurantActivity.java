@@ -3,6 +3,8 @@ package ca.cmpt276.project.ui;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -22,42 +24,45 @@ import java.time.ZoneId;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import ca.cmpt276.project.model.data.Inspection;
+import ca.cmpt276.project.model.data.InspectionDetails;
 import ca.cmpt276.project.model.data.Restaurant;
+import ca.cmpt276.project.model.data.RestaurantDetails;
 import ca.cmpt276.project.model.data.RestaurantManager;
+import ca.cmpt276.project.model.viewmodel.HealthViewModel;
+import ca.cmpt276.project.model.viewmodel.HealthViewModelFactory;
 
 // Display details of single restaurant
 public class RestaurantActivity extends AppCompatActivity {
     Intent intent;
-    RestaurantManager manager;
     Restaurant restaurant;
     String trackingNumber;
-    private List<Inspection> inspections;
+    private List<InspectionDetails> inspections;
+    HealthViewModel model;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_restaurant);
-        getSupportActionBar().setTitle("Restaurant Health Inspector");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        // set restaurant info
-        populateRestaurantInfo();
+        ViewModelProvider.Factory factory = new HealthViewModelFactory(this);
+        model = new ViewModelProvider(this, factory).get(HealthViewModel.class);
 
-        // click coords to go back to map activity
-
-
-        // set the inspections list
-        populateListView();
-
+        model.restaurantDetailsMap.observe(this, restaurantDetailsMap -> {
+            populateRestaurantInfo(restaurantDetailsMap);
+            populateListView(restaurantDetailsMap);
+        });
     }
 
-    private void populateRestaurantInfo() {
+    private void populateRestaurantInfo(Map<String,RestaurantDetails> map) {
         // get the intent and set the restaurant information
         intent = getIntent();
         trackingNumber = intent.getStringExtra("tracking number");
-        manager = RestaurantManager.getInstance();
-        restaurant = manager.get(trackingNumber);
+        //manager = RestaurantManager.getInstance();
+        //restaurant = manager.get(trackingNumber);
+        restaurant = map.get(trackingNumber).restaurant;
 
         TextView name = findViewById(R.id.txtName);
         TextView address = findViewById(R.id.txtAddress);
@@ -113,15 +118,16 @@ public class RestaurantActivity extends AppCompatActivity {
         }
     }
 
-    private void populateListView() {
-        inspections = restaurant.inspections;
+    private void populateListView(Map<String, RestaurantDetails> map) {
+        //inspections = restaurant.inspections;
+        inspections = map.get(trackingNumber).inspectionDetailsList;
 
         if(inspections.isEmpty()){
             TextView empty = findViewById(R.id.txtEmpty);
             empty.setVisibility(View.VISIBLE);
         }
         else {
-            ArrayAdapter<Inspection> adapter = new MyListAdapter();
+            ArrayAdapter<InspectionDetails> adapter = new MyListAdapter();
             ListView list = findViewById(R.id.listInspections);
             list.setAdapter(adapter);
             list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -136,7 +142,7 @@ public class RestaurantActivity extends AppCompatActivity {
         }
     }
 
-    private class MyListAdapter extends ArrayAdapter<Inspection>{
+    private class MyListAdapter extends ArrayAdapter<InspectionDetails>{
         public MyListAdapter(){
             super(RestaurantActivity.this, R.layout.listview_inspections,inspections);
         }
@@ -150,7 +156,7 @@ public class RestaurantActivity extends AppCompatActivity {
             }
 
             // find the inspection to work with
-            Inspection currentInspection = inspections.get(position);
+            Inspection currentInspection = inspections.get(position).inspection;
 
             // set the image
             ImageView imageView = itemView.findViewById(R.id.imgHazard);
