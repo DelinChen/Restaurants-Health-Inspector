@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity implements RestListAdapter.R
         setContentView(R.layout.activity_main);
         ViewModelProvider.Factory factory = new HealthViewModelFactory(this);
         model = new ViewModelProvider(this, factory).get(HealthViewModel.class);
-        
+
         model.restaurantDetailsData.observe(this, restaurantDetailsList -> {
             updateUI(restaurantDetailsList);
         });

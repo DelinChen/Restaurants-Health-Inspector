@@ -53,6 +53,7 @@ import java.text.ParseException;
 import java.time.LocalDateTime;
 import java.util.Calendar;
 
+import ca.cmpt276.project.ApplicationClass;
 import ca.cmpt276.project.R;
 import ca.cmpt276.project.model.data.Restaurant;
 import ca.cmpt276.project.model.data.RestaurantDetails;
@@ -71,14 +72,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     public static final long DEFAULT_DATE = 0;
     private static final long TWENTY_H_IN_MS = 20 * 60 * 60 * 1000;
     private static  final String LAST_UPDATE = "last_update_long";
-    //IF there is no exact date there, it is impossible to compare with the server,
-    //which date was the last modified date on the server and the app.
-    private static  String restaurantlastModifiedDate = "2020-07-01T00:00";
-    private static final String  inspectionslastModifiedDate = "2020-07-01T00:00";
-    private static final String REST_LAST_MODIFIED_DATE = "rest_last_modified_date";
-    private static final String INSP_LAST_MODIFIED_DATE = "insp_last_modified_date";
-    private static final String REST_API_URL = "http://data.surrey.ca/api/3/action/package_show?id=restaurants";
-    private static final String INSP_API_URL = "http://data.surrey.ca/api/3/action/package_show?id=fraser-health-restaurant-inspection-reports";
     private boolean isUpdated = false;
 
     private Boolean mLocationPermissionsGranted = false;
@@ -91,10 +84,10 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     MarkerClusterRenderer mRenderer;
     LocationManager locationManager;
 
-    //RestaurantManager manager;
     HealthViewModel model;
     int sum;
     UpdateTask updateTask;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -118,7 +111,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 e.printStackTrace();
             }
         });
-//        new MapActivity.JSONTask().execute(REST_API_URL);
     }
 
 //
@@ -127,21 +119,20 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
 
     private void updateRestaurant() throws ParseException, IOException {
+        if(ApplicationClass.dontUpdate) {
+            return;
+        }
         //function to check if there is new data
 
         SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
         long lastUpdate = sharedPreferences.getLong(LAST_UPDATE, DEFAULT_DATE);
         long currDateLong = Calendar.getInstance().getTimeInMillis();
-        String restaurantDate = sharedPreferences.getString(REST_LAST_MODIFIED_DATE,restaurantlastModifiedDate);
-        String inspectionsDate = sharedPreferences.getString(INSP_LAST_MODIFIED_DATE, inspectionslastModifiedDate);
 
         if(currDateLong - lastUpdate < TWENTY_H_IN_MS) {
             return;
         }
         else {
-            //LocalDateTime restDate = LocalDateTime.parse(restaurantDate);
             createAskDialog();
-
         }
     }
 
@@ -152,12 +143,16 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 .setPositiveButton(R.string.yes_text, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        //Toast.makeText(MapActivity.this, "onCLick" , Toast.LENGTH_SHORT).show();
                         updateTask = new UpdateTask();
                         updateTask.execute();
                     }
                 })
-                .setNegativeButton(R.string.no_text, null)
+                .setNegativeButton(R.string.no_text, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        ApplicationClass.dontUpdate = true;
+                    }
+                })
                 .setCancelable(false)
                 .show();
     }
