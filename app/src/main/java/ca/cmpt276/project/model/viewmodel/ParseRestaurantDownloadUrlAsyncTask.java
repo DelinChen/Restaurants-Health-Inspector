@@ -4,24 +4,20 @@ import android.os.AsyncTask;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import ca.cmpt276.project.model.data.Restaurant;
 import ca.cmpt276.project.model.data.RestaurantScanner;
 
-public class ParseRestaurantDownloadUrlAsyncTask extends AsyncTask<String, String, List<Restaurant>> {
+public class ParseRestaurantDownloadUrlAsyncTask extends AsyncTask<String, String, Map<String, Restaurant>> {
     @Override
-    protected List<Restaurant> doInBackground(String ...params) {
-        if(android.os.Debug.isDebuggerConnected()) {
-            android.os.Debug.waitForDebugger();
-        }
-
-        List<Restaurant> responseBody = null;
+    protected Map<String, Restaurant> doInBackground(String ...params) {
+        Map<String, Restaurant> responseBody = null;
         try {
             URL downloadUrl = new URL(params[0]);
             RestaurantScanner scanner = new RestaurantScanner(downloadUrl.openStream());
-            responseBody = scanner.scanAllRestaurantsAsList();
+            responseBody = scanner.scanAllRestaurants();
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -22,6 +22,12 @@ public abstract class RestaurantDao implements BaseDao<Restaurant> {
     public void insertRestaurantDetails(Restaurant restaurant, Collection<InspectionDetails> inspectionDetailsCollection) {
         _insertRestaurantDetails(restaurant, inspectionDetailsCollection);
     }
+    @Transaction
+    public void insertAllRestaurantDetails(Collection<RestaurantDetails> restaurantDetailsCollection) {
+        restaurantDetailsCollection.forEach(
+                restaurantDetails -> insertRestaurantDetails(restaurantDetails.restaurant, restaurantDetails.inspectionDetailsList)
+        );
+    }
 
     @Transaction
     void _insertRestaurantDetails(Restaurant restaurant, Collection<InspectionDetails> inspectionDetailsCollection) {
@@ -51,12 +57,6 @@ public abstract class RestaurantDao implements BaseDao<Restaurant> {
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     abstract void _insertViolations(Collection<Violation> violations);
-
-    @Override
-    @Transaction
-    public void insertAll(Collection<Restaurant> restaurants) {
-        restaurants.forEach(this::insert);
-    }
 
 
     @Query("SELECT * FROM restaurants ORDER BY name")

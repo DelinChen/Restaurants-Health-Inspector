@@ -5,20 +5,19 @@ import android.os.AsyncTask;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
+import java.util.Map;
 
 import ca.cmpt276.project.model.data.InspectionDetails;
 import ca.cmpt276.project.model.data.InspectionScanner;
-import ca.cmpt276.project.model.data.Restaurant;
-import ca.cmpt276.project.model.data.RestaurantScanner;
 
-public class ParseInspectionDownloadUrlAsyncTask extends AsyncTask<String, String, List<InspectionDetails>> {
+public class ParseInspectionDownloadUrlAsyncTask extends AsyncTask<String, String, Map<String, List<InspectionDetails>>> {
     @Override
-    protected List<InspectionDetails> doInBackground(String ...params) {
+    protected Map<String, List<InspectionDetails>> doInBackground(String ...params) {
         if(android.os.Debug.isDebuggerConnected()) {
             android.os.Debug.waitForDebugger();
         }
 
-        List<InspectionDetails> responseBody = null;
+        Map<String, List<InspectionDetails>> responseBody = null;
         try {
             URL downloadUrl = new URL(params[0]);
             InspectionScanner scanner = new InspectionScanner(downloadUrl.openStream());

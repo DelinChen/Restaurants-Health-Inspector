@@ -1,7 +1,6 @@
 package ca.cmpt276.project.model.viewmodel;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 
 import androidx.lifecycle.LiveData;
 import androidx.preference.PreferenceManager;
@@ -9,8 +8,10 @@ import androidx.preference.PreferenceManager;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
+import java.util.stream.Collectors;
 
 import ca.cmpt276.project.model.data.InspectionDetails;
+import ca.cmpt276.project.model.data.Restaurant;
 import ca.cmpt276.project.model.data.RestaurantDetails;
 import ca.cmpt276.project.model.data.Violation;
 import ca.cmpt276.project.model.database.HealthDatabase;
@@ -18,9 +19,9 @@ import ca.cmpt276.project.model.database.InspectionDao;
 import ca.cmpt276.project.model.database.RestaurantDao;
 import ca.cmpt276.project.model.database.ViolationDao;
 
-public class HealthRepository {
-    public static final String RESTAURANT_REST_URL = "https://data.surrey.ca/api/3/action/package_show?id=restaurants";
-    public static final String INSPECTIONS_REST_URL = "http://data.surrey.ca/api/3/action/package_show?id=fraser-health-restaurant-inspection-reports";
+class HealthRepository {
+    static final String RESTAURANT_REST_URL = "https://data.surrey.ca/api/3/action/package_show?id=restaurants";
+    static final String INSPECTIONS_REST_URL = "https://data.surrey.ca/api/3/action/package_show?id=fraser-health-restaurant-inspection-reports";
 
     private final RestaurantDao restaurantDao;
     private final InspectionDao inspectionDao;
@@ -28,8 +29,16 @@ public class HealthRepository {
 
     private final DataUpdater updater;
 
-    public HealthRepository(final Context anyContext) {
+    HealthRepository(final Context anyContext) {
         HealthDatabase db = HealthDatabase.getInstance(anyContext);
+        restaurantDao = db.getRestaurantDao();
+        inspectionDao = db.getInspectionDao();
+        violationDao = db.getViolationDao();
+
+        updater = new DataUpdater(PreferenceManager.getDefaultSharedPreferences(anyContext));
+    }
+
+    HealthRepository(final HealthDatabase db, final Context anyContext) {
         restaurantDao = db.getRestaurantDao();
         inspectionDao = db.getInspectionDao();
         violationDao = db.getViolationDao();
@@ -41,15 +50,15 @@ public class HealthRepository {
     ////////////////////////////////////////////////////////////////
     // Database access methods
 
-    public LiveData<List<RestaurantDetails>> getAllRestaurantDetails() {
+    LiveData<List<RestaurantDetails>> getAllRestaurantDetails() {
         return restaurantDao.getAllRestaurantsDetails();
     }
 
-    public LiveData<List<InspectionDetails>> getAllInspectionDetails() {
+    LiveData<List<InspectionDetails>> getAllInspectionDetails() {
         return inspectionDao.getAllInspectionDetails();
     }
 
-    public LiveData<List<Violation>> getAllViolations() {
+    LiveData<List<Violation>> getAllViolations() {
         return violationDao.getAllViolations();
     }
 
@@ -57,15 +66,15 @@ public class HealthRepository {
     ////////////////////////////////////////////////////////////////
     // Data mapper methods
 
-    public LiveData<Map<String, RestaurantDetails>> getRestaurantDetailsMap() {
+    LiveData<Map<String, RestaurantDetails>> getRestaurantDetailsMap() {
         return HealthDataMapper.getRestaurantDetailsMap(getAllRestaurantDetails());
     }
 
-    public LiveData<Map<String, InspectionDetails>> getInspectionDetailsMap() {
+    LiveData<Map<String, InspectionDetails>> getInspectionDetailsMap() {
         return HealthDataMapper.getInspectionDetailsMap(getAllInspectionDetails());
     }
 
-    public LiveData<Map<Integer, Violation>> getViolationMap() {
+    LiveData<Map<Integer, Violation>> getViolationMap() {
         return HealthDataMapper.getViolationMap(getAllViolations());
     }
 
@@ -73,69 +82,50 @@ public class HealthRepository {
     ////////////////////////////////////////////////////////////////
     // Asynchronous data fetching task
 
-    public boolean isDataUpToDate() throws ExecutionException, InterruptedException {
+    boolean isDataUpToDate() throws ExecutionException, InterruptedException {
         return
-                updater.isCacheUpToDate(
+                updater.isCacheUpToDateElseUpdateCache(
                         RESTAURANT_REST_URL,
                         DataUpdater.RESTAURANT_DATA_IS_UP_TO_DATE_PREF_KEY,
                         DataUpdater.RESTAURANT_DATA_DOWNLOAD_URL_KEY)
-                || updater.isCacheUpToDate(
+                || updater.isCacheUpToDateElseUpdateCache(
                         INSPECTIONS_REST_URL,
                         DataUpdater.INSPECTION_DATA_IS_UP_TO_DATE_PREF_KEY,
                         DataUpdater.INSPECTION_DATA_DOWNLOAD_URL_KEY);
     }
 
-    public void updateData() throws ExecutionException, InterruptedException {
-        if(!isDataUpToDate()) {
-            return;
-        }
+    void updateData() throws ExecutionException, InterruptedException {
+        Map<String, Restaurant> restaurantsMap = parseRestaurantDownloadUrl(getRestaurantDataDownloadUrl());
+        Map<String, List<InspectionDetails>> inspectionDetailsMap = parseInspectionDownloadUrl(getInspectionDataDownloadUrl());
 
+        List<RestaurantDetails> restaurantDetailsList = inspectionDetailsMap.entrySet()
+                .parallelStream()
+                .map(entry -> new RestaurantDetails(restaurantsMap.get(entry.getKey()), entry.getValue()))
+                .collect(Collectors.toList());
+        restaurantDao.insertAllRestaurantDetails(restaurantDetailsList);
     }
 
-    public String getRestaurantDataDownloadUrl() {
+    boolean isRestaurantDataUpToDate() {
+        return updater.isRestaurantDataUpToDate();
+    }
+
+    boolean isInspectionDataDataUpToDate() {
+        return updater.isInspectionDataDataUpToDate();
+    }
+
+    String getRestaurantDataDownloadUrl() {
         return updater.getRestaurantDataDownloadUrl();
     }
 
-    private static class DataUpdater {
-        // key for boolean value
-        private static final String RESTAURANT_DATA_IS_UP_TO_DATE_PREF_KEY = "restaurantDataIsUpToDate";
-        private static final String INSPECTION_DATA_IS_UP_TO_DATE_PREF_KEY = "inspectionDataIsUpToDate";
-        // key for url as String
-        private static final String RESTAURANT_DATA_DOWNLOAD_URL_KEY = "restaurantDataDownloadUrl";
-        private static final String INSPECTION_DATA_DOWNLOAD_URL_KEY = "inspectionDataDownloadUrl";
-
-        private final SharedPreferences preferences;
-
-
-        public DataUpdater(SharedPreferences defaultSharedPreferences) {
-            preferences = defaultSharedPreferences;
-        }
-
-
-        private boolean isCacheUpToDate(String restUrl, String isUpToDatePrefKey, String downloadPrefKey)
-                throws ExecutionException, InterruptedException {
-            boolean isUpToDate = preferences.getBoolean(isUpToDatePrefKey, false);
-
-            // Update cached data download link and isUpToDate flag
-            if(!isUpToDate) {
-                HealthApiResponse apiResponse = new FetchDownloadUrlAsyncTask().execute(restUrl).get();
-                updateCachedPreferences(isUpToDatePrefKey, downloadPrefKey, apiResponse.dataDownloadUrl);
-            }
-
-            return isUpToDate;
-        }
-
-        private synchronized void updateCachedPreferences(String isUpToDateKey, String downloadKey, String downloadUrl) {
-            preferences.edit()
-                    .putBoolean(isUpToDateKey, false)
-                    .putString(downloadKey, downloadUrl)
-                    .apply();
-        }
-
-
-        private String getRestaurantDataDownloadUrl() {
-            return preferences.getString(RESTAURANT_DATA_DOWNLOAD_URL_KEY, "");
-        }
+    String getInspectionDataDownloadUrl() {
+        return updater.getInspectionDataDownloadUrl();
     }
 
+    Map<String, Restaurant> parseRestaurantDownloadUrl(String downloadUrl) throws ExecutionException, InterruptedException {
+        return updater.parseRestaurantDownloadUrl(downloadUrl);
+    }
+
+    Map<String, List<InspectionDetails>> parseInspectionDownloadUrl(String downloadUrl) throws ExecutionException, InterruptedException {
+        return updater.parseInspectionDownloadUrl(downloadUrl);
+    }
 }
