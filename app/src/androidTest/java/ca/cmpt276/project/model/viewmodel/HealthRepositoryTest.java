@@ -2,6 +2,7 @@ package ca.cmpt276.project.model.viewmodel;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.os.Looper;
 import android.util.Log;
 
 import androidx.lifecycle.MutableLiveData;
@@ -81,16 +82,11 @@ public class HealthRepositoryTest {
                 .createFromAsset("database/health.db")
                 .build();
         repo = new HealthRepository(db, mainActivity);
-        String url = repo.getRestaurantDataDownloadUrl();
 
         db.getRestaurantDao().getAllRestaurantsDetails().observe(mainActivity, restaurantDetailsList -> {
             Log.i("AAAAAAAAAAAAAAAAAAAAAAA", restaurantDetailsList.toString());
         });
 
-        try {
-            repo.updateData();
-        } catch (ExecutionException | InterruptedException e) {
-            e.printStackTrace();
-        }
+        repo.updateData();
     }
 }

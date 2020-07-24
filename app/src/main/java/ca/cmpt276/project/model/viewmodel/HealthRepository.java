@@ -1,6 +1,7 @@
 package ca.cmpt276.project.model.viewmodel;
 
 import android.content.Context;
+import android.os.AsyncTask;
 
 import androidx.lifecycle.LiveData;
 import androidx.preference.PreferenceManager;
@@ -94,31 +95,34 @@ class HealthRepository {
                         DataUpdater.INSPECTION_DATA_DOWNLOAD_URL_KEY);
     }
 
-    void updateData() throws ExecutionException, InterruptedException {
-        Map<String, Restaurant> restaurantsMap = parseRestaurantDownloadUrl(getRestaurantDataDownloadUrl());
-        Map<String, List<InspectionDetails>> inspectionDetailsMap = parseInspectionDownloadUrl(getInspectionDataDownloadUrl());
-
-        List<RestaurantDetails> restaurantDetailsList = inspectionDetailsMap.entrySet()
-                .parallelStream()
-                .map(entry -> new RestaurantDetails(restaurantsMap.get(entry.getKey()), entry.getValue()))
-                .collect(Collectors.toList());
-        restaurantDao.insertAllRestaurantDetails(restaurantDetailsList);
+    void updateData() {
+        try {
+            Map<String, Restaurant> restaurantMap = parseRestaurantDownloadUrl(getRestaurantDataDownloadUrl());
+            Map<String, List<InspectionDetails>> inspectionDetailsMap = parseInspectionDownloadUrl(getInspectionDataDownloadUrl());
+            new UpdateDataAsyncTask().execute(
+                    restaurantMap,
+                    inspectionDetailsMap,
+                    restaurantDao
+            );
+        } catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     boolean isRestaurantDataUpToDate() {
-        return updater.isRestaurantDataUpToDate();
+        return updater.isCachedRestaurantDataUpToDate();
     }
 
     boolean isInspectionDataDataUpToDate() {
-        return updater.isInspectionDataDataUpToDate();
+        return updater.isCachedInspectionDataDataUpToDate();
     }
 
     String getRestaurantDataDownloadUrl() {
-        return updater.getRestaurantDataDownloadUrl();
+        return updater.getCachedRestaurantDataDownloadUrl();
     }
 
     String getInspectionDataDownloadUrl() {
-        return updater.getInspectionDataDownloadUrl();
+        return updater.getCachedInspectionDataDownloadUrl();
     }
 
     Map<String, Restaurant> parseRestaurantDownloadUrl(String downloadUrl) throws ExecutionException, InterruptedException {

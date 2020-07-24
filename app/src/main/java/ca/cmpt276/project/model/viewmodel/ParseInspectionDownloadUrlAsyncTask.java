@@ -13,10 +13,6 @@ import ca.cmpt276.project.model.data.InspectionScanner;
 public class ParseInspectionDownloadUrlAsyncTask extends AsyncTask<String, String, Map<String, List<InspectionDetails>>> {
     @Override
     protected Map<String, List<InspectionDetails>> doInBackground(String ...params) {
-        if(android.os.Debug.isDebuggerConnected()) {
-            android.os.Debug.waitForDebugger();
-        }
-
         Map<String, List<InspectionDetails>> responseBody = null;
         try {
             URL downloadUrl = new URL(params[0]);

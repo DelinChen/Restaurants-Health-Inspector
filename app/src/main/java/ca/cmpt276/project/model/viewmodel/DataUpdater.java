@@ -33,7 +33,7 @@ class DataUpdater {
         // Update cached data download link and isUpToDate flag
         if(!isUpToDate) {
             HealthApiResponse apiResponse = new FetchDownloadUrlAsyncTask().execute(restUrl).get();
-            updateCachedPreferences(isUpToDatePrefKey, false, downloadPrefKey, apiResponse.dataDownloadUrl);
+            updateCachedPreferences(isUpToDatePrefKey, true, downloadPrefKey, apiResponse.dataDownloadUrl);
         }
 
         return isUpToDate;
@@ -47,7 +47,7 @@ class DataUpdater {
     }
 
 
-    boolean isRestaurantDataUpToDate() {
+    boolean isCachedRestaurantDataUpToDate() {
         return preferences.getBoolean(RESTAURANT_DATA_IS_UP_TO_DATE_PREF_KEY, false);
     }
     void setRestaurantDataIsUpToDate(boolean isDataUpToDate) {
@@ -56,7 +56,7 @@ class DataUpdater {
                 .apply();
     }
 
-    boolean isInspectionDataDataUpToDate() {
+    boolean isCachedInspectionDataDataUpToDate() {
         return preferences.getBoolean(INSPECTION_DATA_IS_UP_TO_DATE_PREF_KEY, false);
     }
     void setInspectionDataIsUpToDate(boolean isDataUpToDate) {
@@ -65,7 +65,7 @@ class DataUpdater {
                 .apply();
     }
 
-    String getRestaurantDataDownloadUrl() {
+    String getCachedRestaurantDataDownloadUrl() {
         return preferences.getString(RESTAURANT_DATA_DOWNLOAD_URL_KEY, "");
     }
     void setRestaurantDataDownloadUrl(String downloadUrl) {
@@ -74,7 +74,7 @@ class DataUpdater {
                 .apply();
     }
 
-    String getInspectionDataDownloadUrl() {
+    String getCachedInspectionDataDownloadUrl() {
         return preferences.getString(INSPECTION_DATA_DOWNLOAD_URL_KEY, "");
     }
     void setInspectionDataDownloadUrl(String downloadUrl) {

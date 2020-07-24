@@ -49,10 +49,6 @@ public class HealthViewModel extends ViewModel {
     }
 
     public void updateData() {
-        try {
-            repo.updateData();
-        } catch (ExecutionException | InterruptedException e) {
-            e.printStackTrace();
-        }
+        repo.updateData();
     }
 }
