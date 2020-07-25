@@ -6,7 +6,7 @@
 
     <item
         android:id="@+id/list"
-        android:title="list"
+        android:title="@string/List"
         app:showAsAction="always" />
 
 </menu>
