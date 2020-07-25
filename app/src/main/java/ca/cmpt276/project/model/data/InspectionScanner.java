@@ -3,13 +3,14 @@ package ca.cmpt276.project.model.data;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.time.Instant;
 import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static ca.cmpt276.project.model.data.InspectionScanner.InspectionCsvColumns.*;
 import static java.time.format.DateTimeFormatter.BASIC_ISO_DATE;
 
 public class InspectionScanner extends CsvScanner {
@@ -43,15 +44,15 @@ public class InspectionScanner extends CsvScanner {
     // TODO: DEPRECATED!
     public Inspection nextInspection() {
         String line = super.nextLine();
-        String[] buffer = cleanLineForParsing(line);
+        String[] buffer = splitCsvLine(line);
 
-        String trackingNumber           = buffer[TRACKING_NUMBER];
-        LocalDate date                  = LocalDate.parse(buffer[DATE], BASIC_ISO_DATE);
-        InspectionType type             = InspectionType.fromString(buffer[TYPE]);
-        int numCritViolations           = Integer.parseInt(buffer[NUM_CRITICAL]);
-        int numNonCritViolations        = Integer.parseInt(buffer[NUM_NONCRITICAL]);
-        HazardRating rating             = HazardRating.fromString(buffer[HAZARD_RATING]);
-        List<Violation> violations      = ViolationScanner.parseListFromLump(buffer[VIOLATIONS_LUMP]);
+        String trackingNumber           = buffer[Iter1Columns.TRACKING_NUMBER];
+        LocalDate date                  = LocalDate.parse(buffer[Iter1Columns.DATE], BASIC_ISO_DATE);
+        InspectionType type             = InspectionType.fromString(buffer[Iter1Columns.TYPE]);
+        int numCritViolations           = Integer.parseInt(buffer[Iter1Columns.NUM_CRITICAL]);
+        int numNonCritViolations        = Integer.parseInt(buffer[Iter1Columns.NUM_NONCRITICAL]);
+        HazardRating rating             = HazardRating.fromString(buffer[Iter1Columns.HAZARD_RATING]);
+        List<Violation> violations      = ViolationScanner.parseListFromLump(buffer[Iter1Columns.VIOLATIONS_LUMP]);
 
         Inspection nextResult = new Inspection(
                 trackingNumber, date, type, numCritViolations, numNonCritViolations, rating);
@@ -60,29 +61,33 @@ public class InspectionScanner extends CsvScanner {
 
     public InspectionDetails nextInspectionDetails() {
         String line = super.nextLine();
-        String[] buffer = cleanLineForParsing(line);
+        if(line.equals(",,,,,,")) {
+            return null;
+        }
+        String[] buffer = splitCsvLine(line);
+        if(buffer.length != 7) {
+            return null;
+        }
 
-        String trackingNumber           = buffer[TRACKING_NUMBER];
-        LocalDate date                  = LocalDate.parse(buffer[DATE], BASIC_ISO_DATE);
-        InspectionType type             = InspectionType.fromString(buffer[TYPE]);
-        int numCritViolations           = Integer.parseInt(buffer[NUM_CRITICAL]);
-        int numNonCritViolations        = Integer.parseInt(buffer[NUM_NONCRITICAL]);
-        HazardRating rating             = HazardRating.fromString(buffer[HAZARD_RATING]);
+        String trackingNumber           = buffer[Iter2Columns.TRACKING_NUMBER];
+        LocalDate date                  = LocalDate.parse(buffer[Iter2Columns.DATE], BASIC_ISO_DATE);
+        InspectionType type             = InspectionType.fromString(buffer[Iter2Columns.TYPE]);
+        int numCritViolations           = Integer.parseInt(buffer[Iter2Columns.NUM_CRITICAL]);
+        int numNonCritViolations        = Integer.parseInt(buffer[Iter2Columns.NUM_NONCRITICAL]);
+        HazardRating rating             = HazardRating.fromString(buffer[Iter2Columns.HAZARD_RATING]);
 
-        List<Violation> violations      = ViolationScanner.parseListFromLump(buffer[VIOLATIONS_LUMP]);
+        List<Violation> violations      = ViolationScanner.parseListFromLump(buffer[Iter2Columns.VIOLATIONS_LUMP]);
         Inspection inspection
                 = new Inspection(trackingNumber, date, type, numCritViolations, numNonCritViolations, rating);
 
         InspectionDetails nextResult = new InspectionDetails(inspection, violations);
         return nextResult;
     }
-    private String[] cleanLineForParsing(String line) {
-        line = line.replace("\"", "");
+
+    @Override
+    protected String[] splitCsvLine(String line) {
         line = line.replace(",Not Repeat", "");
-        String[] buffer = line.split(",", VIOLATIONS_LUMP + 1);
-        for(int i = 0; i < buffer.length; i++) {
-            buffer[i] = buffer[i].trim();
-        }
+        String[] buffer = super.splitCsvLine(line);
         return buffer;
     }
 
@@ -106,24 +111,37 @@ public class InspectionScanner extends CsvScanner {
         return inspectionsMap;
     }
 
-    public List<InspectionDetails> scanAllInspectionDetails() {
-        List<InspectionDetails> inspectionDetailsList = new ArrayList<>();
+    public Map<String, List<InspectionDetails>> scanAllInspectionDetails() {
+        Map<String, List<InspectionDetails>> inspectionDetailsMap = new HashMap<>();
         while(hasNextLine()) {
             InspectionDetails nextResult = nextInspectionDetails();
-            inspectionDetailsList.add(nextResult);
+            if(nextResult == null) {
+                continue;
+            }
+
+            if(inspectionDetailsMap.containsKey(nextResult.inspection.trackingNumber)) {
+                List<InspectionDetails> inspectionDetailsList = inspectionDetailsMap.get(nextResult.inspection.trackingNumber);
+                assert(inspectionDetailsList != null);
+                inspectionDetailsList.add(nextResult);
+            }
+            else {
+                List<InspectionDetails> inspectionDetailsList = new ArrayList<>();
+                inspectionDetailsList.add(nextResult);
+                inspectionDetailsMap.put(nextResult.inspection.trackingNumber, inspectionDetailsList);
+            }
         }
         close();
-        return inspectionDetailsList;
+        return inspectionDetailsMap;
     }
 
 
     ///////////////////////////////////////////////////////////////////////////////////
     // For clarity when parsing the csv data
 
-    static final class InspectionCsvColumns {
-        private InspectionCsvColumns() throws InstantiationException {
+    static final class Iter1Columns {
+        private Iter1Columns() throws InstantiationException {
             // should never be instantiated
-            throw new InstantiationException(getClass().getName() + "is not instantiable");
+            throw new InstantiationException(getClass().getName() + " is not instantiable");
         }
         static final int TRACKING_NUMBER = 0;
         static final int DATE = 1;
@@ -132,5 +150,19 @@ public class InspectionScanner extends CsvScanner {
         static final int NUM_NONCRITICAL = 4;
         static final int HAZARD_RATING = 5;
         static final int VIOLATIONS_LUMP = 6;
+    }
+
+    static final class Iter2Columns {
+        private Iter2Columns() throws InstantiationException {
+            throw new InstantiationException(getClass().getName() + " is not instantiable");
+        }
+
+        static final int TRACKING_NUMBER = 0;
+        static final int DATE = 1;
+        static final int TYPE = 2;
+        static final int NUM_CRITICAL = 3;
+        static final int NUM_NONCRITICAL = 4;
+        static final int VIOLATIONS_LUMP = 5;
+        static final int HAZARD_RATING = 6;
     }
 }

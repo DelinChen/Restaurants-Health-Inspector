@@ -1,11 +1,11 @@
 package ca.cmpt276.project.model.data;
 
 import android.content.Context;
+import android.util.Log;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -48,10 +48,10 @@ public class RestaurantScanner extends CsvScanner {
 
     public Restaurant nextRestaurant() {
         String line = super.nextLine();
-        line = line.replace("\"", "");
-        String[] buffer = Arrays.stream(line.split(","))
-                .map(String::trim)
-                .toArray(String[]::new);
+        String[] buffer = splitCsvLine(line);
+        if(buffer.length != 7) {
+            return null;
+        }
 
         String trackingNumber = buffer[TRACKING_NUMBER];
         String name         = buffer[NAME];
@@ -73,14 +73,6 @@ public class RestaurantScanner extends CsvScanner {
         return allRestaurants;
     }
 
-    public List<Restaurant> scanAllRestaurantsAsList() {
-        List<Restaurant> allRestaurants = new ArrayList<>();
-        while(hasNextLine()) {
-            Restaurant nextResult = nextRestaurant();
-            allRestaurants.add(nextResult);
-        }
-        return allRestaurants;
-    }
 
     ///////////////////////////////////////////////////////////////////////////////////
     // For clarity when parsing the csv data
