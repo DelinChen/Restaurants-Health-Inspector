@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
@@ -15,6 +16,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import java.util.List;
+import java.util.Locale;
 
 import ca.cmpt276.project.R;
 
@@ -31,6 +33,7 @@ public class MainActivity extends AppCompatActivity implements RestListAdapter.R
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         ViewModelProvider.Factory factory = new HealthViewModelFactory(this);
         model = new ViewModelProvider(this, factory).get(HealthViewModel.class);
 

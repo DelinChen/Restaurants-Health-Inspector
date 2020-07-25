@@ -116,7 +116,7 @@ public class InspectionActivity extends AppCompatActivity {
             TextView txt = itemView.findViewById(R.id.txtCategory);
             if (currentViolation.category.toString().equals("Food")){
                 imageView.setImageResource(R.drawable.violation_food);
-                txt.setText("Food");
+                txt.setText("");
             }
             else if (currentViolation.category.toString().equals("Pest")){
                 imageView.setImageResource(R.drawable.violation_pest);

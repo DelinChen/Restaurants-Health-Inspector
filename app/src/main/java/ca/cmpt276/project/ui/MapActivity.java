@@ -6,9 +6,11 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.media.VolumeShaper;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -40,6 +42,7 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 import ca.cmpt276.project.ApplicationClass;
 import ca.cmpt276.project.R;
@@ -76,7 +79,24 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_map);
+
+
+        //if the Language is not readable, set it to English
+        String deviceLanguage = Locale.getDefault().getLanguage();
+        Toast.makeText(this,deviceLanguage,Toast.LENGTH_LONG).show();
+        if( deviceLanguage == "en" | deviceLanguage == "fr" | deviceLanguage == "es" ){
+            setContentView(R.layout.activity_map);
+        }
+        else{
+            Locale locale = new Locale("en");
+            Locale.setDefault(locale);
+            Configuration config = new Configuration();
+//            config.locale = locale;
+            config.setLocale(locale);
+            getBaseContext().getResources().updateConfiguration(config, getBaseContext()
+                    .getResources().getDisplayMetrics());
+            this.setContentView(R.layout.activity_map);
+        }
 
         //manager = RestaurantManager.getInstance(getApplicationContext());
         ViewModelProvider.Factory factory = new HealthViewModelFactory(this);
