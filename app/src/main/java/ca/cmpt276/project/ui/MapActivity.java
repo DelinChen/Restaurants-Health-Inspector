@@ -83,11 +83,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
         //if the Language is not readable, set it to English
         String deviceLanguage = Locale.getDefault().getLanguage();
-        Toast.makeText(this,deviceLanguage,Toast.LENGTH_LONG).show();
-        if( deviceLanguage == "en" | deviceLanguage == "fr" | deviceLanguage == "es" ){
-            setContentView(R.layout.activity_map);
-        }
-        else{
+//        Toast.makeText(this,deviceLanguage,Toast.LENGTH_LONG).show();
+        if (deviceLanguage != "en" && deviceLanguage != "fr" && deviceLanguage != "es") {
             Locale locale = new Locale("en");
             Locale.setDefault(locale);
             Configuration config = new Configuration();
@@ -95,8 +92,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             config.setLocale(locale);
             getBaseContext().getResources().updateConfiguration(config, getBaseContext()
                     .getResources().getDisplayMetrics());
-            this.setContentView(R.layout.activity_map);
         }
+        setContentView(R.layout.activity_map);
 
         //manager = RestaurantManager.getInstance(getApplicationContext());
         ViewModelProvider.Factory factory = new HealthViewModelFactory(this);
