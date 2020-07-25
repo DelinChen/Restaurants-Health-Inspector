@@ -23,4 +23,5 @@ public class ParseRestaurantDownloadUrlAsyncTask extends AsyncTask<String, Strin
         }
         return responseBody;
     }
+
 }

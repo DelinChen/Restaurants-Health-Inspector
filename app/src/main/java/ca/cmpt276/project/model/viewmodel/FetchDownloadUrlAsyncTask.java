@@ -36,9 +36,4 @@ public class FetchDownloadUrlAsyncTask extends AsyncTask<String, String, HealthA
 
         return new HealthApiResponse(dataDownloadUrl, dataLastModified);
     }
-
-    @Override
-    protected void onPostExecute(HealthApiResponse response){
-        super.onPostExecute(response);
-    }
 }
