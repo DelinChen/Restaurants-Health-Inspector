@@ -99,6 +99,15 @@
                 app:layout_constraintEnd_toEndOf="@+id/hazard_icon"
                 app:layout_constraintStart_toStartOf="@+id/hazard_icon"
                 app:layout_constraintTop_toBottomOf="@+id/hazard_icon" />
+
+            <Button
+                android:id="@+id/button"
+                android:layout_width="27dp"
+                android:layout_height="27dp"
+                android:background="@drawable/ic_baseline_favorite_red_24"
+                tools:layout_editor_absoluteX="74dp"
+                tools:layout_editor_absoluteY="63dp" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
 

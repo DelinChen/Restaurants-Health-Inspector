@@ -1,12 +1,15 @@
 package ca.cmpt276.project.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Notification;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.AsyncTask;
@@ -24,21 +27,29 @@ import ca.cmpt276.project.model.data.RestaurantDetails;
 import ca.cmpt276.project.model.viewmodel.HealthViewModel;
 import ca.cmpt276.project.model.viewmodel.HealthViewModelFactory;
 
+import static ca.cmpt276.project.ApplicationClass.CHANNEL_1_ID;
+import static ca.cmpt276.project.ApplicationClass.CHANNEL_2_ID;
+
 
 public class MainActivity extends AppCompatActivity implements RestListAdapter.RestListClickListener {
     RecyclerView restList;
     HealthViewModel model;
+    NotificationManagerCompat notificationManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        notificationManager = NotificationManagerCompat.from(this);
+
         ViewModelProvider.Factory factory = new HealthViewModelFactory(this);
         model = new ViewModelProvider(this, factory).get(HealthViewModel.class);
 
         model.restaurantDetailsData.observe(this, restaurantDetailsList -> {
             updateUI(restaurantDetailsList);
+            //The method sends Notification to user, need to change to favourite later
+            sendOnChannel1(restList);
         });
     }
 
@@ -93,4 +104,27 @@ public class MainActivity extends AppCompatActivity implements RestListAdapter.R
 
         return super.onOptionsItemSelected(item);
     }
+
+    //Send Notificaion Methods
+    public void sendOnChannel1(View view){
+        Notification notification = new NotificationCompat.Builder(this, CHANNEL_1_ID)
+                .setSmallIcon(R.drawable.ic_baseline_error_24)
+                .setContentTitle("Notification works") //The content to added into
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setCategory(NotificationCompat.CATEGORY_MESSAGE)
+                .build();
+
+        notificationManager.notify(1, notification);
+    }
+//
+//    public void sendOnChannel2(View view){
+//        Notification notification = new NotificationCompat.Builder(this, CHANNEL_2_ID)
+//                .setSmallIcon(R.drawable.ic_baseline_error_24)
+//                .setContentTitle("@string/Favourite")
+//                .setPriority(NotificationCompat.PRIORITY_LOW)
+//                .setCategory(NotificationCompat.CATEGORY_MESSAGE)
+//                .build();
+//
+//        notificationManager.notify(2, notification);
+//    }
 }
