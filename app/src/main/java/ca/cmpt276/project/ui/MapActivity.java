@@ -354,12 +354,10 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         protected void onPostExecute(Void voids) {
             super.onPostExecute(voids);
             UpdateDialog.dismiss();
-            //geoLocate();
             SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putLong(LAST_UPDATE, Calendar.getInstance().getTimeInMillis());
             editor.apply();
-            //Toast.makeText(MapActivity.this, "Sum after ASYNCTASK = " + sum, Toast.LENGTH_LONG).show();
         }
 
         @Override
