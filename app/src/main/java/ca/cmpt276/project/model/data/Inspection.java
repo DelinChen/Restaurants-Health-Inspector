@@ -127,7 +127,6 @@ public class Inspection implements Comparable<Inspection> {
         ConstructorArguments.requireNonNegativeIntArgs(intArgNames, intArgValues, Inspection.class);
 
         requireInspectionTypeNotNullType(type);
-        requireHazardRatingNotNullRating(hazardRating);
     }
 
     private static void requireInspectionTypeNotNullType(InspectionType type) {

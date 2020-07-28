@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Restaurante inspector de salud</string>
+    <string name="number_of_issues_text">Número de Cuestiones</string>
+    <string name="latest_inspection_text">Última inspección:</string>
+    <string name="title_activity_test">TestActivity</string>
+    <!--
+    This string is used for square devices and overridden by hello_world in
+    values-round/strings.xml for round devices.
+    -->
+    <string name="hello_world">Hello World Square!</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+
+    <string name="hello_first_fragment" >Hello first fragment</string>
+    <string name="hello_second_fragment" > translatable="false"">Hello second fragment. Arg: %1$s</string>
+    <string name="title_activity_map" >Restaurante inspector de salud</string>
+    <string name="update_available_text" >Actualización disponible</string>
+    <string name="update_now_text" >Quieres actualizar ahora?</string>
+    <string name="yes_text" >si</string>
+    <string name="no_text" >No</string>
+    <string name="please_wait_text" >Por favor espera...</string>
+    <string name="cancel_txt" >Cancelar</string>
+
+    <!-- Strings used for Internationalize UI -->
+    <!-- attribute title-->
+    <string name="Tracking_number" >El número de rastreo</string>
+    <string name="Inspection_date" >Fecha de inspección</string>
+    <string name="Inspection_type" >tipo inspección</string>
+    <string name="Violations" >Violaciónes</string>
+    <string name="ViolLump" >Viol Lump</string>
+    <string name="Not_Repeat" >no Repetir</string>
+    <string name="Routine" >Rutina</string>
+    <!-- maybe duplicated-->
+    <string name="NumCritical" >NumCritical</string>
+    <!-- maybe duplicated-->
+    <string name="NumNonCritical" >NumNonCritical</string>
+    <string name="HazardRating" >Hazard Rating</string>
+    <string name="Restaurant_Name" >Nombre del restaurante</string>
+    <string name="Physical_Address" >Dirección física</string>
+    <string name="LATITUDE" >LATITUD</string>
+    <string name="LONGITUDE" >LONGITUD</string>
+
+
+    <!-- HazardRating-->
+    <string name="Low" >Bajo</string>
+    <string name="Moderate" >Moderar</string>
+    <string name="High" >Alto</string>
+    <string name="No_Rating" >Sin evaluar</string>
+    <string name="Non_critical" >No crítico</string>
+    <string name="Critical" >Crítico</string>
+
+
+    <!-- ToolBar for List and Map Activities-->
+    <string name="List" >Lista</string>
+    <string name="Map" >Mapa</string>
+
+
+    <!-- For Update-->
+    <string name="Update" >Actualizar</string>
+    <string name="Cancel" >Cancelar</string>
+    <string name="Accept" >Aceptar</string>
+
+
+    <!-- For ViolationCatergory-->
+    <string name="LOGISTICS" >Logística</string>
+    <string name="FOOD">Comida</string>
+    <string name="EQUIPMENT">Equipo</string>
+    <string name="PEST">Parásito</string>
+    <string name="HYGIENE">Higiene</string>
+    <string name="TRAINING">Formación</string>
+
+
+    <!-- For Favourite and search in iter3-->
+    <string name="Favourite">Favorito</string>
+    <string name="Search">Buscar</string>
+
+
+
+</resources>
