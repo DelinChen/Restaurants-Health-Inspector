@@ -101,7 +101,9 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             return;
         }
         //function to check if there is new data
-
+        if(model.isDataUpToDate()) {
+            return;
+        }
         SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
         long lastUpdate = sharedPreferences.getLong(LAST_UPDATE, DEFAULT_DATE);
         long currDateLong = Calendar.getInstance().getTimeInMillis();
@@ -327,7 +329,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         return super.onOptionsItemSelected(item);
     }
 
-    class UpdateTask extends AsyncTask<Void, Integer, Integer> {
+    class UpdateTask extends AsyncTask<Void, Void, Void> {
         AlertDialog UpdateDialog;
         @Override
         protected void onPreExecute() {
@@ -349,33 +351,21 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         }
 
         @Override
-        protected void onPostExecute(Integer add) {
-            super.onPostExecute(sum);
-            sum = add;
+        protected void onPostExecute(Void voids) {
+            super.onPostExecute(voids);
             UpdateDialog.dismiss();
             //geoLocate();
             SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putLong(LAST_UPDATE, Calendar.getInstance().getTimeInMillis());
             editor.apply();
-            Toast.makeText(MapActivity.this, "Sum after ASYNCTASK = " + sum, Toast.LENGTH_LONG).show();
+            //Toast.makeText(MapActivity.this, "Sum after ASYNCTASK = " + sum, Toast.LENGTH_LONG).show();
         }
 
         @Override
-        protected Integer doInBackground(Void... voids) {
-            int add = 0;
-            for(int i = 0; i < 1000; i++) {
-                add++;
-            }
-            try {
-                Thread.sleep(5000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            for(int i = 0; i < 1000; i++) {
-                add++;
-            }
-            return add;
+        protected Void doInBackground(Void... voids) {
+            model.updateData();
+            return null;
         }
     }
 }
