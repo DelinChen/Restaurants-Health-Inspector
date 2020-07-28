@@ -76,6 +76,8 @@
         android:id="@+id/btnFav"
         android:layout_width="41dp"
         android:layout_height="37dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
         android:background="@drawable/ic_baseline_favorite_24"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
