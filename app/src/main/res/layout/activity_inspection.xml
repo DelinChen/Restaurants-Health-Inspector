@@ -21,9 +21,9 @@
         android:id="@+id/txtEmpty"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="No Violations"
-        android:visibility="gone"
+        android:text="@string/no_violation_text"
         android:textSize="30sp"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -57,13 +57,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="critical:" />
+            android:text="@string/critical_text" />
 
         <TextView
             android:id="@+id/txtNonCritical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Non critical:" />
+            android:text="@string/non_critical_text" />
     </LinearLayout>
 
     <ListView

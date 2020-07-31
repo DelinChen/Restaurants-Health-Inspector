@@ -43,6 +43,7 @@ import java.util.List;
 
 import ca.cmpt276.project.ApplicationClass;
 import ca.cmpt276.project.R;
+import ca.cmpt276.project.model.data.HazardRating;
 import ca.cmpt276.project.model.data.RestaurantDetails;
 import ca.cmpt276.project.model.viewmodel.HealthViewModel;
 import ca.cmpt276.project.model.viewmodel.HealthViewModelFactory;
@@ -159,9 +160,25 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         if (list.size() > 0) {
             for (RestaurantDetails res : list) {
                 if (!res.inspectionDetailsList.isEmpty()) {
-                    offsetItem= new Cluster(res.restaurant.latitude, res.restaurant.longitude, res.restaurant.name, res.restaurant.address, res.inspectionDetailsList.get(0).inspection.hazardRating.toString());
+                    String rate_str;
+                    HazardRating rate = res.inspectionDetailsList.get(0).inspection.hazardRating;
+                    if(rate == HazardRating.LOW) {
+                        rate_str = getString(R.string.low_text);
+                    }
+                    else if(rate == HazardRating.MODERATE) {
+                        rate_str = getString(R.string.moderate_text);
+                    }
+                    else if(rate == HazardRating.HIGH) {
+                        rate_str = getString(R.string.high_text);
+                    }
+                    else {
+                        rate_str = getString(R.string.none_text);
+                    }
+                    offsetItem= new Cluster(res.restaurant.latitude, res.restaurant.longitude, res.restaurant.name, res.restaurant.address, rate);
+                    offsetItem.setSnippet(offsetItem.getAddress() + ", " + getString(R.string.hazard_text) + ": " + rate_str);
                 } else {
-                    offsetItem = new Cluster(res.restaurant.latitude, res.restaurant.longitude, res.restaurant.name, res.restaurant.address, "null");
+                    offsetItem = new Cluster(res.restaurant.latitude, res.restaurant.longitude, res.restaurant.name, res.restaurant.address, HazardRating.NULL_RATING);
+                    offsetItem.setSnippet(offsetItem.getAddress() + ", " + getString(R.string.hazard_text) + ": " + getString(R.string.none_text));
                 }
                 //mRenderer = new DefaultClusterRenderer(MapActivity.this, mMap, mClusterManager);
                 //mClusterManager.setRenderer(mRenderer);

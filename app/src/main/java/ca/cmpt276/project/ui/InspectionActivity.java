@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Intent;
+import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -114,33 +115,13 @@ public class InspectionActivity extends AppCompatActivity {
             // set the violation category image
             ImageView imageView = itemView.findViewById(R.id.imgCategory);
             TextView txt = itemView.findViewById(R.id.txtCategory);
-            if (currentViolation.category.toString().equals("Food")){
-                imageView.setImageResource(R.drawable.violation_food);
-                txt.setText("Food");
-            }
-            else if (currentViolation.category.toString().equals("Pest")){
-                imageView.setImageResource(R.drawable.violation_pest);
-                txt.setText("Pest");
-            }
-
-            else if (currentViolation.category.toString().equals("Equipment")){
-                imageView.setImageResource(R.drawable.violation_equipment);
-                txt.setText("Equipment");
-            }
-
-            else if (currentViolation.category.toString().equals("Hygiene")){
-                imageView.setImageResource(R.drawable.violation_hygiene);
-                txt.setText("Hygiene");
-            }
-
-            else if (currentViolation.category.toString().equals("Training")){
-                imageView.setImageResource(R.drawable.violation_training);
-                txt.setText("Training");
-            }
-
-            else if (currentViolation.category.toString().equals("Logistics")){
-                imageView.setImageResource(R.drawable.violation_logistics);
-                txt.setText("Logistics");
+            String[] categories_text = getResources().getStringArray(R.array.violation_category);
+            TypedArray categories_drawable = getResources().obtainTypedArray(R.array.violation_category_drawable);
+            for(int i = 0; i < categories_text.length; i++) {
+                if(currentViolation.category.toString().equals(categories_text[i])) {
+                    imageView.setImageResource(categories_drawable.getResourceId(i, -1));
+                    txt.setText(categories_text[i]);
+                }
             }
 
             String description = currentViolation.description;
@@ -153,12 +134,12 @@ public class InspectionActivity extends AppCompatActivity {
             TextView txtCritical = itemView.findViewById(R.id.txtCriticalExtent);
             if(critical){
                 imgCategory.setImageResource(R.drawable.icon_critical);
-                txtCritical.setText("Critical");
+                txtCritical.setText(R.string.critical_text);
                 txtCritical.setTextColor(Color.RED);
             }
             else{
                 imgCategory.setImageResource(R.drawable.icon_noncritical);
-                txtCritical.setText("Non-critical");
+                txtCritical.setText(R.string.non_critical_text);
                 txtCritical.setTextColor(Color.rgb(255,165,0));
             }
 
@@ -199,7 +180,9 @@ public class InspectionActivity extends AppCompatActivity {
 
         txtType.setText(inspectionType);
         txtDate.setText(formatDate.format(date));
-        txtCritical.setText("Critical: " + critical);
-        txtNonCritical.setText("Non-critical: " + nonCritical);
+        String critical_text = getString(R.string.critical_text);
+        String non_critical_text = getString(R.string.non_critical_text);
+        txtCritical.setText(critical_text + ":" + critical);
+        txtNonCritical.setText(non_critical_text + ":" + nonCritical);
     }
 }

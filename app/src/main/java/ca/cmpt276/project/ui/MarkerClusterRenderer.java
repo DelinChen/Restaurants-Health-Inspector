@@ -19,6 +19,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import ca.cmpt276.project.R;
+import ca.cmpt276.project.model.data.HazardRating;
 
 public class MarkerClusterRenderer extends DefaultClusterRenderer<Cluster>{   // 1
     public Map <Cluster, Marker> clusterMarkerMap = new HashMap<>();
@@ -41,14 +42,14 @@ public class MarkerClusterRenderer extends DefaultClusterRenderer<Cluster>{   //
 
     @Override
     protected void onBeforeClusterItemRendered(Cluster item, MarkerOptions markerOptions) { // 5
-        if(!item.getHazard().isEmpty()){
-            if(item.getHazard() == "Low") {
+        if(!item.getHazard().toString().isEmpty()){
+            if(item.getHazard() == HazardRating.LOW) {
                 markerImageView.setImageResource(R.drawable.hazard_low);  // 6
-            } else if (item.getHazard() == "Moderate") {
+            } else if (item.getHazard() == HazardRating.MODERATE) {
                 markerImageView.setImageResource(R.drawable.hazard_medium);
-            } else if (item.getHazard() == "High") {
+            } else if (item.getHazard() == HazardRating.HIGH) {
                 markerImageView.setImageResource(R.drawable.hazard_high);
-            } else if (item.getHazard() == "null") {
+            } else if (item.getHazard() == HazardRating.NULL_RATING) {
                 markerImageView.setImageResource(R.drawable.restaurant);
             }
         } else {

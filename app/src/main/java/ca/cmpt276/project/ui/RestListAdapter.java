@@ -1,6 +1,7 @@
 package ca.cmpt276.project.ui;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.Placeholder;
 import androidx.lifecycle.LiveData;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -108,7 +110,8 @@ public class RestListAdapter extends RecyclerView.Adapter<RestListAdapter.RestLi
             holder.numIssues.setText("" + numIssues);
 
             if(days < 31) {
-                holder.date.setText("" + days + " days ago");
+                String days_ago_text = context.getResources().getString(R.string.days_ago_text);
+                holder.date.setText("" + days + days_ago_text);
             }
             else if (days<365){
                 holder.date.setText(withinOneYearFormat.format(inspectDate));
@@ -119,17 +122,17 @@ public class RestListAdapter extends RecyclerView.Adapter<RestListAdapter.RestLi
 
             if(hazardLevel == HazardRating.LOW) {
                 holder.hazardIcon.setImageResource(R.drawable.hazard_low);
-                holder.level.setText("Low");
+                holder.level.setText(R.string.low_text);
                 holder.level.setTextColor(Color.rgb(204,204,0));
             }
             else if(hazardLevel == HazardRating.MODERATE) {
                 holder.hazardIcon.setImageResource(R.drawable.hazard_medium);
-                holder.level.setText("Moderate");
+                holder.level.setText(R.string.moderate_text);
                 holder.level.setTextColor(Color.rgb(255,165,0));
             }
             else if (hazardLevel == HazardRating.HIGH){
                 holder.hazardIcon.setImageResource(R.drawable.hazard_high);
-                holder.level.setText("High");
+                holder.level.setText(R.string.high_text);
                 holder.level.setTextColor(Color.RED);
             }
             else{
@@ -138,7 +141,7 @@ public class RestListAdapter extends RecyclerView.Adapter<RestListAdapter.RestLi
         }
         else {
             numIssues = 0;
-            holder.date.setText("No inspections");
+            holder.date.setText(R.string.no_inspection_text);
             holder.numIssues.setText("" + numIssues);
             holder.hazardIcon.setImageResource(0);
         }
@@ -147,7 +150,6 @@ public class RestListAdapter extends RecyclerView.Adapter<RestListAdapter.RestLi
 
     @Override
     public int getItemCount() {
-        //return manager.restaurants().size();
         return list.size();
     }
 

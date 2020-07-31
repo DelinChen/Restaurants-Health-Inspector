@@ -1,26 +1,40 @@
 <resources>
     <string name="app_name">Restaurant Health Inspector</string>
+    <string name="title_activity_map">Restaurant Health Inspector</string>
     <string name="number_of_issues_text">Number of Issues: </string>
     <string name="latest_inspection_text">Latest Inspection: </string>
-    <string name="title_activity_test">TestActivity</string>
-    <!--
-    This string is used for square devices and overridden by hello_world in
-    values-round/strings.xml for round devices.
-    -->
-    <string name="hello_world">Hello Square World!</string>
-    <!-- Strings used for fragments for navigation -->
-    <string name="first_fragment_label">First Fragment</string>
-    <string name="second_fragment_label">Second Fragment</string>
-    <string name="next">Next</string>
-    <string name="previous">Previous</string>
-
-    <string name="hello_first_fragment">Hello first fragment</string>
-    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
-    <string name="title_activity_map">Restaurant Health Inspector</string>
     <string name="update_available_text">Update Available</string>
     <string name="update_now_text">Do you want to update now?</string>
     <string name="yes_text">Yes</string>
     <string name="no_text">No</string>
     <string name="please_wait_text">Please Wait...</string>
     <string name="cancel_txt">Cancel</string>
+    <string name="no_inspection_text">No Inspections</string>
+    <string name="no_violation_text">No Violations</string>
+    <string name="days_ago_text"> days ago</string>
+    <string name="low_text">Low</string>
+    <string name="moderate_text">Moderate</string>
+    <string name="high_text">High</string>
+    <string name="critical_text">Critical</string>
+    <string name="non_critical_text">Non-Critical</string>
+    <string-array name="violation_category">
+        <item>Food</item>
+        <item>Pest</item>
+        <item>Equipment</item>
+        <item>Hygiene</item>
+        <item>Training</item>
+        <item>Logistics</item>
+    </string-array>
+    <integer-array name="violation_category_drawable">
+        <item>@drawable/violation_food</item>
+        <item>@drawable/violation_pest</item>
+        <item>@drawable/violation_equipment</item>
+        <item>@drawable/violation_hygiene</item>
+        <item>@drawable/violation_training</item>
+        <item>@drawable/violation_logistics</item>
+    </integer-array>
+    <string name="map_text">map</string>
+    <string name="list_text">list</string>
+    <string name="hazard_text">Hazard</string>
+    <string name="none_text">Nne</string>
 </resources>

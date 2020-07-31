@@ -173,10 +173,12 @@ public class RestaurantActivity extends AppCompatActivity {
 
             }
             TextView txtCritical = itemView.findViewById(R.id.txtCritical);
-            txtCritical.setText("Critical: " + currentInspection.numCritViolations);
+            String critical_text = getString(R.string.critical_text);
+            txtCritical.setText(critical_text + ": " + currentInspection.numCritViolations);
 
             TextView txtNonCritical = itemView.findViewById(R.id.txtNonCritical);
-            txtNonCritical.setText("Non critical: " + currentInspection.numNonCritViolations);
+            String non_critical_text = getString(R.string.non_critical_text);
+            txtNonCritical.setText(non_critical_text + ": " + currentInspection.numNonCritViolations);
 
             Date currDate = Calendar.getInstance().getTime();
             Date inspectDate = Date.from(currentInspection.date.atStartOfDay(ZoneId.systemDefault()).toInstant());
@@ -191,7 +193,8 @@ public class RestaurantActivity extends AppCompatActivity {
 
             TextView txtDate = itemView.findViewById(R.id.txtDate);
             if(days < 31) {
-                txtDate.setText("" + days + " days ago");
+                String days_ago_text = getString(R.string.days_ago_text);
+                txtDate.setText("" + days + days_ago_text);
             }
             else if (days<365){
                 txtDate.setText(withinOneYearFormat.format(inspectDate));
