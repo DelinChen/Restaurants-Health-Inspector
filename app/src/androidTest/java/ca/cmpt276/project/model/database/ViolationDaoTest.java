@@ -64,6 +64,7 @@ public class ViolationDaoTest {
 
     @Test
     public void insertAllViolations_successTest() {
+/*
         LiveData<List<Violation>> data = violationDao.getAllViolations();
         data.observeForever(printAll);
 
@@ -78,6 +79,7 @@ public class ViolationDaoTest {
                 .collect(Collectors.toList());
 
         violationDao.insertAll(violations);
+*/
     }
 
     @Test
