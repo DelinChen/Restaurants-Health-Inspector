@@ -17,6 +17,14 @@
     <string name="high_text">High</string>
     <string name="critical_text">Critical</string>
     <string name="non_critical_text">Non-Critical</string>
+    <string-array name="violation_category_universal">
+        <item>Food</item>
+        <item>Pest</item>
+        <item>Equipment</item>
+        <item>Hygiene</item>
+        <item>Training</item>
+        <item>Logistics</item>
+    </string-array>
     <string-array name="violation_category">
         <item>Food</item>
         <item>Pest</item>
