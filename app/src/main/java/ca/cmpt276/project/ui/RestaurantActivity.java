@@ -197,7 +197,7 @@ public class RestaurantActivity extends AppCompatActivity {
                 txtDate.setText("" + days + days_ago_text);
             }
             else if (days<365){
-                txtDate.setText(withinOneYearFormat.format(inspectDate));
+                txtDate.setText(MainActivity.internationalizeDate(RestaurantActivity.this, withinOneYearFormat.format(inspectDate)));
             }
             else {
                 txtDate.setText(oneYearBeforeFormat.format(inspectDate));

@@ -114,10 +114,11 @@ public class RestListAdapter extends RecyclerView.Adapter<RestListAdapter.RestLi
                 holder.date.setText("" + days + days_ago_text);
             }
             else if (days<365){
-                holder.date.setText(withinOneYearFormat.format(inspectDate));
+
+                holder.date.setText(MainActivity.internationalizeDate(context, withinOneYearFormat.format(inspectDate)));
             }
             else {
-                holder.date.setText(oneYearBeforeFormat.format(inspectDate));
+                holder.date.setText(MainActivity.internationalizeDate(context, oneYearBeforeFormat.format(inspectDate)));
             }
 
             if(hazardLevel == HazardRating.LOW) {

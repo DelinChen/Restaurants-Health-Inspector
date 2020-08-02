@@ -115,13 +115,14 @@ public class InspectionActivity extends AppCompatActivity {
             // set the violation category image
             ImageView imageView = itemView.findViewById(R.id.imgCategory);
             TextView txt = itemView.findViewById(R.id.txtCategory);
-            String[] categories_text_universal = getResources().getStringArray(R.array.violation_category_universal);
+            String[] categories_text_universal = getResources().getStringArray(R.array.violation_category_eng);
             String[] categories_text = getResources().getStringArray(R.array.violation_category);
             TypedArray categories_drawable = getResources().obtainTypedArray(R.array.violation_category_drawable);
             for(int i = 0; i < categories_text_universal.length; i++) {
                 if(currentViolation.category.toString().equals(categories_text_universal[i])) {
                     imageView.setImageResource(categories_drawable.getResourceId(i, -1));
                     txt.setText(categories_text[i]);
+                    break;
                 }
             }
 
@@ -180,7 +181,7 @@ public class InspectionActivity extends AppCompatActivity {
         TextView txtNonCritical = findViewById(R.id.txtNonCritical);
 
         txtType.setText(inspectionType);
-        txtDate.setText(formatDate.format(date));
+        txtDate.setText(MainActivity.internationalizeDate(this, formatDate.format(date)));
         String critical_text = getString(R.string.critical_text);
         String non_critical_text = getString(R.string.non_critical_text);
         txtCritical.setText(critical_text + ":" + critical);

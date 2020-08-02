@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -89,5 +90,18 @@ public class MainActivity extends AppCompatActivity implements RestListAdapter.R
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public static String internationalizeDate(Context context, String date) {
+        String[] arr = date.split(" ", 2);
+        String[] monthsEng = context.getResources().getStringArray(R.array.months_eng);
+        String[] months = context.getResources().getStringArray(R.array.months);
+        for(int i = 0; i < months.length; i++) {
+            if(arr[0].equals(monthsEng[i])) {
+                arr[0] = months[i];
+                break;
+            }
+        }
+        return arr[0] + " " + arr[1];
     }
 }
