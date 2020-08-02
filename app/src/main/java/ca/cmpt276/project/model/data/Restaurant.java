@@ -22,7 +22,6 @@ public class Restaurant implements Comparable<Restaurant> {
     @NonNull public final String address;
     @NonNull public final String city;
     //unable to add these attribute into restaurant class, crashed the app
-//    public String isFavourite;  //to use to set for Favourite Restaurant ("0" or "1")
 //    public LocalDate lastInspection; //to check the last inspection date of this restaurant
 
     // GPS coordinates
@@ -46,8 +45,6 @@ public class Restaurant implements Comparable<Restaurant> {
         this.city           = city;
         this.latitude       = latitude;
         this.longitude      = longitude;
-//        all restaurant default is not favourite restaurant ("0" is not, "1" is favourite)
-//        this.isFavourite = "0";
 //        this.lastInspection = null;
     }
 

@@ -18,15 +18,22 @@ public class RestaurantDetails implements Comparable<RestaurantDetails> {
             entity = Inspection.class)
     @NonNull public final List<InspectionDetails> inspectionDetailsList;
 
+    @Relation(
+            parentColumn = "tracking_number",
+            entityColumn = "tracking_number",
+            entity = Favourites.class,
+            projection = "is_favourite")
+    public boolean isFavourite;
 
     ////////////////////////////////////////////////////
     // Constructor
 
-    public RestaurantDetails(Restaurant restaurant, List<InspectionDetails> inspectionDetailsList) {
+    public RestaurantDetails(Restaurant restaurant, List<InspectionDetails> inspectionDetailsList, boolean isFavourite) {
         this.restaurant = restaurant;
         this.inspectionDetailsList = inspectionDetailsList.stream()
                 .sorted(Collections.reverseOrder())
                 .collect(Collectors.collectingAndThen(Collectors.toList(), Collections::unmodifiableList));
+        this.isFavourite = isFavourite;
     }
 
 

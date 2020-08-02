@@ -7,13 +7,14 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.room.TypeConverters;
 
+import ca.cmpt276.project.model.data.Favourites;
 import ca.cmpt276.project.model.data.Inspection;
 import ca.cmpt276.project.model.data.Restaurant;
 import ca.cmpt276.project.model.data.Violation;
 
 @Database(
         version = 1,
-        entities = {Restaurant.class, Inspection.class, Violation.class, InspectionViolationCrossref.class})
+        entities = {Restaurant.class, Inspection.class, Violation.class, Favourites.class, InspectionViolationCrossref.class})
 @TypeConverters(Converters.class)
 public abstract class HealthDatabase extends RoomDatabase {
     // Follows from guideline found at http://tutorials.jenkov.com/java-concurrency/volatile.html
@@ -26,6 +27,7 @@ public abstract class HealthDatabase extends RoomDatabase {
     public abstract RestaurantDao getRestaurantDao();
     public abstract InspectionDao getInspectionDao();
     public abstract ViolationDao getViolationDao();
+    public abstract FavouriteDao getFavouriteDao();
 
     public static synchronized HealthDatabase getInstance(final Context context) {
         if(instance == null) {
