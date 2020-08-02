@@ -5,8 +5,17 @@
     android:layout_height="match_parent">
 
     <item
+        android:id="@+id/search"
+        android:title="search"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/clear"
+        android:title="clear"
+        app:showAsAction="always" />
+    <item
         android:id="@+id/list"
         android:title="list"
         app:showAsAction="always" />
+
 
 </menu>

@@ -42,6 +42,9 @@ public class RestaurantActivity extends AppCompatActivity {
     String trackingNumber;
     private List<InspectionDetails> inspections;
     HealthViewModel model;
+
+    // for test only
+    boolean isFavourite = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

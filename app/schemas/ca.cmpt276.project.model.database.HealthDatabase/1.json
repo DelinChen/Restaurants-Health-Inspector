@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "4c695366b626806e52604100724da4d4",
+    "identityHash": "87b2269ef05404ed7b6da476bee6f8d7",
     "entities": [
       {
         "tableName": "restaurants",
@@ -196,6 +196,41 @@
         "foreignKeys": []
       },
       {
+        "tableName": "favourites",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`tracking_number` TEXT NOT NULL, `is_favourite` INTEGER NOT NULL, PRIMARY KEY(`tracking_number`))",
+        "fields": [
+          {
+            "fieldPath": "trackingNumber",
+            "columnName": "tracking_number",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "isFavourite",
+            "columnName": "is_favourite",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "tracking_number"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [
+          {
+            "name": "index_favourites_tracking_number",
+            "unique": false,
+            "columnNames": [
+              "tracking_number"
+            ],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_favourites_tracking_number` ON `${TABLE_NAME}` (`tracking_number`)"
+          }
+        ],
+        "foreignKeys": []
+      },
+      {
         "tableName": "inspection_violations_crossref",
         "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`inspection_id` INTEGER NOT NULL, `code_number` INTEGER NOT NULL, PRIMARY KEY(`inspection_id`, `code_number`), FOREIGN KEY(`inspection_id`) REFERENCES `inspections`(`inspection_id`) ON UPDATE CASCADE ON DELETE CASCADE , FOREIGN KEY(`code_number`) REFERENCES `violations`(`code_number`) ON UPDATE CASCADE ON DELETE CASCADE )",
         "fields": [
@@ -266,7 +301,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '4c695366b626806e52604100724da4d4')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '87b2269ef05404ed7b6da476bee6f8d7')"
     ]
   }
 }

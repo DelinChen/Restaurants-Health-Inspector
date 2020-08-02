@@ -15,7 +15,7 @@ import ca.cmpt276.project.model.data.Violation;
 
 @Dao
 public abstract class FavouriteDao implements BaseDao<Restaurant> {
-
+/*
     @Query("SELECT * FROM favourites")
     public abstract LiveData<List<Restaurant>> getAllFavourites();
 
@@ -27,5 +27,7 @@ public abstract class FavouriteDao implements BaseDao<Restaurant> {
 
     @Update
     abstract public void updateRestaurant(Restaurant restaurant);
+
+ */
 
 }
