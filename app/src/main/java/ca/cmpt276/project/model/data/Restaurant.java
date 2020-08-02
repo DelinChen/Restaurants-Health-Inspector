@@ -1,6 +1,5 @@
 package ca.cmpt276.project.model.data;
 
-import java.time.LocalDate;
 import java.util.Collections;
 import java.util.Objects;
 
@@ -21,8 +20,6 @@ public class Restaurant implements Comparable<Restaurant> {
     @NonNull public final String name;
     @NonNull public final String address;
     @NonNull public final String city;
-    //unable to add these attribute into restaurant class, crashed the app
-//    public LocalDate lastInspection; //to check the last inspection date of this restaurant
 
     // GPS coordinates
     public final double latitude;
@@ -45,7 +42,6 @@ public class Restaurant implements Comparable<Restaurant> {
         this.city           = city;
         this.latitude       = latitude;
         this.longitude      = longitude;
-//        this.lastInspection = null;
     }
 
 
@@ -60,23 +56,6 @@ public class Restaurant implements Comparable<Restaurant> {
 
         return name.compareTo(other.name);
     }
-
-    /////////////////////////////////////////////////////////////////////////////////////
-    // Setter methods
-
-//    //Setter method for user to set the restaurant to Favourite restaurant
-//    public void setIsFavourite(String stringVal){ //String stringVal will be either "0" or "1"
-//        if(isFavourite != stringVal){
-//            isFavourite = stringVal;
-//        }
-//    }
-//
-//    //Setter method for user to set the restaurant's latest inspection date (in LocalDate)
-//    public void setLastInspection(LocalDate date){
-//        if(lastInspection != date || lastInspection == null){
-//            lastInspection = date;
-//        }
-//    }
 
 
     /////////////////////////////////////////////////////////////////////////////////////

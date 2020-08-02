@@ -5,7 +5,6 @@ import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -84,11 +83,6 @@ public class RestListAdapter extends RecyclerView.Adapter<RestListAdapter.RestLi
         }else {
             holder.restIcon.setImageResource(R.drawable.restaurant);
         }
-        //Only show the LOVE ICON when it is the FAVROURITE restaurant
-//        if(currRest.isFavourite == "1"){
-//            holder.favouriteButton.setVisibility(View.VISIBLE);
-//        }
-
 
         Inspection currInspect;
         int numIssues;
@@ -161,7 +155,6 @@ public class RestListAdapter extends RecyclerView.Adapter<RestListAdapter.RestLi
         TextView name, date, numIssues, address, level;
         ImageView restIcon, hazardIcon;
         RestListClickListener itemListener;
-        Button favouriteButton;
         public RestListViewHolder(@NonNull View itemView, RestListClickListener itemListener) {
             super(itemView);
             name = itemView.findViewById(R.id.rest_name);
@@ -171,8 +164,6 @@ public class RestListAdapter extends RecyclerView.Adapter<RestListAdapter.RestLi
             hazardIcon = itemView.findViewById(R.id.hazard_icon);
             address = itemView.findViewById(R.id.rest_address);
             level = itemView.findViewById(R.id.txtLevel);
-            //add the favourite Btn into the restaurant List
-            favouriteButton = itemView.findViewById(R.id.button);
             this.itemListener = itemListener;
             itemView.setOnClickListener(this);
         }
@@ -186,6 +177,4 @@ public class RestListAdapter extends RecyclerView.Adapter<RestListAdapter.RestLi
     public interface RestListClickListener {
         void onClick(View v, int position);
     }
-
-
 }

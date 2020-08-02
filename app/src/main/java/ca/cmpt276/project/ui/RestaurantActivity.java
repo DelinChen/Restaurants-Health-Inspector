@@ -3,11 +3,9 @@ package ca.cmpt276.project.ui;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.NotificationManagerCompat;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import android.app.NotificationManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -15,7 +13,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -44,7 +41,6 @@ public class RestaurantActivity extends AppCompatActivity {
     String trackingNumber;
     private List<InspectionDetails> inspections;
     HealthViewModel model;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,25 +63,11 @@ public class RestaurantActivity extends AppCompatActivity {
         //manager = RestaurantManager.getInstance();
         //restaurant = manager.get(trackingNumber);
         restaurant = map.get(trackingNumber).restaurant;
-        inspections = map.get(trackingNumber).inspectionDetailsList;
-        //set LastInspections attribute into current Restaurant
-//        Inspection inspection = inspections.get(0).inspection; //the latest inspection in DB
-//        if(restaurant.lastInspection != inspection.date) {
-//            //also update the new latestInspectiondate to the restaurant
-//            //        restaurant.setLastInspection(inspection.date);
-//            //send Notification to user if it is favourite restaurant
-//            if(restaurant.isFavourite == "1"){
-//                sendNofitication(); //send notification that inspeciton is updated
-//            }
-//        }
-
 
         TextView name = findViewById(R.id.txtName);
         TextView address = findViewById(R.id.txtAddress);
         TextView coords = findViewById(R.id.txtCoords);
         ImageView image = findViewById(R.id.rest_icon_restActivity);
-        //the FAVOURITE BUTTON TO CLICK ON
-        Button button = findViewById(R.id.btnFav);
         name.setText(restaurant.name);
         address.setText(restaurant.address);
         coords.setText("(" + restaurant.latitude + ", " + restaurant.longitude + ")");
@@ -122,11 +104,6 @@ public class RestaurantActivity extends AppCompatActivity {
         }else {
             image.setImageResource(R.drawable.restaurant);
         }
-
-    }
-
-    //the methods that send Notification to user that new Inspections for favourite restaurants
-    private void sendNofitication() {
 
     }
 
