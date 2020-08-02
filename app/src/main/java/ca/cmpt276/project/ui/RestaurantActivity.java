@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -63,6 +64,7 @@ public class RestaurantActivity extends AppCompatActivity {
         //manager = RestaurantManager.getInstance();
         //restaurant = manager.get(trackingNumber);
         restaurant = map.get(trackingNumber).restaurant;
+        inspections = map.get(trackingNumber).inspectionDetailsList;
 
         TextView name = findViewById(R.id.txtName);
         TextView address = findViewById(R.id.txtAddress);
@@ -71,6 +73,14 @@ public class RestaurantActivity extends AppCompatActivity {
         name.setText(restaurant.name);
         address.setText(restaurant.address);
         coords.setText("(" + restaurant.latitude + ", " + restaurant.longitude + ")");
+        Button button = findViewById(R.id.btnFav);
+        if(isFavourite){
+            button.setBackgroundResource(R.drawable.ic_baseline_favorite_red_24);
+        }
+        else{
+            button.setBackgroundResource(R.drawable.ic_baseline_favorite_24);
+        }
+        button.setOnClickListener(favouriteButton);
 
         coords.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -106,6 +116,20 @@ public class RestaurantActivity extends AppCompatActivity {
         }
 
     }
+    View.OnClickListener favouriteButton = new View.OnClickListener(){
+
+        @Override
+        public void onClick(View v){
+
+            isFavourite = !isFavourite;
+            if(isFavourite){
+                v.setBackgroundResource(R.drawable.ic_baseline_favorite_red_24);
+            }else{
+                v.setBackgroundResource(R.drawable.ic_baseline_favorite_24);
+            }
+        }
+
+    };
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
