@@ -44,7 +44,7 @@
     <string name="map_text">map</string>
     <string name="list_text">list</string>
     <string name="hazard_text">Hazard</string>
-    <string name="none_text">Nne</string>
+    <string name="none_text">None</string>
     <string-array name="months_eng">
         <item>January</item>
         <item>February</item>

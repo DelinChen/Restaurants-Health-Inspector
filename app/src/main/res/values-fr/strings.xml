@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Inspecteur de la santé des restaurants</string>
+    <string name="title_activity_map">Inspecteur de la santé des restaurants</string>
+    <string name="number_of_issues_text">Nombre de numéros:</string>
+    <string name="latest_inspection_text">Dernière inspection:</string>
+    <string name="update_available_text">Mise à jour disponible</string>
+    <string name="update_now_text">Voulez-vous mettre à jour maintenant?</string>
+    <string name="yes_text">Oui</string>
+    <string name="no_text">Non</string>
+    <string name="please_wait_text">Veuillez patienter ...</string>
+    <string name="cancel_txt">Annuler</string>
+    <string name="no_inspection_text">Aucune inspection</string>
+    <string name="no_violation_text">Aucune violation</string>
+    <string name="days_ago_text">journées</string>
+    <string name="low_text">Faible</string>
+    <string name="moderate_text">Modéré</string>
+    <string name="high_text">Haut</string>
+    <string name="critical_text">Critique</string>
+    <string name="non_critical_text">Non critique</string>
+    <string-array name="violation_category_eng">
+        <item>Food</item>
+        <item>Pest</item>
+        <item>Equipment</item>
+        <item>Hygiene</item>
+        <item>Training</item>
+        <item>Logistics</item>
+    </string-array>
+    <string-array name="violation_category">
+        <item>Nourriture</item>
+        <item>Ravageur</item>
+        <item>Équipement</item>
+        <item>Hygiène</item>
+        <item>Formation</item>
+        <item>Logistique</item>
+    </string-array>
+    <integer-array name="violation_category_drawable">
+        <item>@drawable/violation_food</item>
+        <item>@drawable/violation_pest</item>
+        <item>@drawable/violation_equipment</item>
+        <item>@drawable/violation_hygiene</item>
+        <item>@drawable/violation_training</item>
+        <item>@drawable/violation_logistics</item>
+    </integer-array>
+    <string name="map_text">carte</string>
+    <string name="list_text">liste</string>
+    <string name="hazard_text">Danger</string>
+    <string name="none_text">Nonce</string>
+    <string-array name="months_eng">
+        <item>January</item>
+        <item>February</item>
+        <item>March</item>
+        <item>April</item>
+        <item>May</item>
+        <item>June</item>
+        <item>July</item>
+        <item>August</item>
+        <item>September</item>
+        <item>October</item>
+        <item>November</item>
+        <item>December</item>
+    </string-array>
+    <string-array name="months">
+        <item>janvier</item>
+        <item>février</item>
+        <item>mars</item>
+        <item>avril</item>
+        <item>mai</item>
+        <item>juin</item>
+        <item>juillet</item>
+        <item>août</item>
+        <item>septembre</item>
+        <item>octobre</item>
+        <item>novembre</item>
+        <item>décembre</item>
+    </string-array>
+    <string name="routine_text">Routine</string>
+    <string name="follow_up_text">Suivi</string>
+    <string name="no_description_text">La description n\'est pas connue</string>
+    <integer-array name="violation_code">
+        <item>101</item>
+        <item>102</item>
+        <item>103</item>
+        <item>104</item>
+        <item>201</item>
+        <item>202</item>
+        <item>203</item>
+        <item>204</item>
+        <item>205</item>
+        <item>206</item>
+        <item>208</item>
+        <item>209</item>
+        <item>210</item>
+        <item>211</item>
+        <item>212</item>
+        <item>301</item>
+        <item>302</item>
+        <item>303</item>
+        <item>304</item>
+        <item>305</item>
+        <item>306</item>
+        <item>307</item>
+        <item>308</item>
+        <item>309</item>
+        <item>310</item>
+        <item>311</item>
+        <item>312</item>
+        <item>313</item>
+        <item>314</item>
+        <item>315</item>
+        <item>401</item>
+        <item>402</item>
+        <item>403</item>
+        <item>404</item>
+        <item>501</item>
+        <item>502</item>
+    </integer-array>
+    <string-array name="violation_description_short">
+        <item>Plans / construction / modifications non valides</item>
+        <item>Locaux alimentaires non approuvés</item>
+        <item>Permis invalide</item>
+        <item>Le permis est masqué</item>
+        <item>Aliments contaminés</item>
+        <item>Les aliments ne sont pas traités correctement</item>
+        <item>Refroidissement inacceptable des aliments</item>
+        <item>Cuisson / réchauffage dangereux</item>
+        <item>Température de stockage des aliments froids inacceptable</item>
+        <item>Température de stockage des aliments chauds inacceptable</item>
+        <item>Nourriture non approuvée</item>
+        <item>Non protégé contre la contamination</item>
+        <item>Processus de dégel inacceptable</item>
+        <item>Température de stockage des aliments surgelés inacceptable</item>
+        <item>Procédure non acceptée</item>
+        <item>Matériel et ustensiles non entretenus</item>
+        <item>Matériel / ustensiles non lavés</item>
+        <item>Eau chaude / froide non entretenue</item>
+        <item>Non exempt de ravageurs</item>
+        <item>Vulnérable aux ravageurs</item>
+        <item>Locaux alimentaires non entretenus</item>
+        <item>Conception inadaptée du matériel et des ustensiles</item>
+        <item>L\'équipement / les ustensiles sont en mauvais état</item>
+        <item>Étiquette incorrecte des ustensiles de nettoyage</item>
+        <item>Un seul objet utilisé utilisé se multiplie</item>
+        <item>Locaux non entretenus comme prévu</item>
+        <item>Objets non nécessaires stockés dans les locaux</item>
+        <item>Animaux vivants inacceptables dans les locaux</item>
+        <item>Aucune procédure d\'assainissement</item>
+        <item>Thermomètre inexact dans les équipements</item>
+        <item>Station de lavage des mains inadéquate</item>
+        <item>Lavage des mains inadéquat des employés</item>
+        <item>Employés insalubres</item>
+        <item>Fumer dans une zone non désignée</item>
+        <item>L\'opérateur n\'a pas le niveau FOODSAFE 1</item>
+        <item>Le personnel suppléant n\'a pas le niveau FOODSAFE 1</item>
+    </string-array>
+    <string-array name="violation_description_long">
+        <item>Plans / construction / modifications non conformes au règlement [art. 3; s. 4]</item>
+        <item>Exploitation d\'un établissement alimentaire non agréé [art. 6 (1)]</item>
+        <item>Défaut de détenir un permis valide lors de l\'exploitation d\'un établissement de restauration [art. 8 (1)]</item>
+        <item>Permis non affiché dans un endroit bien en vue [art. 8 (7)]</item>
+        <item>Aliments contaminés ou impropres à la consommation humaine [art. 13]</item>
+        <item>Aliments non transformés de manière à les rendre sûrs à manger [art. 14 (1)]</item>
+        <item>Aliments non refroidis d\'une manière acceptable [art. 12 a)]</item>
+        <item>Aliments non cuits ou réchauffés de manière à les rendre sûrs à manger [art. 14 (1)]</item>
+        <item>Aliments froids potentiellement dangereux stockés / affichés au-dessus de 4 ° C. [s. 14 (2)]</item>
+        <item>Aliments chauds potentiellement dangereux stockés / affichés en dessous de 60 ° C. [s. 14 (2)]</item>
+        <item>Aliments obtenus de sources non approuvées [art. 11]</item>
+        <item>Aliments non protégés contre la contamination [art. 12 a)]</item>
+        <item>Aliments non décongelés d\'une manière acceptable [art. 14 (2)]</item>
+        <item>Aliments potentiellement dangereux surgelés stockés / affichés au-dessus de -18 ° C. [s. 14 (3)]</item>
+        <item>L\'exploitant n\'a pas fourni de procédures écrites acceptables de manipulation des aliments [art. 23]</item>
+        <item>Matériel / ustensiles / surfaces en contact avec les aliments non maintenus en bon état [art. 17 (1)]</item>
+        <item>L\'équipement / les ustensiles / les surfaces en contact avec les aliments ne sont pas correctement lavés et désinfectés [art. 17 (2)]</item>
+        <item>Les équipements / installations / eau chaude et froide pour l\'entretien sanitaire ne sont pas adéquats [art. 17 (3); s. 4 (1) f)]</item>
+        <item>Locaux non exempts de parasites [art. 26 a)]</item>
+        <item>Conditions observées pouvant permettre l\'entrée / l\'hébergement / la reproduction de ravageurs [art. 26 b) c)]</item>
+        <item>Locaux alimentaires non maintenus dans un état sanitaire [art. 17 (1)]</item>
+        <item>L\'équipement / les ustensiles / les surfaces en contact avec les aliments ne sont pas de conception / matériau approprié [art. 16; s. 19]</item>
+        <item>L\'équipement / les ustensiles / les surfaces en contact avec les aliments ne sont pas en bon état de fonctionnement [art. 16 b)]</item>
+        <item>Nettoyants chimiques et agents similaires stockés ou étiquetés de manière incorrecte [art. 27]</item>
+        <item>Les récipients et ustensiles à usage unique sont utilisés plus d\'une fois [s. 20]</item>
+        <item>Locaux non entretenus conformément aux plans approuvés [art. 6 (1) b)]</item>
+        <item>Articles non requis pour l\'exploitation des locaux destinés aux aliments étant entreposés sur les lieux [art. 18]</item>
+        <item>Animal vivant sur les lieux à l\'exclusion des animaux-guides dans les zones agréées [art. 25 (1)]</item>
+        <item>L\'exploitant n\'a pas fourni de procédures d\'assainissement écrites acceptables [art. 24]</item>
+        <item>Les unités de réfrigération et l\'équipement de maintien au chaud manquent de thermomètres précis [art. 19 (2)]</item>
+        <item>Des postes de lavage des mains adéquats ne sont pas disponibles pour les employés [art. 21 (4)]</item>
+        <item>L\'employé ne se lave pas les mains correctement ou à une fréquence adéquate [art. 21 (3)]</item>
+        <item>L\'employé n\'a pas une bonne hygiène personnelle, des vêtements propres et un contrôle capillaire [art. 21 (1)]</item>
+        <item>Employé qui fume dans les zones de préparation / transformation / stockage des aliments [art. 21 (2)]</item>
+        <item>L\'exploitant n\'a pas de niveau 1 FOODSAFE ou l\'équivalent [s. 10 (1)]</item>
+        <item>En l\'absence de l\'exploitant, aucun membre du personnel de service n\'a le niveau FOODSAFE 1 ou l\'équivalent [art. 10 (2)]</item>
+    </string-array>
+</resources>
