@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<string name="app_name">Inspektur Kesehatan Restoran</string>
+    <string name="title_activity_map">Inspektur Kesehatan Restoran</string>
+    <string name="number_of_issues_text">Jumlah Masalah:</string>
+    <string name="latest_inspection_text">Pemeriksaan Terbaru:</string>
+    <string name="update_available_text">Pembaruan Tersedia</string>
+    <string name="update_now_text">Apakah Anda ingin memperbarui sekarang?</string>
+    <string name="yes_text">Ya</string>
+    <string name="no_text">Tidak</string>
+    <string name="please_wait_text">Harap Tunggu ...</string>
+    <string name="cancel_txt">Batalkan</string>
+    <string name="no_inspection_text">Tidak Ada Inspeksi</string>
+    <string name="no_violation_text">Tidak Ada Pelanggaran</string>
+    <string name="days_ago_text">hari yang lalu</string>
+    <string name="low_text">Rendah</string>
+    <string name="moderate_text">Sedang</string>
+    <string name="high_text">Tinggi</string>
+    <string name="critical_text">Kritis</string>
+    <string name="non_critical_text">Tidak Kritis</string>
+    <string-array name="violation_category_eng">
+        <item>Food</item>
+        <item>Pest</item>
+        <item>Equipment</item>
+        <item>Hygiene</item>
+        <item>Training</item>
+        <item>Logistics</item>
+    </string-array>
+    <string-array name="violation_category">
+        <item>Makanan</item>
+        <item>Hama</item>
+        <item>Peralatan</item>
+        <item>Kebersihan</item>
+        <item>Pelatihan</item>
+        <item>Logistik</item>
+    </string-array>
+    <integer-array name="violation_category_drawable">
+        <item>@drawable/violation_food</item>
+        <item>@drawable/violation_pest</item>
+        <item>@drawable/violation_equipment</item>
+        <item>@drawable/violation_hygiene</item>
+        <item>@drawable/violation_training</item>
+        <item>@drawable/violation_logistics</item>
+    </integer-array>
+    <string name="map_text">peta</string>
+    <string name="list_text">tabel</string>
+    <string name="hazard_text">Bahaya</string>
+    <string name="none_text">Tidak Ada</string>
+    <string-array name="months_eng">
+        <item>January</item>
+        <item>February</item>
+        <item>March</item>
+        <item>April</item>
+        <item>May</item>
+        <item>June</item>
+        <item>July</item>
+        <item>August</item>
+        <item>September</item>
+        <item>October</item>
+        <item>November</item>
+        <item>December</item>
+    </string-array>
+    <string-array name="months">
+        <item>Januari</item>
+        <item>Februari</item>
+        <item>Maret</item>
+        <item>April</item>
+        <item>Mei</item>
+        <item>Juni</item>
+        <item>Juli</item>
+        <item>Agustus</item>
+        <item>September</item>
+        <item>Oktober</item>
+        <item>November</item>
+        <item>Desember</item>
+    </string-array>
+    <string name="routine_text">Rutin</string>
+    <string name="follow_up_text">Tindak lanjut</string>
+    <string name="no_description_text">Deskripsi tidak dikenal</string>
+    <integer-array name="violation_code">
+        <item>101</item>
+        <item>102</item>
+        <item>103</item>
+        <item>104</item>
+        <item>201</item>
+        <item>202</item>
+        <item>203</item>
+        <item>204</item>
+        <item>205</item>
+        <item>206</item>
+        <item>208</item>
+        <item>209</item>
+        <item>210</item>
+        <item>211</item>
+        <item>212</item>
+        <item>301</item>
+        <item>302</item>
+        <item>303</item>
+        <item>304</item>
+        <item>305</item>
+        <item>306</item>
+        <item>307</item>
+        <item>308</item>
+        <item>309</item>
+        <item>310</item>
+        <item>311</item>
+        <item>312</item>
+        <item>313</item>
+        <item>314</item>
+        <item>315</item>
+        <item>401</item>
+        <item>402</item>
+        <item>403</item>
+        <item>404</item>
+        <item>501</item>
+        <item>502</item>
+    </integer-array>
+    <string-array name="violation_description_short">
+        <item>Rencana / konstruksi / perubahan yang tidak valid</item>
+        <item>Tempat makanan yang tidak disetujui</item>
+        <item>Izin tidak valid</item>
+        <item>Izin disembunyikan</item>
+        <item>Makanan yang terkontaminasi</item>
+        <item>Makanan tidak diproses dengan benar</item>
+        <item>Pendinginan makanan yang tidak bisa diterima</item>
+        <item>Memasak / memanaskan kembali yang tidak aman</item>
+        <item>Suhu penyimpanan makanan dingin yang tidak dapat diterima</item>
+        <item>Suhu penyimpanan makanan panas yang tidak dapat diterima</item>
+        <item>Makanan yang tidak disetujui</item>
+        <item>Tidak dilindungi dari kontaminasi</item>
+        <item>Proses pencairan yang tidak bisa diterima</item>
+        <item>Suhu penyimpanan makanan beku yang tidak dapat diterima</item>
+        <item>Prosedur yang tidak diterima</item>
+        <item>Peralatan / peralatan yang tidak dirawat</item>
+        <item>Peralatan / perkakas yang tidak dicuci</item>
+        <item>Air panas / dingin yang tidak dirawat</item>
+        <item>Tidak bebas hama</item>
+        <item>Rentan terhadap hama</item>
+        <item>Tempat makanan yang tidak dirawat</item>
+        <item>Desain peralatan / perkakas yang tidak sesuai</item>
+        <item>Peralatan / peralatan dalam kondisi buruk</item>
+        <item>Label peralatan kebersihan yang tidak tepat</item>
+        <item>Obyek yang digunakan tunggal digunakan multiply</item>
+        <item>Bangunan tidak dikelola sesuai rencana</item>
+        <item>Barang yang tidak diminta disimpan di tempat</item>
+        <item>Hewan hidup yang tidak dapat diterima di tempat</item>
+        <item>Tidak ada prosedur sanitasi</item>
+        <item>Termometer tidak akurat dalam peralatan</item>
+        <item>Tempat cuci tangan yang tidak memadai</item>
+        <item>Cuci tangan yang tidak memadai dari karyawan</item>
+        <item>Karyawan Tidak Higienis</item>
+        <item>Merokok di area yang tidak dirancang</item>
+        <item>Operator tidak memiliki FOODSAFE level 1</item>
+        <item>Staf pengganti tidak memiliki FOODSAFE level 1</item>
+    </string-array>
+    <string-array name="violation_description_long">
+        <item>Rencana / konstruksi / perubahan tidak sesuai dengan Peraturan [s. 3; s. 4]</item>
+        <item>Pengoperasian tempat makanan yang tidak disetujui [s. 6 (1)]</item>
+        <item>Kegagalan untuk memegang izin yang valid saat mengoperasikan perusahaan jasa makanan [s. 8 (1)]</item>
+        <item>Izin tidak diposting di lokasi yang mencolok [s. 8 (7)]</item>
+        <item>Makanan yang terkontaminasi atau tidak layak untuk dikonsumsi manusia [s. 13]</item>
+        <item>Makanan tidak diproses dengan cara yang membuatnya aman untuk dikonsumsi [s. 14 (1)]</item>
+        <item>Makanan tidak didinginkan dengan cara yang dapat diterima [s. 12 (a)]</item>
+        <item>Makanan tidak dimasak atau dipanaskan kembali dengan cara yang membuatnya aman untuk dikonsumsi [s. 14 (1)]</item>
+        <item>Makanan yang berpotensi berbahaya dingin disimpan / ditampilkan di atas 4 ° C. [s. 14 (2)]</item>
+        <item>Makanan panas yang berpotensi berbahaya disimpan / ditampilkan di bawah 60 ° C. [s. 14 (2)]</item>
+        <item>Makanan diperoleh dari sumber yang tidak disetujui [s. 11]</item>
+        <item>Makanan tidak dilindungi dari kontaminasi [s. 12 (a)]</item>
+        <item>Makanan tidak dicairkan dengan cara yang dapat diterima [s. 14 (2)]</item>
+        <item>Makanan beku yang berpotensi berbahaya disimpan / ditampilkan di atas -18 ° C. [s. 14 (3)]</item>
+        <item>Operator belum memberikan prosedur penanganan makanan tertulis yang dapat diterima [s. 23]</item>
+        <item>Permukaan peralatan / perkakas / kontak makanan tidak dijaga dalam kondisi sanitasi [s. 17 (1)]</item>
+        <item>Permukaan peralatan / perkakas / kontak makanan tidak dicuci dan disanitasi dengan baik [s. 17 (2)]</item>
+        <item>Peralatan / fasilitas / air panas dan dingin untuk pemeliharaan sanitasi tidak memadai [s. 17 (3); s. 4 (1) (f)]</item>
+        <item>Tempat tidak bebas dari hama [s. 26 (a)]</item>
+        <item>Kondisi yang diamati memungkinkan masuk / menampung / membiakkan hama [s. 26 (b) (c)]</item>
+        <item>Tempat makanan tidak dirawat dalam kondisi sanitasi [s. 17 (1)]</item>
+        <item>Peralatan / perkakas / permukaan kontak makanan tidak sesuai dengan desain / bahan [s. 16; s. 19]</item>
+        <item>Permukaan peralatan / perkakas / kontak makanan tidak dalam kondisi baik [s. 16 (b)]</item>
+        <item>Pembersih bahan kimia dan agen sejenis yang disimpan atau dilabeli dengan tidak semestinya [s. 27]</item>
+        <item>Wadah sekali pakai dan peralatan digunakan lebih dari satu kali [s. 20]</item>
+        <item>Tempat tidak dikelola sesuai dengan rencana yang disetujui [s. 6 (1) (b)]</item>
+        <item>Barang-barang yang tidak diperlukan untuk operasi tempat makanan disimpan di tempat [s. 18]</item>
+        <item>Hewan hidup di tempat tidak termasuk hewan pemandu di area yang disetujui [s. 25 (1)]</item>
+        <item>Operator belum memberikan prosedur sanitasi tertulis yang dapat diterima [s. 24]</item>
+        <item>Unit pendingin dan peralatan holding panas tidak memiliki termometer yang akurat [s. 19 (2)]</item>
+        <item>Stasiun cuci tangan yang memadai tidak tersedia untuk karyawan [s. 21 (4)]</item>
+        <item>Karyawan tidak mencuci tangan dengan benar atau pada frekuensi yang memadai [s. 21 (3)]</item>
+        <item>Karyawan tidak memiliki kebersihan pribadi yang baik, pakaian bersih dan kontrol rambut [s. 21 (1)]</item>
+        <item>Karyawan merokok di area persiapan / pemrosesan / penyimpanan makanan [s. 21 (2)]</item>
+        <item>Operator tidak memiliki FOODSAFE Level 1 atau Setara [s. 10 (1)]</item>
+        <item>Dalam ketidakhadiran operator, tidak ada staf yang bertugas yang memiliki FOODSAFE Level 1 atau yang setara [s. 10 (2)]</item>
+    </string-array>
+</resources>
