@@ -88,8 +88,17 @@ public class InspectionActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 // show exact description
+                String description = getString(R.string.no_description_text);
+                int[] violationCode = getResources().getIntArray(R.array.violation_code);
+                String[] descriptionLong = getResources().getStringArray(R.array.violation_description_long);
+                for(int index = 0; index < violationCode.length; index++) {
+                    if(violations.get(i).codeNumber == violationCode[index]) {
+                        description = descriptionLong[index];
+                        break;
+                    }
+                }
                 Toast.makeText(getApplicationContext(),
-                        violations.get(i).description,
+                        description,
                         Toast.LENGTH_LONG).show();
             }
         });
@@ -126,10 +135,16 @@ public class InspectionActivity extends AppCompatActivity {
                 }
             }
 
-            String description = currentViolation.description;
-            TextView txtDescription = itemView.findViewById(R.id.txtDescription);
-            txtDescription.setText(description);
-
+            int violationCode = currentViolation.codeNumber;
+            int[] codeArr = getResources().getIntArray(R.array.violation_code);
+            String[] descriptionShort = getResources().getStringArray(R.array.violation_description_short);
+            for(int i = 0; i < codeArr.length; i++) {
+                if(violationCode == codeArr[i]) {
+                    TextView txtDescription = itemView.findViewById(R.id.txtDescription);
+                    txtDescription.setText(descriptionShort[i]);
+                    break;
+                }
+            }
 
             boolean critical = currentViolation.isCritical;
             ImageView imgCategory = itemView.findViewById(R.id.imageView3);
@@ -154,12 +169,17 @@ public class InspectionActivity extends AppCompatActivity {
         // find single inspection data
         inspection = map.get(trackingNumber).inspectionDetailsList.get(position).inspection;
         String hazardLevel = inspection.hazardRating.toString();
-        String inspectionType = inspection.type.toString();
+        String inspectionType;
         SimpleDateFormat formatDate = new SimpleDateFormat("MMMM dd, yyyy");
         Date date = Date.from(inspection.date.atStartOfDay(ZoneId.systemDefault()).toInstant());
         int critical = inspection.numCritViolations;
         int nonCritical = inspection.numNonCritViolations;
 
+        if(inspection.type.toString().equals("Routine")) {
+            inspectionType = getString(R.string.routine_text);
+        }else {
+            inspectionType = getString(R.string.follow_up_text);
+        }
         //
         ImageView image = findViewById(R.id.imgHazard);
         if (hazardLevel.equals("Low")){

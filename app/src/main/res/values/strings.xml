@@ -73,6 +73,9 @@
         <item>November</item>
         <item>December</item>
     </string-array>
+    <string name="routine_text">Routine</string>
+    <string name="follow_up_text">Follow-up</string>
+    <string name="no_description_text">Description is not known</string>
     <integer-array name="violation_code">
         <item>101</item>
         <item>102</item>
@@ -141,7 +144,7 @@
         <item>Unrequired items stored in premises</item>
         <item>Unacceptable live animals in premises</item>
         <item>No sanitation procedure</item>
-        <item>Inaccurate thermometer in specific items</item>
+        <item>Inaccurate thermometer in equipments</item>
         <item>Inadequate hand washing station</item>
         <item>Inadequate hand wash from employees</item>
         <item>Unhygienic Employees</item>
@@ -186,6 +189,5 @@
         <item>Employee smoking in food preparation/processing/storage areas [s. 21(2)]</item>
         <item>Operator does not have FOODSAFE Level 1 or Equivalent [s. 10(1)]</item>
         <item>In operator’s absence no staff on duty has FOODSAFE Level 1 or equivalent [s. 10(2)]</item>
-
     </string-array>
 </resources>
