@@ -8,5 +8,9 @@
         android:id="@+id/list"
         android:title="@string/List"
         app:showAsAction="always" />
+    <item
+        android:id="@+id/search"
+        android:title="@string/Search"
+        app:showAsAction="always" />
 
 </menu>

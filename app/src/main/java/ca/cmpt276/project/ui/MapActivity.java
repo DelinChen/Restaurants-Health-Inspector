@@ -329,6 +329,9 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 startActivity(new Intent(this, MainActivity.class));
                 finish();
                 return true;
+            case R.id.search:
+                startActivityForResult(new Intent(this,SearchActivity.class), 1);
+                return true;
         }
 
         return super.onOptionsItemSelected(item);

@@ -8,5 +8,9 @@
         android:id="@+id/map"
         android:title="@string/Map"
         app:showAsAction="always" />
+    <item
+        android:id="@+id/search"
+        android:title="@string/Search"
+        app:showAsAction="always" />
 
 </menu>
