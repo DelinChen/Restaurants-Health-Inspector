@@ -86,6 +86,9 @@ public class MainActivity extends AppCompatActivity implements RestListAdapter.R
                 startActivity(intent);
                 finish();
                 return true;
+            case R.id.search:
+                startActivityForResult(new Intent(this,SearchActivity.class), 1);
+                return true;
         }
 
         return super.onOptionsItemSelected(item);
