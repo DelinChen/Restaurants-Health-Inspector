@@ -20,6 +20,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -330,11 +331,29 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 finish();
                 return true;
             case R.id.search:
-                startActivityForResult(new Intent(this,SearchActivity.class), 1);
+                startActivityForResult(new Intent(this,SearchActivity.class), 2);
                 return true;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 2){
+            if(resultCode == RESULT_OK){
+                String option = data.getStringExtra("option");
+                String search = data.getStringExtra("search");
+                if (option ==  "all"){
+
+                }
+                else{
+
+                }
+            }
+
+        }
     }
 
     class UpdateTask extends AsyncTask<Void, Integer, Integer> {

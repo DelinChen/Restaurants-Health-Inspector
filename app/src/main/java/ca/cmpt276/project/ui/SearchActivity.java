@@ -6,17 +6,22 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 
 import ca.cmpt276.project.R;
 
 public class SearchActivity extends AppCompatActivity {
     Intent intent = new Intent();
+    EditText txt;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search2);
+
+        txt = findViewById(R.id.editTextTextPersonName);
 
         createOptionButtons();
         createFinishButton();
@@ -27,6 +32,7 @@ public class SearchActivity extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                intent.putExtra("search",txt.getText().toString());
                 finish();
             }
         });

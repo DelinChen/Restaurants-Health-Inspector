@@ -66,6 +66,19 @@ public class MainActivity extends AppCompatActivity implements RestListAdapter.R
                 finish();
             }
         }
+        else if (requestCode == 2){
+            if(resultCode == RESULT_OK){
+                String option = data.getStringExtra("option");
+                String search = data.getStringExtra("search");
+                if (option ==  "all"){
+
+                }
+                else{
+
+                }
+            }
+
+        }
     }
 
 
@@ -87,7 +100,7 @@ public class MainActivity extends AppCompatActivity implements RestListAdapter.R
                 finish();
                 return true;
             case R.id.search:
-                startActivityForResult(new Intent(this,SearchActivity.class), 1);
+                startActivityForResult(new Intent(this,SearchActivity.class), 2);
                 return true;
         }
 
